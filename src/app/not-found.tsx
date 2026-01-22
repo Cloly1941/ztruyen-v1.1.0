@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 // ** Shadcn ui
-import {Button} from "@/components/ui/button";
+import Button from "@/components/common/Button";
 
 export const metadata: Metadata = {
     title: '404 - Không tìm thấy trang này',
@@ -21,10 +21,10 @@ export default function NotFound() {
                 alt="404 - Ztruyện | ztruyen.io.vn"
                 className="hover:scale-105 transition-transform"
             />
-            <h1 className="sm:text-xl font-bold mt-4">
+            <h1 className="text-lg sm:text-2xl mt-4 font-title tracking-wide">
                 (つ≧▽≦)つ Hình như bạn đi lạc mất rồi ⊂(・▽・⊂)
             </h1>
-            <p className="text-xs sm:text-sm">
+            <p className="text-xs sm:text-sm text-center">
                 Đường dẫn này không tồn tại, hãy quay lại để tiếp tục hành trình
                 nhé.
             </p>
