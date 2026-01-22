@@ -27,7 +27,7 @@ const bangers = Bangers({
 // Description / text comic
 const nunito = Nunito({
 	subsets: ["latin"],
-	weight: ["400", "500", "600"],
+	weight: ["400", "500", "600", "700"],
 	variable: "--font-text",
 	display: "swap",
 });

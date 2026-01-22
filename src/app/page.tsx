@@ -1,5 +1,8 @@
+// ** Layout components
+import DefaultLayout from "@/layouts/DefaultLayout";
+
 export default function Home() {
 	return (
-		<div>Xin chào các bạn</div>
+		<DefaultLayout>Xin chào các bạn</DefaultLayout>
 	);
 }
