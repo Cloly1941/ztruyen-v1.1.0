@@ -8,7 +8,7 @@ import {tagsFooter} from "@/configs/footer";
 const Footer = () => {
     return (
         <footer className="w-full">
-            <div className="bg-[#212121] pt-10 pb-5 shadow-footer">
+            <div className="bg-[#212121] pt-10 pb-5 shadow-layout">
                 <div className="container text-white/70">
                     <div className="flex justify-between items-center gap-4">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-y-5">

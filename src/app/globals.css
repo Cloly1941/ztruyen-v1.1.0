@@ -83,7 +83,7 @@
 }
 
 .dark {
-    --background: oklch(0.129 0.042 264.695);
+    --background: hsl(0,0%,13%);
     --foreground: oklch(0.984 0.003 247.858);
     --card: oklch(0.208 0.042 265.755);
     --card-foreground: oklch(0.984 0.003 247.858);
@@ -137,24 +137,44 @@
     }
 }
 
-@layer components {
+@layer utilities {
 
-    .shadow-footer {
-        box-shadow: 0 0 5px 1px rgba(158, 179, 193, 0.5);
+    .text-header {
+        @apply text-[15px]
+    }
+
+    .mt-header {
+        @apply mt-[56px];
+    }
+
+    .shadow-layout {
+        @apply shadow-[0_0_5px_1px_rgba(158,179,193,0.5)]
     }
 
     /* scroll bar */
-    .scroll-bar::-webkit-scrollbar {
-        width: 6px;
-    }
-    .scroll-bar::-webkit-scrollbar-thumb {
-        background-color: #E5E7EB;
-        border-radius: 4px;
-        cursor: pointer;
+    .scroll-bar {
+        @apply overflow-y-auto
+        [&::-webkit-scrollbar]:w-[6px]
+        [&::-webkit-scrollbar-thumb]:rounded-[4px]
+        [&::-webkit-scrollbar-thumb]:bg-gray-200
+        hover:[&::-webkit-scrollbar-thumb]:bg-gray-300;
     }
 
-    .scroll-bar::-webkit-scrollbar-thumb:hover {
-        background-color: #D1D5DB;
-    }
     /* End scroll bar */
+}
+
+
+@layer components {
+
+    /* Sheet */
+    [data-hide-close] > button.absolute.top-4.right-4 {
+        @apply hidden;
+    }
+
+    [data-slot="sheet-overlay"] {
+        @apply bg-black/80
+    }
+
+    /* End Sheet */
+
 }
