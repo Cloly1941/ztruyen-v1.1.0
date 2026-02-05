@@ -10,10 +10,12 @@ import NavHeader from "@/layouts/components/Header/NavHeader";
 // ** Configs
 import {navHeader} from "@/configs/header";
 
+// ================ MOCKS =================
 jest.mock('next/navigation', () => ({
     usePathname: jest.fn(),
 }));
 
+// ================ TESTS =================
 describe("<NavHeader/>", () => {
     it("Render all navigation items", () => {
         (usePathname as jest.Mock).mockReturnValue('/');

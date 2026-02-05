@@ -13,6 +13,7 @@ import NavHeaderMobile from '@/layouts/components/Header/NavHeaderMobile';
 // ** Configs
 import { navHeader } from '@/configs/header';
 
+// ================ MOCKS =================
 jest.mock('next/navigation', () => ({
     usePathname: jest.fn(),
 }));
@@ -22,6 +23,7 @@ jest.mock('@/components/ui/sheet', () => ({
     SheetTitle: ({ children }: PropsWithChildren) => <>{children}</>,
 }));
 
+// ================ TESTS =================
 describe('<NavHeaderMobile />', () => {
     it('Renders all navigation items', () => {
         (usePathname as jest.Mock).mockReturnValue('/');

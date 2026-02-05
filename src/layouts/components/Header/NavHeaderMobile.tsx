@@ -1,5 +1,8 @@
 'use client';
 
+// ** React
+import {useEffect, useState} from "react";
+
 // ** Next
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -16,10 +19,20 @@ import removeExtension from '@/utils/removeExtension';
 // ** Configs
 import {navHeader} from "@/configs/header";
 
+// ** lib
+import {getAccessToken} from "@/lib/localStorage";
+
 const NavHeaderMobile = () => {
     const path = usePathname();
 
     const pathGenre = path.startsWith('/the-loai');
+
+    const [isLogin, setIsLogin] = useState(false)
+
+    useEffect(() => {
+        const token = getAccessToken();
+        setIsLogin(Boolean(token))
+    }, [])
 
     return (
         <>
@@ -51,9 +64,11 @@ const NavHeaderMobile = () => {
                     </SheetTitle>
                 );
             })}
-            <Link href='dang-nhap' className='mt-4'>
-                <Button width='full' sizeCustom='sm'>Đăng nhập ngay ~</Button>
-            </Link>
+            {!isLogin && (
+                <Link href='dang-nhap' className='mt-4'>
+                    <Button width='full' sizeCustom='sm'>Đăng nhập ngay ~</Button>
+                </Link>
+            )}
         </>
     );
 };

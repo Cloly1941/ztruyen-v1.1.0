@@ -7,10 +7,12 @@ import {render, screen} from "@testing-library/react";
 // ** Components
 import ReadingHistoryBtn from "@/layouts/components/Header/ReadingHistoryBtn";
 
+// ================ MOCKS =================
 jest.mock('next/navigation', () => ({
     usePathname: jest.fn(),
 }));
 
+// ================ TESTS =================
 describe('<ReadingHistoryBtn />', () => {
     const linkName = 'Lịch sử đọc truyện'
     const pathHistory = '/lich-su.html'

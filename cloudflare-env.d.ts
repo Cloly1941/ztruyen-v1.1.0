@@ -287,7 +287,7 @@ declare namespace WebAssembly {
     function validate(bytes: BufferSource): boolean;
 }
 /**
- * The **`ServiceWorkerGlobalScope`** interface of the Service Worker API represents the global execution context of a service worker.
+ * The **`ServiceWorkerGlobalScope`** interface of the Service Worker API represents the global execution context of a services worker.
  * Available only in secure contexts.
  *
  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/ServiceWorkerGlobalScope)
@@ -847,7 +847,7 @@ interface SchedulerWaitOptions {
     signal?: AbortSignal;
 }
 /**
- * The **`ExtendableEvent`** interface extends the lifetime of the `install` and `activate` events dispatched on the global scope as part of the service worker lifecycle.
+ * The **`ExtendableEvent`** interface extends the lifetime of the `install` and `activate` events dispatched on the global scope as part of the services worker lifecycle.
  *
  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/ExtendableEvent)
  */
@@ -9118,7 +9118,7 @@ interface IncomingRequestCfPropertiesBotManagementBase {
     verifiedBot: boolean;
     /**
      * A boolean value that is true if the request originates from a
-     * Cloudflare-verified proxy service.
+     * Cloudflare-verified proxy services.
      */
     corporateProxy: boolean;
     /**
@@ -10440,7 +10440,7 @@ declare namespace TailStream {
     interface SpanContext {
         // Single id for the entire top-level invocation
         // This should be a new traceId for the first worker stage invoked in the eyeball request and then
-        // same-account service-bindings should reuse the same traceId but cross-account service-bindings
+        // same-account services-bindings should reuse the same traceId but cross-account services-bindings
         // should use a new traceId.
         readonly traceId: string;
         // spanId in which this event is handled
@@ -10449,7 +10449,7 @@ declare namespace TailStream {
         // For Hibernate and Mark this would be the span under which they were emitted.
         // spanId is not set ONLY if:
         //  1. This is an Onset event
-        //  2. We are not inherting any SpanContext. (e.g. this is a cross-account service binding or a new top-level invocation)
+        //  2. We are not inherting any SpanContext. (e.g. this is a cross-account services binding or a new top-level invocation)
         readonly spanId?: string;
     }
     interface TailEvent<Event extends EventType> {

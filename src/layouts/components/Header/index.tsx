@@ -29,13 +29,19 @@ import {
 // ** Lucide Icon
 import {Menu} from 'lucide-react';
 
-const Header = ({
+// ** lib
+import {getCookie} from "@/lib/cookie";
+
+const Header = async ({
                     asChild = false,
                     children,
                 }: {
     asChild?: boolean;
     children?: ReactNode;
 }) => {
+
+    const isLogin = await getCookie()
+
     return (
         <header className="shadow-layout z-40 fixed left-0 top-0 right-0 bg-background">
             <nav className="container flex justify-between items-center py-2.5 font-medium text-header">
@@ -50,7 +56,9 @@ const Header = ({
                     <div className="hidden xl:block">
                         <ModeToggle/>
                     </div>
-                    <Link href='/dang-nhap' className='text-header hidden xl:block'>Đăng nhập</Link>
+                    {!isLogin && (
+                        <Link href='/dang-nhap' className='text-header hidden xl:block'>Đăng nhập</Link>
+                    )}
                     <div className="xl:hidden">
                         <Sheet>
                             <SheetTrigger asChild className="cursor-pointer">

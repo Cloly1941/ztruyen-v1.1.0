@@ -7,10 +7,12 @@ import {fireEvent, render, screen} from "@testing-library/react";
 // ** Layout components
 import Search from "@/layouts/components/Header/Search";
 
+// ================= MOCKS =================
 jest.mock('next/navigation', () => ({
     useRouter: jest.fn(),
 }))
 
+// ================= TESTS =================
 describe('<Search />', () => {
     const pushMock = jest.fn();
     const placeholderInput = 'Tìm truyện...'

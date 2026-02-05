@@ -8,6 +8,9 @@ import {Montserrat, Bangers, Nunito} from "next/font/google";
 // ** Theme provider
 import {ThemeProvider} from "@/theme/ThemeProvider";
 
+// ** Components
+import Toast from "@/components/common/Toast";
+
 // ** Styles global
 import "./globals.css";
 
@@ -53,6 +56,7 @@ export default function RootLayout({children,}: { children: ReactNode }) {
             disableTransitionOnChange
         >
             {children}
+            <Toast/>
         </ThemeProvider>
         </body>
         </html>

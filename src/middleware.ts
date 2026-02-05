@@ -1,0 +1,28 @@
+// ** Next
+import {NextRequest, NextResponse} from 'next/server'
+
+// ** Configs
+import {VARIABLE} from "@/configs/variable";
+
+const AUTH_PAGES = ['/dang-nhap', '/dang-ky', '/quen-mat-khau']
+
+export function middleware(request: NextRequest) {
+    const { pathname, searchParams } = request.nextUrl
+
+    const refreshToken = request.cookies.get(VARIABLE.REFRESH_TOKEN)?.value
+    const hasSocialToken = searchParams.has('token')
+
+    const isLoggedIn = Boolean(refreshToken)
+
+    if (hasSocialToken) {
+        return NextResponse.next()
+    }
+
+    if (isLoggedIn && AUTH_PAGES.some((path) => pathname.startsWith(path))) {
+        const url = request.nextUrl.clone()
+        url.pathname = '/'
+        return NextResponse.redirect(url)
+    }
+
+    return NextResponse.next()
+}

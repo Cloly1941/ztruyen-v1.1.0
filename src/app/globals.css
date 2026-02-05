@@ -83,7 +83,7 @@
 }
 
 .dark {
-    --background: hsl(0,0%,13%);
+    --background: hsl(0, 0%, 13%);
     --foreground: oklch(0.984 0.003 247.858);
     --card: oklch(0.208 0.042 265.755);
     --card-foreground: oklch(0.984 0.003 247.858);
@@ -161,6 +161,23 @@
     }
 
     /* End scroll bar */
+    .bg-auth {
+        @apply bg-no-repeat bg-cover bg-center bg-[url('/auth-bg.png')];
+    }
+
+    /* form */
+    .form {
+        @apply w-full flex flex-col gap-y-4;
+    }
+
+    /* input */
+    .input-group-ring-0:has([data-slot="input-group-control"]:focus-visible) {
+        @apply ring-0;
+    }
+
+    .input {
+        @apply focus-visible:ring-0 text-sm
+    }
 }
 
 
@@ -176,5 +193,4 @@
     }
 
     /* End Sheet */
-
 }
