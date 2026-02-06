@@ -41,7 +41,7 @@ describe("<Button />", () => {
 
     it('applies shape, width, and sizeCustom classes', () => {
         render(
-            <Button shape="pill" width="full" sizeCustom="sm">
+            <Button shape="pill" width="full" sizeCustom="xs">
                 Custom Button
             </Button>
         );

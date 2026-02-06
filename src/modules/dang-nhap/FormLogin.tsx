@@ -19,12 +19,12 @@ import toast from "react-hot-toast";
 
 // ** Components
 import Button from "@/components/common/Button";
-import {Input} from "@/components/ui/input";
 import InputPassword from "@/components/common/InputPassword";
 import TurnstileWidget from "@/components/auth/TurnstileWidget";
 
 // ** Shadcn ui
 import {Field, FieldError, FieldLabel} from "@/components/ui/field";
+import {Input} from "@/components/ui/input";
 
 // ** Services
 import {AuthService} from "@/services/auth";
@@ -51,12 +51,14 @@ const FormLogin = () => {
     });
 
     const onSubmit = async (values: TLoginForm) => {
-        setLoading(true);
 
         if (!cfToken) {
             toast.error('Vui lòng xác thực bạn không phải bot');
             return;
         }
+
+        setLoading(true);
+
         try {
             const res = await AuthService.login(values, cfToken);
 
@@ -76,6 +78,7 @@ const FormLogin = () => {
 
     return (
         <form id='form-login' onSubmit={form.handleSubmit(onSubmit)} className='form mt-4'>
+            {/* Email */}
             <Controller
                 name='email'
                 control={form.control}
@@ -88,7 +91,6 @@ const FormLogin = () => {
                             aria-invalid={fieldState.invalid}
                             placeholder='Email bạn dùng để đăng nhập'
                             autoComplete="email"
-                            className='input'
                         />
                         {fieldState.invalid && (
                             <FieldError errors={[fieldState.error]}/>
@@ -96,6 +98,9 @@ const FormLogin = () => {
                     </Field>
                 )}
             />
+
+
+            {/* Password */}
             <Controller
                 name='password'
                 control={form.control}
@@ -113,9 +118,12 @@ const FormLogin = () => {
                     </Field>
                 )}
             />
+
+            {/* Cloudflare turnstile*/}
             <div className="mt-4">
                 <TurnstileWidget onVerify={setCfToken}/>
             </div>
+
             <div className="flex justify-end mt-1">
                 <Link
                     href="/quen-mat-khau"

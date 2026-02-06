@@ -66,7 +66,7 @@ const NavHeaderMobile = () => {
             })}
             {!isLogin && (
                 <Link href='dang-nhap' className='mt-4'>
-                    <Button width='full' sizeCustom='sm'>Đăng nhập ngay ~</Button>
+                    <Button width='full' sizeCustom='xs'>Đăng nhập ngay ~</Button>
                 </Link>
             )}
         </>

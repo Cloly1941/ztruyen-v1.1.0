@@ -12,24 +12,24 @@ import GuestGuard from "@/components/guards/GuestGuard";
 import {ListenOAuthMessage} from "@/components/auth/ListenOAuthMessage";
 
 // ** Modules
-import FormLogin from "@/modules/dang-nhap/FormLogin";
+import FormRegister from "@/modules/dang-ky/FormRegister";
 
 export const metadata: Metadata = {
-    title: 'Đăng nhập - ZTruyen',
+    title: 'Đăng ký - ZTruyen',
     description:
-        'Đăng nhập ZTruyen để theo dõi truyện yêu thích, quản lý lịch sử đọc và đồng bộ tài khoản trên mọi thiết bị.',
+        'Đăng ký tài khoản ZTruyen để theo dõi truyện yêu thích, lưu lịch sử đọc và đồng bộ dữ liệu trên mọi thiết bị.',
     alternates: {
-        canonical: 'https://ztruyen.io.vn/dang-nhap',
+        canonical: 'https://ztruyen.io.vn/dang-ky',
     },
     robots: {
         index: false,
         follow: true,
     },
     openGraph: {
-        title: 'Đăng nhập - ZTruyen',
+        title: 'Đăng ký - ZTruyen',
         description:
-            'Truy cập tài khoản ZTruyen an toàn để đọc truyện, lưu tiến độ và nhận cập nhật mới nhất.',
-        url: 'https://ztruyen.io.vn/dang-nhap',
+            'Tạo tài khoản ZTruyen miễn phí để đọc truyện online, lưu tiến độ và nhận thông báo truyện mới.',
+        url: 'https://ztruyen.io.vn/dang-ky',
         siteName: 'ZTruyen',
         images: [
             {
@@ -42,16 +42,16 @@ export const metadata: Metadata = {
     },
 };
 
-type TLoginSearchParams = { token?: string }
+type TRegisterSearchParams = { token?: string }
 
-const Login = async ({searchParams}: { searchParams: Promise<TLoginSearchParams> }) => {
+const Register = async ({searchParams}: { searchParams: Promise<TRegisterSearchParams> }) => {
 
-    const { token } = await searchParams
+    const {token} = await searchParams
 
     return (
         <GuestGuard>
             <div className='bg-auth flex justify-center items-center p-10 bg-black/40 dark:bg-white/40'>
-                <HandleSocialToken token={token} />
+                <HandleSocialToken token={token}/>
                 <ListenOAuthMessage/>
                 <div>
                     <div className='flex justify-center mb-5'>
@@ -61,16 +61,17 @@ const Login = async ({searchParams}: { searchParams: Promise<TLoginSearchParams>
                     </div>
                     <div
                         className='bg-background rounded-lg pt-12 pb-8 px-8 sm:px-14 lg:px-16 flex flex-col justify-center items-center'>
-                        <h1 className='text-primary capitalize font-semibold text-base lg:text-lg dark:text-white'>Đăng nhập</h1>
-                        <FormLogin/>
+                        <h1 className='text-primary capitalize font-semibold text-base lg:text-lg dark:text-white'>Đăng
+                            ký</h1>
+                        <FormRegister/>
                         <AuthFooter/>
                         <div className="mt-4 text-center text-sm text-muted-foreground">
-                            Chưa có tài khoản?
+                            Đã có tài khoản?
                             <Link
-                                href="/dang-ky"
+                                href="/dang-nhap"
                                 className="font-medium text-primary hover:underline transition ml-1"
                             >
-                                Đăng ký
+                                Đăng nhập ngay
                             </Link>
                         </div>
                     </div>
@@ -80,4 +81,4 @@ const Login = async ({searchParams}: { searchParams: Promise<TLoginSearchParams>
     )
 }
 
-export default Login
+export default Register

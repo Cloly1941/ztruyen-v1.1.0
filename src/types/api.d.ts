@@ -9,3 +9,8 @@ export interface ILogin {
     access_token: string
     user: IUserLogin
 }
+
+export interface IRegister {
+    _id: string
+    createdAt: string
+}

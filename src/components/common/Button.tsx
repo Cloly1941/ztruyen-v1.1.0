@@ -23,14 +23,14 @@ const buttonVariants = cva(
                 full: "w-full",
             },
             sizeCustom: {
-                sm: "px-4 py-2 text-xs",
-                md: "px-5 py-2.5 text-sm",
+                xs: "px-4 py-2 text-xs",
+                sm: "px-5 py-2.5 text-sm",
             },
         },
         defaultVariants: {
             shape: "normal",
             width: "auto",
-            sizeCustom: "md",
+            sizeCustom: "sm",
         },
     }
 )

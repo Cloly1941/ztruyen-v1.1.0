@@ -39,7 +39,7 @@ function InputPassword<
     const [show, setShow] = useState(false)
 
     return (
-        <InputGroup className='input-group-ring-0'>
+        <InputGroup>
             <InputGroupInput
                 {...field}
                 id={id}
@@ -47,7 +47,6 @@ function InputPassword<
                 aria-invalid={fieldState.invalid}
                 placeholder={placeholder}
                 autoComplete="current-password"
-                className="input"
             />
 
             <InputGroupAddon

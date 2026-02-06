@@ -171,13 +171,67 @@
     }
 
     /* input */
-    .input-group-ring-0:has([data-slot="input-group-control"]:focus-visible) {
+    [data-slot="input-group"],
+    [data-slot="input-group"]:has([data-slot="input-group-control"]:focus-visible) {
+        @apply ring-0 ring-offset-0;
+    }
+
+    [data-slot='input-group-control'],
+    [data-slot='input'] {
+        @apply focus-visible:ring-0 text-sm
+    }
+
+    /*  calendar  */
+    [data-slot="calendar"] button {
+        @apply ring-0 ring-offset-0 cursor-pointer dark:text-white dark:hover:bg-white/10;
+    }
+
+    [data-slot="calendar"] button[data-selected-single="true"],
+    [data-slot="calendar"] button[data-range-start="true"],
+    [data-slot="calendar"] button[data-range-end="true"],
+    [data-slot="calendar"] button[data-range-middle="true"] {
+        @apply ring-0 ring-offset-0;
+    }
+
+    [data-slot="calendar"] td[data-focused="true"] button {
         @apply ring-0;
     }
 
-    .input {
-        @apply focus-visible:ring-0 text-sm
+    [data-slot="calendar"] .rdp-dropdown_root {
+        @apply ring-0 ring-offset-0;
     }
+
+    [data-slot="calendar"] .rdp-dropdown_root:has(select:focus-visible) {
+        @apply ring-0 ring-offset-0 border border-input;
+    }
+
+    [data-slot="calendar"] select {
+        @apply bg-background
+    }
+
+    /*  End calendar  */
+
+
+    /*  Select  */
+    [data-slot="select-trigger"] {
+        @apply ring-0 ring-offset-0 focus:ring-0 focus-visible:ring-0;
+    }
+
+    [data-slot="select-item"] {
+        @apply cursor-pointer dark:hover:bg-white/10;
+    }
+
+    [data-slot='select-content'] {
+        @apply dark:bg-background;
+    }
+
+    /*  End Select  */
+    /*  Popover  */
+    [data-slot="popover-content"] {
+        @apply bg-background w-[var(--radix-popover-trigger-width)] p-0;
+    }
+
+    /*  End Popover  */
 }
 
 

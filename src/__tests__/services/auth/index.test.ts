@@ -1,5 +1,10 @@
+// ** Services
 import { AuthService } from '@/services/auth'
+
+// ** Libs
 import { fetcher } from '@/lib/fetcher'
+
+// ** Configs
 import { CONFIG_API } from '@/configs/api'
 import { VARIABLE } from '@/configs/variable'
 
@@ -96,4 +101,41 @@ describe('AuthService', () => {
             setItemSpy.mockRestore()
         })
     })
+
+    describe('register', () => {
+        it('Call register endpoint with correct payload', async () => {
+            const mockRes = {
+                data: {
+                    _id: 1,
+                    createdAt: '2004-02-04T17:00:00.000Z',
+                },
+            };
+
+            (fetcher as jest.Mock).mockResolvedValue(mockRes)
+
+            const payload = {
+                name: 'test user',
+                email: 'test@gmail.com',
+                password: '123456',
+                birthday: "2004-02-04T17:00:00.000Z",
+                age: 22
+            }
+
+            const res = await AuthService.register(payload as never, 'cf-token')
+
+            expect(fetcher).toHaveBeenCalledWith(
+                CONFIG_API.AUTH.REGISTER,
+                expect.objectContaining({
+                    method: 'POST',
+                    body: JSON.stringify({
+                        ...payload,
+                        cfToken: 'cf-token',
+                    }),
+                })
+            )
+
+            expect(res).toEqual(mockRes)
+        })
+    })
+
 })

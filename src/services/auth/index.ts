@@ -2,7 +2,7 @@
 import {fetcher} from "@/lib/fetcher";
 
 // ** Types
-import {ILogin} from "@/types/api";
+import {ILogin, IRegister} from "@/types/api";
 
 // ** Configs
 import {CONFIG_API} from "@/configs/api";
@@ -10,6 +10,7 @@ import {VARIABLE} from "@/configs/variable";
 
 // ** Modules
 import {TLoginForm} from "@/modules/dang-nhap/FormLogin";
+import {TRegisterPayload} from "@/modules/dang-ky/FormRegister";
 
 export const AuthService = {
     login: async (payload: TLoginForm, cftoken: string): Promise<IApiRes<ILogin>> => {
@@ -36,6 +37,18 @@ export const AuthService = {
         }
 
         return res
-    }
+    },
+
+    register: async (payload: TRegisterPayload, cftoken: string): Promise<IApiRes<IRegister>> => {
+        const res = await fetcher<IApiRes<IRegister>>(CONFIG_API.AUTH.REGISTER, {
+            method: 'POST',
+            body: JSON.stringify({
+                ...payload,
+                cfToken: cftoken
+            }),
+        });
+
+        return res
+    },
 }
 
