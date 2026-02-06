@@ -44,9 +44,9 @@ const AuthFooter = () => {
                 </div>
             </div>
             <span className='text-center w-full md:w-[400px]'>Bằng cách đăng nhập hay hoàn tất đăng ký, bạn đã đồng ý với
-                <Link className='text-primary' href='thoa-thuan-nguoi-dung'> Thoả thuận người dùng </Link>
+                <Link className='text-primary' href='thoa-thuan-nguoi-dung' target='_blank'> Thoả thuận người dùng </Link>
                 và
-                <Link className='text-primary' href='chinh-sach-bao-mat'> Chính sách bảo mât.</Link>
+                <Link className='text-primary' href='chinh-sach-bao-mat' target='_blank'> Chính sách bảo mât.</Link>
             </span>
         </div>
     )
