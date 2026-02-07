@@ -10,15 +10,18 @@ export function middleware(request: NextRequest) {
     const { pathname, searchParams } = request.nextUrl
 
     const refreshToken = request.cookies.get(VARIABLE.REFRESH_TOKEN)?.value
-    const hasSocialToken = searchParams.has('token')
+    const hasToken = searchParams.has('token')
 
     const isLoggedIn = Boolean(refreshToken)
 
-    if (hasSocialToken) {
+    if (
+        hasToken &&
+        (pathname.startsWith('/dang-nhap') || pathname.startsWith('/dang-ky'))
+    ) {
         return NextResponse.next()
     }
 
-    if (isLoggedIn && AUTH_PAGES.some((path) => pathname.startsWith(path))) {
+    if (isLoggedIn && AUTH_PAGES.some(path => pathname.startsWith(path))) {
         const url = request.nextUrl.clone()
         url.pathname = '/'
         return NextResponse.redirect(url)

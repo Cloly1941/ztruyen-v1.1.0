@@ -138,4 +138,68 @@ describe('AuthService', () => {
         })
     })
 
+    describe('forgotPassword', () => {
+        it('Call forgot password endpoint with correct payload', async () => {
+            const mockRes = {
+                    message: 'Email sent',
+                    statusCode: 200,
+                    data: null,
+                }
+
+            ;(fetcher as jest.Mock).mockResolvedValue(mockRes)
+
+            const payload = {
+                email: 'test@gmail.com',
+            }
+
+            const res = await AuthService.forgotPassword(payload, 'cf-token')
+
+            expect(fetcher).toHaveBeenCalledWith(
+                CONFIG_API.AUTH.FORGOT,
+                expect.objectContaining({
+                    method: 'POST',
+                    body: JSON.stringify({
+                        ...payload,
+                        cfToken: 'cf-token',
+                    }),
+                })
+            )
+
+            expect(res).toEqual(mockRes)
+        })
+    })
+
+    describe('resetPassword', () => {
+        it('Call reset password endpoint with correct payload and token', async () => {
+            const mockRes = {
+                    message: 'Password reset success',
+                    statusCode: 200,
+                    data: null,
+                };
+
+            (fetcher as jest.Mock).mockResolvedValue(mockRes)
+
+            const payload = {
+                newPassword: 'new-password',
+            }
+
+            const token = 'reset-token-123'
+
+            const res = await AuthService.resetPassword(payload as never, token)
+
+            expect(fetcher).toHaveBeenCalledWith(
+                CONFIG_API.AUTH.RESET,
+                expect.objectContaining({
+                    method: 'POST',
+                    body: JSON.stringify({
+                        ...payload,
+                        token,
+                    }),
+                })
+            )
+
+            expect(res).toEqual(mockRes)
+        })
+    })
+
 })
