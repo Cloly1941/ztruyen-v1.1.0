@@ -3,13 +3,28 @@ import { AuthService } from '@/services/auth'
 
 // ** Libs
 import { fetcher } from '@/lib/fetcher'
+import { authFetcher } from '@/lib/auth-fetch'
+import { removeAccessToken } from '@/lib/localStorage'
+import { setAccessToken } from '@/lib/localStorage'
 
 // ** Configs
 import { CONFIG_API } from '@/configs/api'
 import { VARIABLE } from '@/configs/variable'
 
+// =============================== Mocks =============================//
 jest.mock('@/lib/fetcher')
 
+jest.mock('@/lib/auth-fetch', () => ({
+    authFetcher: jest.fn(),
+}))
+
+jest.mock('@/lib/localStorage', () => ({
+    removeAccessToken: jest.fn(),
+    setAccessToken: jest.fn(),
+}))
+
+
+// ============================== Tests =============================//
 describe('AuthService', () => {
 
     describe('login', () => {
@@ -43,13 +58,9 @@ describe('AuthService', () => {
             expect(res).toEqual(mockRes)
         })
 
-        it('Save accessToken to localStorage when window exists', async () => {
-            const setItemSpy = jest.spyOn(Storage.prototype, 'setItem');
-
+        it('calls setAccessToken after login success', async () => {
             (fetcher as jest.Mock).mockResolvedValue({
-                data: {
-                    access_token: 'token-123',
-                },
+                data: { access_token: 'token-123' },
             })
 
             await AuthService.login(
@@ -57,12 +68,7 @@ describe('AuthService', () => {
                 'cf-token'
             )
 
-            expect(setItemSpy).toHaveBeenCalledWith(
-                VARIABLE.ACCESS_TOKEN,
-                'token-123'
-            )
-
-            setItemSpy.mockRestore()
+            expect(setAccessToken).toHaveBeenCalledWith('token-123')
         })
     })
 
@@ -82,23 +88,14 @@ describe('AuthService', () => {
             expect(res).toEqual(mockRes)
         })
 
-        it('Save refreshed accessToken to localStorage', async () => {
-            const setItemSpy = jest.spyOn(Storage.prototype, 'setItem');
-
+        it('calls setAccessToken when refresh token success', async () => {
             (fetcher as jest.Mock).mockResolvedValue({
-                data: {
-                    access_token: 'new-token',
-                },
+                data: { access_token: 'new-token' },
             })
 
             await AuthService.refreshToken()
 
-            expect(setItemSpy).toHaveBeenCalledWith(
-                VARIABLE.ACCESS_TOKEN,
-                'new-token'
-            )
-
-            setItemSpy.mockRestore()
+            expect(setAccessToken).toHaveBeenCalledWith('new-token')
         })
     })
 
@@ -202,4 +199,39 @@ describe('AuthService', () => {
         })
     })
 
+    describe('logout', () => {
+        it('calls logout endpoint and removes access token', async () => {
+            const mockRes = {
+                    message: 'Logout success',
+                    statusCode: 200,
+                    data: null,
+                };
+
+            (authFetcher as jest.Mock).mockResolvedValueOnce(mockRes)
+
+            const res = await AuthService.logout()
+
+            expect(authFetcher).toHaveBeenCalledTimes(1)
+            expect(authFetcher).toHaveBeenCalledWith(
+                CONFIG_API.AUTH.LOGOUT,
+                expect.objectContaining({
+                    method: 'POST',
+                })
+            )
+
+            expect(removeAccessToken).toHaveBeenCalledTimes(1)
+
+            expect(res).toEqual(mockRes)
+        })
+
+        it('does NOT remove access token if logout api fails', async () => {
+            (authFetcher as jest.Mock).mockRejectedValueOnce(
+                new Error('Unauthorized')
+            )
+
+            await expect(AuthService.logout()).rejects.toThrow('Unauthorized')
+
+            expect(removeAccessToken).not.toHaveBeenCalled()
+        })
+    })
 })

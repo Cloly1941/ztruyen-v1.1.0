@@ -58,11 +58,11 @@
     --primary: #32aaff;
     --primary-foreground: oklch(0.984 0.003 247.858);
     --secondary: oklch(0.968 0.007 247.896);
-    --secondary-foreground: oklch(0.208 0.042 265.755);
+    --secondary-foreground: hsl(0, 0%, 13%);
     --muted: oklch(0.968 0.007 247.896);
     --muted-foreground: oklch(0.554 0.046 257.417);
     --accent: oklch(0.968 0.007 247.896);
-    --accent-foreground: oklch(0.208 0.042 265.755);
+    --accent-foreground: hsl(0, 0%, 13%);
     --destructive: oklch(0.577 0.245 27.325);
     --border: oklch(0.929 0.013 255.508);
     --input: oklch(0.929 0.013 255.508);
@@ -74,10 +74,10 @@
     --chart-5: oklch(0.769 0.188 70.08);
     --sidebar: oklch(0.984 0.003 247.858);
     --sidebar-foreground: oklch(0.129 0.042 264.695);
-    --sidebar-primary: oklch(0.208 0.042 265.755);
+    --sidebar-primary: hsl(0, 0%, 13%);
     --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
     --sidebar-accent: oklch(0.968 0.007 247.896);
-    --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
+    --sidebar-accent-foreground: hsl(0, 0%, 13%);
     --sidebar-border: oklch(0.929 0.013 255.508);
     --sidebar-ring: oklch(0.704 0.04 256.788);
 }
@@ -85,17 +85,17 @@
 .dark {
     --background: hsl(0, 0%, 13%);
     --foreground: oklch(0.984 0.003 247.858);
-    --card: oklch(0.208 0.042 265.755);
+    --card: hsl(0, 0%, 13%);
     --card-foreground: oklch(0.984 0.003 247.858);
-    --popover: oklch(0.208 0.042 265.755);
+    --popover: hsl(0, 0%, 13%);
     --popover-foreground: oklch(0.984 0.003 247.858);
     --primary: #32aaff;
-    --primary-foreground: oklch(0.208 0.042 265.755);
+    --primary-foreground: hsl(0, 0%, 13%);
     --secondary: oklch(0.279 0.041 260.031);
     --secondary-foreground: oklch(0.984 0.003 247.858);
-    --muted: oklch(0.279 0.041 260.031);
+    --muted: oklch(0.35 0.015 260);
     --muted-foreground: oklch(0.704 0.04 256.788);
-    --accent: oklch(0.279 0.041 260.031);
+    --accent: oklch(0.35 0.015 260);
     --accent-foreground: oklch(0.984 0.003 247.858);
     --destructive: oklch(0.704 0.191 22.216);
     --border: oklch(1 0 0 / 10%);
@@ -106,7 +106,7 @@
     --chart-3: oklch(0.769 0.188 70.08);
     --chart-4: oklch(0.627 0.265 303.9);
     --chart-5: oklch(0.645 0.246 16.439);
-    --sidebar: oklch(0.208 0.042 265.755);
+    --sidebar: hsl(0, 0%, 13%);
     --sidebar-foreground: oklch(0.984 0.003 247.858);
     --sidebar-primary: oklch(0.488 0.243 264.376);
     --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
@@ -134,6 +134,11 @@
 
     body {
         @apply bg-background text-foreground font-text antialiased select-none overflow-x-hidden;
+    }
+
+    body.loading {
+        overflow: hidden;
+        scrollbar-gutter: stable;
     }
 }
 
@@ -205,13 +210,7 @@
         @apply ring-0 ring-offset-0 border border-input;
     }
 
-    [data-slot="calendar"] select {
-        @apply bg-background
-    }
-
     /*  End calendar  */
-
-
     /*  Select  */
     [data-slot="select-trigger"] {
         @apply ring-0 ring-offset-0 focus:ring-0 focus-visible:ring-0;
@@ -221,17 +220,19 @@
         @apply cursor-pointer dark:hover:bg-white/10;
     }
 
-    [data-slot='select-content'] {
-        @apply dark:bg-background;
-    }
-
     /*  End Select  */
     /*  Popover  */
     [data-slot="popover-content"] {
-        @apply bg-background w-[var(--radix-popover-trigger-width)] p-0;
+        @apply w-[var(--radix-popover-trigger-width)] p-0;
     }
 
     /*  End Popover  */
+    /*  Dropdown  */
+    [data-slot="dropdown-menu-item"] {
+        @apply cursor-pointer;
+    }
+
+    /*  End Dropdown  */
 }
 
 
@@ -247,4 +248,63 @@
     }
 
     /* End Sheet */
+    /*  Loading  */
+    .text-loading {
+        @apply flex items-center gap-3 text-2xl text-zinc-700 dark:text-zinc-300;
+    }
+
+    .text-loading__icon {
+        @apply inline-block;
+        animation: hand-bounce 0.8s infinite ease-in-out;
+    }
+
+    .text-loading__icon.right {
+        animation-delay: 0.4s;
+    }
+
+    .text-loading__dots {
+        @apply inline-flex gap-[2px];
+    }
+
+    .text-loading__dots span {
+        @apply opacity-0;
+        animation: dot-fade 1.4s infinite;
+    }
+
+    .text-loading__dots span:nth-child(1) {
+        animation-delay: 0s;
+    }
+
+    .text-loading__dots span:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+
+    .text-loading__dots span:nth-child(3) {
+        animation-delay: 0.4s;
+    }
+
+    /*  End Loading  */
+}
+
+@keyframes hand-bounce {
+    0% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-4px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+@keyframes dot-fade {
+    0%,
+    80%,
+    100% {
+        opacity: 0;
+    }
+    40% {
+        opacity: 1;
+    }
 }

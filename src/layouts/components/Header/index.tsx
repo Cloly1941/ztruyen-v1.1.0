@@ -7,15 +7,14 @@ import Link from "next/link";
 // ** Components
 import {ModeToggle} from '@/components/common/ModeToggle';
 import Button from '@/components/common/Button';
-import ReadingHistoryBtn from "@/layouts/components/Header/ReadingHistoryBtn";
+import Logo from '@/components/common/Logo';
 
 // ** Layout Components
 import Search from '@/layouts/components/Header/Search';
 import NavHeader from '@/layouts/components/Header/NavHeader';
 import NavHeaderMobile from '@/layouts/components/Header/NavHeaderMobile';
-
-// ** Components
-import Logo from '@/components/common/Logo';
+import AccountMenu from "@/layouts/components/Header/AccountMenu";
+import ReadingHistoryBtn from "@/layouts/components/Header/ReadingHistoryBtn";
 
 // ** Shadcn ui
 import {
@@ -33,9 +32,9 @@ import {Menu} from 'lucide-react';
 import {getCookie} from "@/lib/cookie";
 
 const Header = async ({
-                    asChild = false,
-                    children,
-                }: {
+                          asChild = false,
+                          children,
+                      }: {
     asChild?: boolean;
     children?: ReactNode;
 }) => {
@@ -45,6 +44,7 @@ const Header = async ({
     return (
         <header className="shadow-layout z-40 fixed left-0 top-0 right-0 bg-background">
             <nav className="container flex justify-between items-center py-2.5 font-medium text-header">
+
                 <div className="flex items-center gap-10">
                     <Logo/>
                     {!asChild && <NavHeader/>}
@@ -56,9 +56,12 @@ const Header = async ({
                     <div className="hidden xl:block">
                         <ModeToggle/>
                     </div>
-                    {!isLogin && (
+                    {isLogin ? (
+                        <AccountMenu/>
+                    ) : (
                         <Link href='/dang-nhap' className='text-header hidden xl:block'>Đăng nhập</Link>
                     )}
+
                     <div className="xl:hidden">
                         <Sheet>
                             <SheetTrigger asChild className="cursor-pointer">

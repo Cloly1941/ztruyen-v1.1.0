@@ -12,5 +12,8 @@ export const CONFIG_API = {
         RESET: `${authUrl}/reset-password`,
         GOOGLE: `${authUrl}/google`,
         FACEBOOK: `${authUrl}/facebook`,
-    }
+    },
+    USER: {
+        PROFILE: `${baseUrl}/user/profile`,
+    },
 } as const
