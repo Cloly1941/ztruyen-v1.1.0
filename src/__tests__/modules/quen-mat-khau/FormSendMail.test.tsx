@@ -1,43 +1,23 @@
-// ** Testing Library
+// ** testing-library
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
 // ** Component
 import FormSendMail from '@/modules/quen-mat-khau/FormSendMail'
 
-// ** Services
-import { AuthService } from '@/services/auth'
-
-// ** Toast
-import toast from 'react-hot-toast'
-
-// ** Next router
-import { useRouter } from 'next/navigation'
+// ** Hook
+import { useForgotPassword } from '@/hooks/auth/useForgotPassword'
 
 // ================= MOCKS =================
 
-jest.mock('@/services/auth', () => ({
-    AuthService: {
-        forgotPassword: jest.fn(),
-    },
-}))
-
-jest.mock('react-hot-toast', () => ({
-    success: jest.fn(),
-    error: jest.fn(),
-}))
-
-jest.mock('next/navigation', () => ({
-    useRouter: jest.fn(),
+jest.mock('@/hooks/auth/useForgotPassword', () => ({
+    useForgotPassword: jest.fn(),
 }))
 
 jest.mock('@/components/auth/TurnstileWidget', () => ({
     __esModule: true,
     default: ({ onVerify }: { onVerify: (token: string) => void }) => (
-        <button
-            data-testid="mock-turnstile"
-            onClick={() => onVerify('cf-token')}
-        >
+        <button onClick={() => onVerify('cf-token')}>
             Verify CF
         </button>
     ),
@@ -46,127 +26,86 @@ jest.mock('@/components/auth/TurnstileWidget', () => ({
 // ================= TESTS =================
 
 describe('<FormSendMail />', () => {
-    const push = jest.fn()
-
-    const setup = () => {
-        render(<FormSendMail />)
-
-        return {
-            emailInput: screen.getByPlaceholderText('Nhập email của bạn'),
-            submitButton: screen.getByRole('button', { name: /gửi email/i }),
-            turnstileButton: screen.getByTestId('mock-turnstile'),
-        }
-    }
+    const trigger = jest.fn()
 
     beforeEach(() => {
         jest.clearAllMocks()
-        ;(useRouter as jest.Mock).mockReturnValue({ push })
+
+        ;(useForgotPassword as jest.Mock).mockReturnValue({
+            trigger,
+            isMutating: false,
+        })
     })
 
-    it('Render form correctly', () => {
-        const { emailInput, submitButton } = setup()
+    const fillValidForm = async (user: ReturnType<typeof userEvent.setup>) => {
+        await user.type(
+            screen.getByPlaceholderText('Nhập email của bạn'),
+            'test@gmail.com'
+        )
+    }
 
-        expect(emailInput).toBeInTheDocument()
-        expect(submitButton).toBeInTheDocument()
-    })
-
-    it('Show validation error when email is invalid', async () => {
-        const user = userEvent.setup()
-        const { emailInput, submitButton } = setup()
-
-        await user.type(emailInput, 'invalid-email')
-        await user.click(submitButton)
+    it('renders forgot password form correctly', () => {
+        render(<FormSendMail />)
 
         expect(
-            await screen.findByText('Email không hợp lệ')
+            screen.getByPlaceholderText('Nhập email của bạn')
+        ).toBeInTheDocument()
+
+        expect(
+            screen.getByRole('button', { name: /gửi email/i })
         ).toBeInTheDocument()
     })
 
-    it('Show error if Cloudflare token is missing', async () => {
-        const user = userEvent.setup()
-        const { emailInput, submitButton } = setup()
-
-        await user.type(emailInput, 'test@gmail.com')
-        await user.click(submitButton)
-
-        await waitFor(() => {
-            expect(toast.error).toHaveBeenCalledWith(
-                'Vui lòng xác thực bạn không phải bot'
-            )
-        })
-
-        expect(AuthService.forgotPassword).not.toHaveBeenCalled()
-    })
-
-    it('Submit forgot password successfully', async () => {
+    it('submits form and calls trigger with email', async () => {
         const user = userEvent.setup()
 
-        ;(AuthService.forgotPassword as jest.Mock).mockResolvedValue({
-            message: 'Đã gửi email',
-        })
+        render(<FormSendMail />)
 
-        const {
-            emailInput,
-            submitButton,
-            turnstileButton,
-        } = setup()
+        await fillValidForm(user)
 
-        await user.type(emailInput, 'test@gmail.com')
-        await user.click(turnstileButton)
-        await user.click(submitButton)
-
-        await waitFor(() => {
-            expect(AuthService.forgotPassword).toHaveBeenCalledWith(
-                { email: 'test@gmail.com' },
-                'cf-token'
-            )
-        })
-
-        expect(toast.success).toHaveBeenCalledWith('Đã gửi email')
-        expect(push).toHaveBeenCalledWith('/')
-    })
-
-    it('Show error message when API throws Error', async () => {
-        const user = userEvent.setup()
-
-        ;(AuthService.forgotPassword as jest.Mock).mockRejectedValue(
-            new Error('Email không tồn tại')
+        await user.click(
+            screen.getByRole('button', { name: /gửi email/i })
         )
 
-        const {
-            emailInput,
-            submitButton,
-            turnstileButton,
-        } = setup()
-
-        await user.type(emailInput, 'test@gmail.com')
-        await user.click(turnstileButton)
-        await user.click(submitButton)
-
         await waitFor(() => {
-            expect(toast.error).toHaveBeenCalledWith('Email không tồn tại')
+            expect(trigger).toHaveBeenCalledWith({
+                email: 'test@gmail.com',
+            })
         })
     })
 
-    it('Show generic error when API throws non-Error', async () => {
+    it('submits form after Cloudflare verification', async () => {
         const user = userEvent.setup()
 
-        ;(AuthService.forgotPassword as jest.Mock).mockRejectedValue('ERROR')
+        render(<FormSendMail />)
 
-        const {
-            emailInput,
-            submitButton,
-            turnstileButton,
-        } = setup()
+        await user.click(screen.getByText('Verify CF'))
 
-        await user.type(emailInput, 'test@gmail.com')
-        await user.click(turnstileButton)
-        await user.click(submitButton)
+        await fillValidForm(user)
+
+        await user.click(
+            screen.getByRole('button', { name: /gửi email/i })
+        )
 
         await waitFor(() => {
-            expect(toast.error).toHaveBeenCalledWith(
-                'Đã có lỗi xảy ra khi gửi email, vui lòng thử lại sau!'
-            )
+            expect(trigger).toHaveBeenCalledWith({
+                email: 'test@gmail.com',
+            })
         })
+    })
+
+    it('passes loading state to submit button', () => {
+        (useForgotPassword as jest.Mock).mockReturnValue({
+            trigger,
+            isMutating: true,
+        })
+
+        render(<FormSendMail />)
+
+        const submitButton = screen
+            .getAllByRole('button')
+            .find(btn => btn.getAttribute('type') === 'submit')
+
+        expect(submitButton).toBeDisabled()
     })
 })

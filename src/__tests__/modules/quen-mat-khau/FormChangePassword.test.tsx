@@ -1,25 +1,23 @@
-// ** Testing Library
+// ** testing-library
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
-// ** react hot toast
-import toast from 'react-hot-toast'
-
-// ** Next
-import { useRouter } from 'next/navigation'
-
-// ** Module
+// ** Component
 import FormChangePassword from '@/modules/quen-mat-khau/FormChangePassword'
 
-// ** Services
-import { AuthService } from '@/services/auth'
+// ** Next router
+import { useRouter } from 'next/navigation'
 
-// =============================== Mocks =======================================
+// ** Toast
+import toast from 'react-hot-toast'
 
-jest.mock('@/services/auth', () => ({
-    AuthService: {
-        resetPassword: jest.fn(),
-    },
+// ** Hook
+import { useChangePassword } from '@/hooks/auth/useChangePassword'
+
+// ================= MOCKS =================
+
+jest.mock('next/navigation', () => ({
+    useRouter: jest.fn(),
 }))
 
 jest.mock('react-hot-toast', () => ({
@@ -27,149 +25,152 @@ jest.mock('react-hot-toast', () => ({
     error: jest.fn(),
 }))
 
-jest.mock('next/navigation', () => ({
-    useRouter: jest.fn(),
+jest.mock('@/hooks/auth/useChangePassword', () => ({
+    useChangePassword: jest.fn(),
 }))
 
-// =============================== Tests =======================================
+// ================= TESTS =================
 
-describe('FormChangePassword', () => {
-    const pushMock = jest.fn()
+describe('<FormChangePassword />', () => {
+    const push = jest.fn()
+    const trigger = jest.fn()
 
     beforeEach(() => {
-        ;(useRouter as jest.Mock).mockReturnValue({
-            push: pushMock,
+        jest.clearAllMocks()
+
+        ;(useRouter as jest.Mock).mockReturnValue({ push })
+
+        ;(useChangePassword as jest.Mock).mockReturnValue({
+            trigger,
+            isMutating: false,
         })
     })
 
-    afterEach(() => {
-        jest.clearAllMocks()
-    })
+    const fillValidForm = async (
+        user: ReturnType<typeof userEvent.setup>
+    ) => {
+        await user.type(
+            screen.getByLabelText(/^mật khẩu$/i),
+            '123456'
+        )
 
-    const setup = (token?: string) => {
-        render(<FormChangePassword token={token} />)
-
-        const newPasswordInput = screen.getByLabelText('Mật khẩu')
-        const confirmPasswordInput = screen.getByLabelText('Nhập lại mật khẩu')
-        const submitButton = screen.getByRole('button', { name: 'Đổi mật khẩu' })
-
-        return {
-            newPasswordInput,
-            confirmPasswordInput,
-            submitButton,
-        }
+        await user.type(
+            screen.getByLabelText(/nhập lại mật khẩu/i),
+            '123456'
+        )
     }
 
-    it('Render form correctly', () => {
-        setup('token-123')
+    it('renders change password form fields', () => {
+        render(<FormChangePassword token="valid-token" />)
 
         expect(screen.getByLabelText('Mật khẩu')).toBeInTheDocument()
-        expect(screen.getByLabelText('Nhập lại mật khẩu')).toBeInTheDocument()
-        expect(screen.getByRole('button', { name: 'Đổi mật khẩu' })).toBeInTheDocument()
-    })
-
-    it('Show error if token is missing', async () => {
-        const user = userEvent.setup()
-        const {
-            newPasswordInput,
-            confirmPasswordInput,
-            submitButton,
-        } = setup(undefined)
-
-        await user.type(newPasswordInput, '123456')
-        await user.type(confirmPasswordInput, '123456')
-        await user.click(submitButton)
-
-        await waitFor(() => {
-            expect(toast.error).toHaveBeenCalledWith(
-                'Đổi mật khẩu thất bại, vui lòng thử lại sau!'
-            )
-        })
-
-        expect(AuthService.resetPassword).not.toHaveBeenCalled()
-    })
-
-
-    it('Show validation error when passwords do not match', async () => {
-        const user = userEvent.setup()
-        const { newPasswordInput, confirmPasswordInput, submitButton } =
-            setup('token-123')
-
-        await user.type(newPasswordInput, '123456')
-        await user.type(confirmPasswordInput, '654321')
-        await user.click(submitButton)
-
         expect(
-            await screen.findByText('Mật khẩu không khớp')
+            screen.getByLabelText('Nhập lại mật khẩu')
         ).toBeInTheDocument()
 
-        expect(AuthService.resetPassword).not.toHaveBeenCalled()
+        expect(
+            screen.getByRole('button', { name: /đổi mật khẩu/i })
+        ).toBeInTheDocument()
     })
 
-    it('Call resetPassword and redirect on success', async () => {
+    it('shows error toast when token is missing', async () => {
         const user = userEvent.setup()
 
-        ;(AuthService.resetPassword as jest.Mock).mockResolvedValue({
+        render(<FormChangePassword />)
+
+        await fillValidForm(user)
+
+        await user.click(
+            screen.getByRole('button', { name: /đổi mật khẩu/i })
+        )
+
+        expect(toast.error).toHaveBeenCalledWith(
+            'Đổi mật khẩu thất bại, vui lòng thử lại sau!'
+        )
+
+        expect(trigger).not.toHaveBeenCalled()
+    })
+
+    it('submits successfully and redirects to login page', async () => {
+        const user = userEvent.setup()
+
+        trigger.mockResolvedValue({
+            message: 'Change password success',
+        })
+
+        render(<FormChangePassword token="valid-token" />)
+
+        await fillValidForm(user)
+
+        await user.click(
+            screen.getByRole('button', { name: /đổi mật khẩu/i })
+        )
+
+        await waitFor(() => {
+            expect(trigger).toHaveBeenCalledWith({
+                payload: {
+                    newPassword: '123456',
+                },
+                token: 'valid-token',
+            })
+        })
+
+        expect(toast.success).toHaveBeenCalledWith(
+            'Change password success'
+        )
+
+        expect(push).toHaveBeenCalledWith('/dang-nhap')
+    })
+
+    it('shows success toast when response has message', async () => {
+        const user = userEvent.setup()
+
+        trigger.mockResolvedValue({
             message: 'Đổi mật khẩu thành công',
         })
 
-        const { newPasswordInput, confirmPasswordInput, submitButton } =
-            setup('token-123')
+        render(<FormChangePassword token="valid-token" />)
 
-        await user.type(newPasswordInput, '123456')
-        await user.type(confirmPasswordInput, '123456')
-        await user.click(submitButton)
+        await fillValidForm(user)
 
-        await waitFor(() => {
-            expect(AuthService.resetPassword).toHaveBeenCalledWith(
-                { newPassword: '123456' },
-                'token-123'
-            )
-        })
-
-        expect(toast.success).toHaveBeenCalledWith('Đổi mật khẩu thành công')
-        expect(pushMock).toHaveBeenCalledWith('/dang-nhap')
-    })
-
-    it('Show error toast when resetPassword fails', async () => {
-        const user = userEvent.setup()
-
-        ;(AuthService.resetPassword as jest.Mock).mockRejectedValue(
-            new Error('Server error')
+        await user.click(
+            screen.getByRole('button', { name: /đổi mật khẩu/i })
         )
 
-        const { newPasswordInput, confirmPasswordInput, submitButton } =
-            setup('token-123')
-
-        await user.type(newPasswordInput, '123456')
-        await user.type(confirmPasswordInput, '123456')
-        await user.click(submitButton)
-
         await waitFor(() => {
-            expect(toast.error).toHaveBeenCalledWith('Server error')
+            expect(toast.success).toHaveBeenCalledWith(
+                'Đổi mật khẩu thành công'
+            )
         })
     })
 
-    it('Show generic error when error is not instance of Error', async () => {
+    it('does nothing when response has no message', async () => {
         const user = userEvent.setup()
 
-        ;(AuthService.resetPassword as jest.Mock).mockRejectedValue('some error')
+        trigger.mockResolvedValue({})
 
-        const {
-            newPasswordInput,
-            confirmPasswordInput,
-            submitButton,
-        } = setup('valid-token')
+        render(<FormChangePassword token="valid-token" />)
 
-        await user.type(newPasswordInput, '123456')
-        await user.type(confirmPasswordInput, '123456')
-        await user.click(submitButton)
+        await user.type(
+            screen.getByLabelText(/^mật khẩu$/i),
+            '123456'
+        )
+
+        await user.type(
+            screen.getByLabelText(/nhập lại mật khẩu/i),
+            '123456'
+        )
+
+        await user.click(
+            screen.getByRole('button', { name: /đổi mật khẩu/i })
+        )
 
         await waitFor(() => {
-            expect(toast.error).toHaveBeenCalledWith(
-                'Đã có lỗi xảy ra khi đổi mật khẩu, vui lòng thử lại sau!'
-            )
+            expect(trigger).toHaveBeenCalled()
         })
+
+        expect(toast.success).not.toHaveBeenCalled()
+        expect(push).not.toHaveBeenCalled()
     })
 
 })

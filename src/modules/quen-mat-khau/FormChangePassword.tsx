@@ -1,8 +1,5 @@
 'use client'
 
-// ** React
-import {useState} from "react";
-
 // ** Next
 import {useRouter} from "next/navigation";
 
@@ -20,12 +17,11 @@ import toast from "react-hot-toast";
 import Button from "@/components/common/Button";
 import InputPassword from "@/components/common/InputPassword";
 
-
 // ** Shadcn ui
 import {Field, FieldError, FieldLabel} from "@/components/ui/field";
 
-// ** Services
-import {AuthService} from "@/services/auth";
+// ** Hooks
+import {useChangePassword} from "@/hooks/auth/useChangePassword";
 
 const formSchema = z.object({
     newPassword: z.string().min(1, 'Mật khẩu không được để trống'),
@@ -48,9 +44,8 @@ export type TChangePasswordPayload = {
 
 const FormChangePassword = ({token}: Props) => {
 
-    const [loading, setLoading] = useState<boolean>(false);
     const router = useRouter()
-
+    const {trigger, isMutating} = useChangePassword()
 
     const form = useForm<TChangePasswordForm>({
         resolver: zodResolver(formSchema),
@@ -67,28 +62,20 @@ const FormChangePassword = ({token}: Props) => {
             return;
         }
 
-        setLoading(true);
+        const {confirmPassword, ...rest} = values;
 
-        try {
-            const {confirmPassword, ...rest} = values;
+        const payload = {
+            ...rest
+        }
 
-            const payload = {
-                ...rest
-            }
+        const res = await trigger({
+            payload,
+            token,
+        })
 
-            const res = await AuthService.resetPassword(payload, token);
-
-            toast.success(res.message);
-
-            router.push('/dang-nhap');
-        } catch (error) {
-            if (error instanceof Error) {
-                toast.error(error.message);
-            } else {
-                toast.error('Đã có lỗi xảy ra khi đổi mật khẩu, vui lòng thử lại sau!');
-            }
-        } finally {
-            setLoading(false);
+        if (res?.message) {
+            toast.success(res.message)
+            router.push('/dang-nhap')
         }
     }
 
@@ -135,7 +122,7 @@ const FormChangePassword = ({token}: Props) => {
                 )}
             />
 
-            <Button type='submit' form='form-change-password' width='full' isLoading={loading}>Đổi mật khẩu</Button>
+            <Button type='submit' form='form-change-password' width='full' isLoading={isMutating}>Đổi mật khẩu</Button>
         </form>
     )
 }

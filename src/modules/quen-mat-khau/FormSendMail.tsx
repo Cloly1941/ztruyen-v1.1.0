@@ -3,18 +3,12 @@
 // ** React
 import {useState} from "react";
 
-// ** Next
-import {useRouter} from "next/navigation";
-
 // ** zod
 import {z} from "zod";
 
 // ** React hook form
 import {Controller, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
-
-// ** React hot toast
-import toast from "react-hot-toast";
 
 // ** Components
 import Button from "@/components/common/Button";
@@ -24,8 +18,8 @@ import TurnstileWidget from "@/components/auth/TurnstileWidget";
 import {Field, FieldError, FieldLabel} from "@/components/ui/field";
 import {Input} from "@/components/ui/input";
 
-// ** Services
-import {AuthService} from "@/services/auth";
+// ** Hooks
+import {useForgotPassword} from "@/hooks/auth/useForgotPassword";
 
 const formSchema = z.object({
     email: z.string().email({message: 'Email không hợp lệ'}),
@@ -36,8 +30,8 @@ export type TForgotPassForm = z.infer<typeof formSchema>;
 const FormSendMail = () => {
 
     const [cfToken, setCfToken] = useState<string | null>(null);
-    const [loading, setLoading] = useState<boolean>(false);
-    const router = useRouter()
+
+    const { trigger, isMutating } = useForgotPassword(cfToken)
 
     const form = useForm<TForgotPassForm>({
         resolver: zodResolver(formSchema),
@@ -46,30 +40,8 @@ const FormSendMail = () => {
         },
     });
 
-    const onSubmit = async (values: TForgotPassForm) => {
-
-        if (!cfToken) {
-            toast.error('Vui lòng xác thực bạn không phải bot');
-            return;
-        }
-
-        setLoading(true);
-
-        try {
-            const res = await AuthService.forgotPassword(values, cfToken);
-
-            toast.success(res.message);
-
-            router.push('/');
-        } catch (error) {
-            if (error instanceof Error) {
-                toast.error(error.message);
-            } else {
-                toast.error('Đã có lỗi xảy ra khi gửi email, vui lòng thử lại sau!');
-            }
-        } finally {
-            setLoading(false);
-        }
+    const onSubmit = (values: TForgotPassForm) => {
+        trigger(values)
     }
 
     return (
@@ -100,7 +72,7 @@ const FormSendMail = () => {
                 <TurnstileWidget onVerify={setCfToken}/>
             </div>
 
-            <Button type='submit' form='form-forgot-password' width='full' isLoading={loading}>Gửi email</Button>
+            <Button type='submit' form='form-forgot-password' width='full' isLoading={isMutating}>Gửi email</Button>
         </form>
     )
 }
