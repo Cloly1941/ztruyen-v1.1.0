@@ -10,6 +10,7 @@ import {ThemeProvider} from "@/theme/ThemeProvider";
 
 // ** Components
 import Toast from "@/components/common/Toast";
+import ProgressWrapper from "@/components/common/ProgressWrapper";
 
 // ** Styles global
 import "./globals.css";
@@ -55,7 +56,9 @@ export default function RootLayout({children,}: { children: ReactNode }) {
             enableSystem
             disableTransitionOnChange
         >
-            {children}
+            <ProgressWrapper>
+                {children}
+            </ProgressWrapper>
             <Toast/>
         </ThemeProvider>
         </body>
