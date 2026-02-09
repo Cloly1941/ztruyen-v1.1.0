@@ -1,7 +1,7 @@
 // ** lib
 import {fetcher} from "@/lib/fetcher";
 import {removeAccessToken, setAccessToken} from "@/lib/localStorage";
-import {authFetcher} from "@/lib/auth-fetch";
+import {authFetcherWithRefresh} from "@/lib/auth-fetch";
 
 // ** Types
 import {ILogin, IRegister} from "@/types/api";
@@ -75,7 +75,7 @@ export const AuthService = {
     },
 
     logout: async (): Promise<IApiRes<null>> => {
-        const res = await authFetcher<IApiRes<null>>(CONFIG_API.AUTH.LOGOUT, {
+        const res = await authFetcherWithRefresh<IApiRes<null>>(CONFIG_API.AUTH.LOGOUT, {
             method: 'POST'
         });
 

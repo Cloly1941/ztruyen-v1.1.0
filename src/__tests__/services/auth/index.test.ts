@@ -3,19 +3,18 @@ import { AuthService } from '@/services/auth'
 
 // ** Libs
 import { fetcher } from '@/lib/fetcher'
-import { authFetcher } from '@/lib/auth-fetch'
+import { authFetcherWithRefresh } from '@/lib/auth-fetch'
 import { removeAccessToken } from '@/lib/localStorage'
 import { setAccessToken } from '@/lib/localStorage'
 
 // ** Configs
 import { CONFIG_API } from '@/configs/api'
-import { VARIABLE } from '@/configs/variable'
 
 // =============================== Mocks =============================//
 jest.mock('@/lib/fetcher')
 
 jest.mock('@/lib/auth-fetch', () => ({
-    authFetcher: jest.fn(),
+    authFetcherWithRefresh: jest.fn(),
 }))
 
 jest.mock('@/lib/localStorage', () => ({
@@ -200,34 +199,34 @@ describe('AuthService', () => {
     })
 
     describe('logout', () => {
-        it('calls logout endpoint and removes access token', async () => {
+
+        it('calls logout endpoint and removes access token on success', async () => {
             const mockRes = {
                     message: 'Logout success',
                     statusCode: 200,
                     data: null,
                 };
 
-            (authFetcher as jest.Mock).mockResolvedValueOnce(mockRes)
+            (authFetcherWithRefresh as jest.Mock).mockResolvedValueOnce(mockRes)
 
             const res = await AuthService.logout()
 
-            expect(authFetcher).toHaveBeenCalledTimes(1)
-            expect(authFetcher).toHaveBeenCalledWith(
+            expect(authFetcherWithRefresh).toHaveBeenCalledTimes(1)
+            expect(authFetcherWithRefresh).toHaveBeenCalledWith(
                 CONFIG_API.AUTH.LOGOUT,
-                expect.objectContaining({
-                    method: 'POST',
-                })
+                { method: 'POST' }
             )
 
+            // clear token
             expect(removeAccessToken).toHaveBeenCalledTimes(1)
 
             expect(res).toEqual(mockRes)
         })
 
-        it('does NOT remove access token if logout api fails', async () => {
-            (authFetcher as jest.Mock).mockRejectedValueOnce(
-                new Error('Unauthorized')
-            )
+        it('does NOT remove access token if logout api throws error', async () => {
+            const error = new Error('Unauthorized');
+
+            (authFetcherWithRefresh as jest.Mock).mockRejectedValueOnce(error)
 
             await expect(AuthService.logout()).rejects.toThrow('Unauthorized')
 
