@@ -1,96 +1,91 @@
 // ** Testing Library
-import { render, screen, waitFor } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
+import { render, screen } from '@testing-library/react'
 
-// ** Layout components
+// ** Layout Component
 import AccountMenu from '@/layouts/components/Header/AccountMenu'
 
-// ** Services
-import { UserService } from '@/services/user'
+// ** Hooks
+import { useProfile } from '@/hooks/auth/useProfile'
+import userEvent from "@testing-library/user-event";
+
+// ================== MOCKS ==================
+jest.mock('@/hooks/auth/useProfile')
+
+// eslint-disable-next-line react/display-name
+jest.mock('@/layouts/components/Header/Logout', () => () => (
+    <div data-testid="logout">Logout</div>
+))
+
+// eslint-disable-next-line react/display-name
+jest.mock('@/skeletons/layouts/AvatarSkeletons', () => () => (
+    <div data-testid="avatar-skeleton" />
+))
 
 jest.mock('next/link', () => ({
     __esModule: true,
     default: ({ children }: { children: React.ReactNode }) => children,
 }))
 
-jest.mock('@/layouts/components/Header/Logout', () => ({
-    __esModule: true,
-    default: () => <div>Logout</div>,
-}))
-
-jest.mock('@/services/user', () => ({
-    UserService: {
-        getProfile: jest.fn(),
-    },
-}))
-
-jest.mock('@/skeletons/layouts/AvatarSkeletons', () => ({
-    __esModule: true,
-    default: () => <div data-testid="avatar-skeleton" />,
-}))
-
-const mockUser = {
-    id: 1,
-    name: 'John Doe',
-    avatar: {
-        url: 'https://avatar.test/john.png',
-    },
-}
-
+// ================== TEST ==================
 describe('AccountMenu', () => {
-    beforeEach(() => {
-        jest.clearAllMocks()
-    })
 
-    it('shows skeleton while loading', () => {
-        (UserService.getProfile as jest.Mock).mockResolvedValueOnce({
-            data: mockUser,
-        })
-
-        render(<AccountMenu />)
-
-        expect(screen.getByTestId('avatar-skeleton')).toBeInTheDocument()
-    })
-
-    it('renders avatar and dropdown when profile is loaded', async () => {
-        (UserService.getProfile as jest.Mock).mockResolvedValueOnce({
-            data: mockUser,
-        })
-
-        render(<AccountMenu />)
-
-        const avatarFallback = await screen.findByText('J')
-        expect(avatarFallback).toBeInTheDocument()
-
-        await userEvent.click(avatarFallback)
-
-        expect(await screen.findByText('John Doe')).toBeInTheDocument()
-        expect(screen.getByText('Thông tin')).toBeInTheDocument()
-        expect(screen.getByText('Yêu thích')).toBeInTheDocument()
-        expect(screen.getByText('Logout')).toBeInTheDocument()
-    })
-
-    it('renders nothing when profile fetch fails', async () => {
-        (UserService.getProfile as jest.Mock).mockRejectedValueOnce(
-            new Error('Unauthorized')
-        )
-
-        const { container } = render(<AccountMenu />)
-
-        await waitFor(() => {
-            expect(container.firstChild).toBeNull()
-        })
-    })
-
-    it('renders nothing when profile is null', async () => {
-        (UserService.getProfile as jest.Mock).mockResolvedValueOnce({
+    it('renders skeleton when loading profile', () => {
+        (useProfile as jest.Mock).mockReturnValue({
             data: null,
+            isLoading: true,
+        })
+
+        render(<AccountMenu />)
+
+        expect(
+            screen.getByTestId('avatar-skeleton')
+        ).toBeInTheDocument()
+    })
+
+    it('renders nothing when user is null', () => {
+        (useProfile as jest.Mock).mockReturnValue({
+            data: null,
+            isLoading: false,
         })
 
         const { container } = render(<AccountMenu />)
 
-        await waitFor(() => {
-            expect(container.firstChild).toBeNull()
+        expect(container.firstChild).toBeNull()
+    })
+
+    it('renders account menu when user exists', async () => {
+        const user = userEvent.setup();
+
+        (useProfile as jest.Mock).mockReturnValue({
+            isLoading: false,
+            data: {
+                name: 'Nguyen Van A',
+                avatar: {
+                    url: 'https://example.com/avatar.png',
+                },
+            },
         })
+
+        render(<AccountMenu />)
+
+        expect(screen.getByText('N')).toBeInTheDocument()
+
+        await user.click(screen.getByText('N'))
+
+        expect(
+            await screen.findByText('Nguyen Van A')
+        ).toBeInTheDocument()
+
+        expect(
+            screen.getByText(/thông tin cá nhân/i)
+        ).toBeInTheDocument()
+
+        expect(
+            screen.getByText(/truyện yêu thích/i)
+        ).toBeInTheDocument()
+
+        expect(
+            screen.getByTestId('logout')
+        ).toBeInTheDocument()
     })
 })

@@ -1,56 +1,56 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
 // ** testing-library
-import { render, screen, waitFor } from "@testing-library/react"
-import userEvent from "@testing-library/user-event"
+import { render, screen, waitFor } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 
 // ** Component
-import FormRegister from "@/modules/dang-ky/FormRegister"
-
-// ** Services
-import { AuthService } from "@/services/auth"
+import FormRegister from '@/modules/dang-ky/FormRegister'
 
 // ** Next router
-import { useRouter } from "next/navigation"
+import { useRouter } from 'next/navigation'
 
 // ** Toast
-import toast from "react-hot-toast"
+import toast from 'react-hot-toast'
+
+// ** Hook
+import { useRegister } from '@/hooks/auth/useRegister'
 
 // ================= MOCKS =================
 
-jest.mock("@/services/auth", () => ({
-    AuthService: {
-        register: jest.fn(),
-    },
-}))
-
-jest.mock("next/navigation", () => ({
+jest.mock('next/navigation', () => ({
     useRouter: jest.fn(),
 }))
 
-jest.mock("react-hot-toast", () => ({
+jest.mock('react-hot-toast', () => ({
     success: jest.fn(),
     error: jest.fn(),
 }))
 
-jest.mock("@/components/auth/TurnstileWidget", () => ({
+jest.mock('@/hooks/auth/useRegister', () => ({
+    useRegister: jest.fn(),
+}))
+
+jest.mock('@/components/auth/TurnstileWidget', () => ({
     __esModule: true,
     default: ({ onVerify }: { onVerify: (token: string) => void }) => (
-        <button onClick={() => onVerify("cf-token")}>Verify CF</button>
+        <button onClick={() => onVerify('cf-token')}>
+            Verify CF
+        </button>
     ),
 }))
 
-jest.mock("@/components/ui/select", () => ({
-    Select: ({ value, onValueChange, children }: any) => (
+jest.mock('@/components/ui/select', () => ({
+    Select: ({ value, onValueChange }: any) => (
         <select
             data-testid="gender-select"
-            value={value ?? ""}
+            value={value ?? ''}
             onChange={(e) => onValueChange(e.target.value)}
         >
-            <option value="">Chọn giới tính</option>
-            <option value="male">Nam</option>
-            <option value="female">Nữ</option>
+            <option value="">Select gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
             <option value="lgbt">LGBT</option>
-            {children}
         </select>
     ),
     SelectTrigger: ({ children }: any) => <>{children}</>,
@@ -59,168 +59,133 @@ jest.mock("@/components/ui/select", () => ({
     SelectItem: ({ children }: any) => <>{children}</>,
 }))
 
-jest.mock("@/components/ui/popover", () => ({
+jest.mock('@/components/ui/popover', () => ({
     Popover: ({ children }: any) => <div>{children}</div>,
     PopoverTrigger: ({ children }: any) => <div>{children}</div>,
     PopoverContent: ({ children }: any) => <div>{children}</div>,
 }))
 
-jest.mock("@/components/ui/calendar", () => ({
-    Calendar: ({ onSelect }: any) => (
-        <button
-            type="button"
-            onClick={() => onSelect(new Date("2000-01-01"))}
-        >
-            Pick birthday
-        </button>
-    ),
-}))
+jest.mock('@/components/ui/calendar', () => ({
+    Calendar: ({ onSelect, disabled, formatters }: any) => {
+        disabled?.(new Date('1990-01-01'))
+        disabled?.(new Date())
 
+        formatters?.formatMonthDropdown?.(new Date('2024-01-01'))
+
+        return (
+            <button
+                type="button"
+                onClick={() => onSelect(new Date('2000-01-01'))}
+            >
+                Pick birthday
+            </button>
+        )
+    },
+}))
 
 // ================= TESTS =================
 
-describe("<FormRegister />", () => {
+describe('<FormRegister /> (with useRegister hook)', () => {
     const push = jest.fn()
+    const trigger = jest.fn()
 
     beforeEach(() => {
-        jest.clearAllMocks()
-        ;(useRouter as jest.Mock).mockReturnValue({ push })
+        (useRouter as jest.Mock).mockReturnValue({ push });
+
+        (useRegister as jest.Mock).mockReturnValue({
+            trigger,
+            isMutating: false,
+        })
     })
 
     const fillValidForm = async (user: ReturnType<typeof userEvent.setup>) => {
         await user.type(
-            screen.getByPlaceholderText("Tên hiển thị của bạn"),
-            "Nguyen Van A"
+            screen.getByPlaceholderText('Tên hiển thị của bạn'),
+            'Nguyen Van A'
         )
 
         await user.type(
-            screen.getByPlaceholderText("Email bạn dùng để đăng ký"),
-            "test@gmail.com"
+            screen.getByPlaceholderText('Email bạn dùng để đăng ký'),
+            'test@gmail.com'
         )
 
-        await user.type(screen.getByLabelText("Mật khẩu"), "123456")
-        await user.type(screen.getByLabelText("Nhập lại mật khẩu"), "123456")
+        await user.type(screen.getByLabelText('Mật khẩu'), '123456')
+        await user.type(screen.getByLabelText('Nhập lại mật khẩu'), '123456')
 
-        // gender (mocked select)
         await user.selectOptions(
-            screen.getByTestId("gender-select"),
-            "male"
+            screen.getByTestId('gender-select'),
+            'male'
         )
 
-        // birthday (mocked calendar)
-        await user.click(screen.getByText("Pick birthday"))
+        await user.click(screen.getByText('Pick birthday'))
     }
 
-    it("Render register form fields", () => {
+    it('renders all register form fields', () => {
         render(<FormRegister />)
 
         expect(
-            screen.getByPlaceholderText("Tên hiển thị của bạn")
+            screen.getByPlaceholderText('Tên hiển thị của bạn')
         ).toBeInTheDocument()
 
         expect(
-            screen.getByPlaceholderText("Email bạn dùng để đăng ký")
+            screen.getByPlaceholderText('Email bạn dùng để đăng ký')
         ).toBeInTheDocument()
 
-        expect(
-            screen.getByLabelText("Mật khẩu")
-        ).toBeInTheDocument()
+        expect(screen.getByLabelText('Mật khẩu')).toBeInTheDocument()
+        expect(screen.getByLabelText('Nhập lại mật khẩu')).toBeInTheDocument()
 
         expect(
-            screen.getByLabelText("Nhập lại mật khẩu")
-        ).toBeInTheDocument()
-
-        expect(
-            screen.getByRole("button", { name: /đăng ký/i })
+            screen.getByRole('button', { name: /đăng ký/i })
         ).toBeInTheDocument()
     })
 
-    it("Show error toast if submit without Cloudflare verification", async () => {
+    it('shows error toast when Cloudflare verification is missing', async () => {
         const user = userEvent.setup()
+
         render(<FormRegister />)
 
         await fillValidForm(user)
 
         await user.click(
-            screen.getByRole("button", { name: /đăng ký/i })
+            screen.getByRole('button', { name: /đăng ký/i })
         )
 
         expect(toast.error).toHaveBeenCalledWith(
-            "Vui lòng xác thực bạn không phải bot"
+            'Vui lòng xác thực bạn không phải bot'
         )
 
-        expect(AuthService.register).not.toHaveBeenCalled()
+        expect(trigger).not.toHaveBeenCalled()
     })
 
-    it("Submit successfully and redirect to login page", async () => {
+    it('submits form successfully, calls register and redirects to login page', async () => {
         const user = userEvent.setup()
 
-        ;(AuthService.register as jest.Mock).mockResolvedValue({
-            message: "Register success",
+        trigger.mockResolvedValue({
+            message: 'Register success',
         })
 
         render(<FormRegister />)
 
-        await user.click(screen.getByText("Verify CF"))
+        await user.click(screen.getByText('Verify CF'))
 
         await fillValidForm(user)
 
         await user.click(
-            screen.getByRole("button", { name: /đăng ký/i })
+            screen.getByRole('button', { name: /đăng ký/i })
         )
 
         await waitFor(() => {
-            expect(AuthService.register).toHaveBeenCalled()
+            expect(trigger).toHaveBeenCalledWith({
+                payload: expect.objectContaining({
+                    name: 'Nguyen Van A',
+                    email: 'test@gmail.com',
+                    gender: 'male',
+                }),
+                cfToken: 'cf-token',
+            })
         })
 
-        await waitFor(() => {
-            expect(toast.success).toHaveBeenCalledWith("Register success")
-        })
-
-        expect(push).toHaveBeenCalledWith("/dang-nhap")
-    })
-
-    it("Show error toast when register failed (Error instance)", async () => {
-        const user = userEvent.setup()
-
-        ;(AuthService.register as jest.Mock).mockRejectedValue(
-            new Error("Email đã tồn tại")
-        )
-
-        render(<FormRegister />)
-
-        await user.click(screen.getByText("Verify CF"))
-
-        await fillValidForm(user)
-
-        await user.click(
-            screen.getByRole("button", { name: /đăng ký/i })
-        )
-
-        await waitFor(() => {
-            expect(toast.error).toHaveBeenCalledWith("Email đã tồn tại")
-        })
-    })
-
-    it("Show fallback error toast when error is not instance of Error", async () => {
-        const user = userEvent.setup()
-
-        ;(AuthService.register as jest.Mock).mockRejectedValue("UNKNOWN_ERROR")
-
-        render(<FormRegister />)
-
-        await user.click(screen.getByText("Verify CF"))
-
-        await fillValidForm(user)
-
-        await user.click(
-            screen.getByRole("button", { name: /đăng ký/i })
-        )
-
-        await waitFor(() => {
-            expect(toast.error).toHaveBeenCalledWith(
-                "Đã có lỗi xảy ra khi đăng ký, vui lòng thử lại sau!"
-            )
-        })
+        expect(toast.success).toHaveBeenCalledWith('Register success')
+        expect(push).toHaveBeenCalledWith('/dang-nhap')
     })
 })

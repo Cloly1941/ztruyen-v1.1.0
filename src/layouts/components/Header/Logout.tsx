@@ -1,52 +1,24 @@
 'use client'
 
-// ** React
-import {useState} from "react";
-
-// ** Next
-import {useRouter} from "next/navigation";
-
-// ** react hot toast
-import toast from "react-hot-toast";
-
 // ** Components
 import Loading from "@/components/common/Loading";
 
 // ** Icon
 import {LogOut} from "lucide-react";
 
-// ** Service
-import {AuthService} from "@/services/auth";
+// ** Hooks
+import {useLogout} from "@/hooks/auth/useLogout";
 
-// ** Utils
-import {sleep} from "@/utils/sleep";
+// ** Services
+import {UserService} from "@/services/user";
 
 const Logout = () => {
 
-    const [loading, setLoading] = useState(false);
-    const router = useRouter()
+    const {trigger, isMutating} = useLogout()
 
     const handleLogout = async () => {
-        setLoading(true);
-
-        try {
-            const [res] = await Promise.all([
-                AuthService.logout(),
-                sleep(600),
-            ]);
-
-            toast.success(res.message);
-
-            router.refresh();
-        } catch (error) {
-            if (error instanceof Error) {
-                toast.error(error.message);
-            } else {
-                toast.error('Đã có lỗi xảy ra khi đăng xuất, vui lòng thử lại sau!');
-            }
-        } finally {
-            setLoading(false);
-        }
+        await UserService.getProfile()
+        await trigger()
     }
 
     return (
@@ -55,11 +27,11 @@ const Logout = () => {
                 className="text-red-500 flex gap-2 cursor-pointer"
                 onClick={handleLogout}
             >
-                <LogOut className="text-inherit" />
+                <LogOut className="text-inherit"/>
                 Đăng xuất
             </div>
 
-            {loading && <Loading />}
+            {isMutating && <Loading/>}
         </>
     )
 }

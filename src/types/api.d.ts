@@ -1,20 +1,8 @@
-enum EGender {
-    MALE = 'male',
-    FEMALE = 'female',
-    LGBT = 'lgbt',
-}
+type TGender = 'male' | 'female' | 'lgbt';
 
-enum ERole {
-    ADMIN = 'admin',
-    AUTHOR = 'author',
-    USER = 'user',
-}
+type TRole = 'admin' | 'author' | 'user';
 
-enum EProvider {
-    LOCAL = 'local',
-    GOOGLE = 'google',
-    FACEBOOK = 'facebook',
-}
+type TProvider = 'local' | 'google' | 'facebook';
 
 interface IImage {
     _id: string;
@@ -48,9 +36,9 @@ export interface IUserProfile {
     avatar_frame?: IImage;
     birthday: string;
     age: number;
-    gender: EGender;
-    role: ERole;
-    provider: EProvider;
+    gender: TGender;
+    role: TRole;
+    provider: TProvider;
     createdAt: string;
     updatedAt: string;
 }

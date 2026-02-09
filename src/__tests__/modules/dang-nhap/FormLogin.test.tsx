@@ -1,182 +1,180 @@
-// ** testing-library
-import { render, screen } from "@testing-library/react"
-import { userEvent } from "@testing-library/user-event"
+// ** Testing Library
+import { render, screen, waitFor } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 
-// ** Component
-import FormLogin from "@/modules/dang-nhap/FormLogin";
+// ** Next
+import { useRouter } from 'next/navigation'
 
-// ** Services
-import { AuthService } from "@/services/auth"
+// ** Module
+import FormLogin from '@/modules/dang-nhap/FormLogin'
 
-// ** Next router
-import { useRouter } from "next/navigation"
+// ** react hot toast
+import toast from 'react-hot-toast'
 
-// ** Toast
-import toast from "react-hot-toast"
+// ** Hooks
+import { useLogin } from '@/hooks/auth/useLogin'
 
 // ================= MOCKS =================
+jest.mock('@/hooks/auth/useLogin')
 
-jest.mock("@/services/auth", () => ({
-    AuthService: {
-        login: jest.fn(),
-    },
-}))
-
-jest.mock("next/navigation", () => ({
+jest.mock('next/navigation', () => ({
     useRouter: jest.fn(),
 }))
 
-jest.mock("react-hot-toast", () => ({
+jest.mock('react-hot-toast', () => ({
     success: jest.fn(),
     error: jest.fn(),
 }))
 
-jest.mock("@/components/auth/TurnstileWidget", () => ({
+jest.mock('@/components/auth/TurnstileWidget', () => ({
     __esModule: true,
     default: ({ onVerify }: { onVerify: (token: string) => void }) => (
-        <button onClick={() => onVerify("cf-token")}>Verify CF</button>
+        <button
+            data-testid="turnstile"
+            onClick={() => onVerify('mock-cf-token')}
+        >
+            verify
+        </button>
     ),
 }))
 
-// ================= TESTS =================
-
-describe("<FormLogin />", () => {
+// ================== TESTS =================
+describe('FormLogin', () => {
+    const trigger = jest.fn()
     const push = jest.fn()
 
     beforeEach(() => {
-        (useRouter as jest.Mock).mockReturnValue({ push })
+        (useLogin as jest.Mock).mockReturnValue({
+            trigger,
+            isMutating: false,
+        });
+
+        (useRouter as jest.Mock).mockReturnValue({
+            push,
+        })
     })
 
-    it("Render form login fields", () => {
+    it('renders login form', () => {
         render(<FormLogin />)
 
+        expect(screen.getByLabelText(/email/i)).toBeInTheDocument()
+        expect(screen.getByLabelText(/mật khẩu/i)).toBeInTheDocument()
         expect(
-            screen.getByPlaceholderText(/email bạn dùng để đăng nhập/i)
-        ).toBeInTheDocument()
-
-        expect(
-            screen.getByPlaceholderText(/mật khẩu/i)
-        ).toBeInTheDocument()
-
-        expect(
-            screen.getByRole("button", { name: /đăng nhập/i })
+            screen.getByRole('button', { name: /đăng nhập/i })
         ).toBeInTheDocument()
     })
 
-    it("Show error toast if submit without Cloudflare verification", async () => {
+    it('shows validation errors when submitting empty form', async () => {
+        const user = userEvent.setup()
+        render(<FormLogin />)
+
+        await user.click(
+            screen.getByRole('button', { name: /đăng nhập/i })
+        )
+
+        expect(await screen.findByText(/email không hợp lệ/i)).toBeInTheDocument()
+        expect(
+            await screen.findByText(/mật khẩu không được để trống/i)
+        ).toBeInTheDocument()
+    })
+
+    it('shows error toast when cfToken is missing (cover line 57–58)', async () => {
         const user = userEvent.setup()
         render(<FormLogin />)
 
         await user.type(
-            screen.getByPlaceholderText(/email bạn dùng/i),
-            "test@gmail.com"
+            screen.getByLabelText(/email/i),
+            'test@gmail.com'
         )
 
         await user.type(
-            screen.getByPlaceholderText(/mật khẩu/i),
-            "123456"
+            screen.getByLabelText(/mật khẩu/i),
+            '123456'
         )
 
         await user.click(
-            screen.getByRole("button", { name: /đăng nhập/i })
+            screen.getByRole('button', { name: /đăng nhập/i })
         )
 
-        expect(toast.error).toHaveBeenCalledWith(
-            "Vui lòng xác thực bạn không phải bot"
-        )
+        await waitFor(() => {
+            expect(toast.error).toHaveBeenCalledWith(
+                'Vui lòng xác thực bạn không phải bot'
+            )
+        })
+
+        expect(trigger).not.toHaveBeenCalled()
     })
 
-    it("Submit successfully and redirect", async () => {
-        const user = userEvent.setup();
+    it('submits form successfully when verified', async () => {
+        const user = userEvent.setup()
 
-        (AuthService.login as jest.Mock).mockResolvedValue({
-            message: "Login success",
+        trigger.mockResolvedValue({
+            message: 'Login success',
         })
 
         render(<FormLogin />)
 
-        // verify cloudflare
-        await user.click(screen.getByText("Verify CF"))
-
         await user.type(
-            screen.getByPlaceholderText(/email bạn dùng/i),
-            "test@gmail.com"
+            screen.getByLabelText(/email/i),
+            'test@gmail.com'
         )
 
         await user.type(
-            screen.getByPlaceholderText(/mật khẩu/i),
-            "123456"
+            screen.getByLabelText(/mật khẩu/i),
+            '123456'
         )
+
+        await user.click(screen.getByTestId('turnstile'))
 
         await user.click(
-            screen.getByRole("button", { name: /đăng nhập/i })
+            screen.getByRole('button', { name: /đăng nhập/i })
         )
 
-        expect(AuthService.login).toHaveBeenCalledWith(
-            {
-                email: "test@gmail.com",
-                password: "123456",
-            },
-            "cf-token"
-        )
+        await waitFor(() => {
+            expect(trigger).toHaveBeenCalledWith({
+                payload: {
+                    email: 'test@gmail.com',
+                    password: '123456',
+                },
+                cfToken: 'mock-cf-token',
+            })
+        })
 
-        expect(toast.success).toHaveBeenCalledWith("Login success")
-        expect(push).toHaveBeenCalledWith("/")
+        expect(toast.success).toHaveBeenCalledWith('Login success')
+        expect(push).toHaveBeenCalledWith('/')
     })
 
-    it("Show error toast when login failed", async () => {
-        const user = userEvent.setup();
+    it('does nothing when login returns no response', async () => {
+        const user = userEvent.setup()
 
-        (AuthService.login as jest.Mock).mockRejectedValue(
-            new Error("Sai mật khẩu")
-        )
+        trigger.mockResolvedValue(undefined)
 
         render(<FormLogin />)
 
-        await user.click(screen.getByText("Verify CF"))
-
         await user.type(
-            screen.getByPlaceholderText(/email bạn dùng/i),
-            "test@gmail.com"
+            screen.getByLabelText(/email/i),
+            'test@gmail.com'
         )
 
         await user.type(
-            screen.getByPlaceholderText(/mật khẩu/i),
-            "123456"
+            screen.getByLabelText(/mật khẩu/i),
+            '123456'
         )
+
+        // verify Cloudflare
+        await user.click(screen.getByTestId('turnstile'))
 
         await user.click(
-            screen.getByRole("button", { name: /đăng nhập/i })
+            screen.getByRole('button', { name: /đăng nhập/i })
         )
 
-        expect(toast.error).toHaveBeenCalledWith("Sai mật khẩu")
+        await waitFor(() => {
+            expect(trigger).toHaveBeenCalled()
+        })
+
+        expect(toast.success).not.toHaveBeenCalled()
+
+        expect(push).not.toHaveBeenCalled()
     })
 
-    it("Show fallback error toast when error is not instance of Error", async () => {
-        const user = userEvent.setup();
-
-        (AuthService.login as jest.Mock).mockRejectedValue("UNKNOWN_ERROR")
-
-        render(<FormLogin />)
-
-        await user.click(screen.getByText("Verify CF"))
-
-        await user.type(
-            screen.getByPlaceholderText(/email bạn dùng/i),
-            "test@gmail.com"
-        )
-
-        await user.type(
-            screen.getByPlaceholderText(/mật khẩu/i),
-            "123456"
-        )
-
-        await user.click(
-            screen.getByRole("button", { name: /đăng nhập/i })
-        )
-
-        expect(toast.error).toHaveBeenCalledWith(
-            "Đã có lỗi xảy ra khi đăng nhập, vui lòng thử lại sau!"
-        )
-    })
 })

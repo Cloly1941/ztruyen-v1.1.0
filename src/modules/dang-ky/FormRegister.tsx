@@ -28,9 +28,6 @@ import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/c
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
 import {Calendar} from "@/components/ui/calendar";
 
-// ** Services
-import {AuthService} from "@/services/auth";
-
 // ** lucide icons
 import {CalendarIcon} from "lucide-react";
 
@@ -42,6 +39,9 @@ import {vi} from 'react-day-picker/locale';
 
 // ** Utils
 import {getAgeToBirthday, getDefaultBirthdayMonth, isBirthdayValid} from "@/utils/date";
+
+// ** Hooks
+import {useRegister} from "@/hooks/auth/useRegister";
 
 const formSchema = z
     .object({
@@ -87,9 +87,10 @@ export type TRegisterPayload = {
 
 const FormRegister = () => {
 
-    const [cfToken, setCfToken] = useState<string | null>(null);
-    const [loading, setLoading] = useState<boolean>(false);
     const router = useRouter()
+    const [cfToken, setCfToken] = useState<string | null>(null);
+
+    const {trigger, isMutating} = useRegister()
 
     const form = useForm<TRegisterForm>({
         resolver: zodResolver(formSchema),
@@ -110,31 +111,22 @@ const FormRegister = () => {
             return;
         }
 
-        setLoading(true);
+        const {confirmPassword, birthday, ...rest} = values;
 
-        try {
-            const {confirmPassword, birthday, ...rest} = values;
-
-            const payload = {
-                ...rest,
-                birthday: birthday.toISOString(),
-                age: getAgeToBirthday(birthday),
-            }
-
-            const res = await AuthService.register(payload, cfToken);
-
-            toast.success(res.message);
-
-            router.push('/dang-nhap');
-        } catch (error) {
-            if (error instanceof Error) {
-                toast.error(error.message);
-            } else {
-                toast.error('Đã có lỗi xảy ra khi đăng ký, vui lòng thử lại sau!');
-            }
-        } finally {
-            setLoading(false);
+        const payload = {
+            ...rest,
+            birthday: birthday.toISOString(),
+            age: getAgeToBirthday(birthday),
         }
+
+        const res = await trigger({
+            payload,
+            cfToken,
+        })
+
+        toast.success(res.message);
+
+        router.push('/dang-nhap');
     }
 
     return (
@@ -295,7 +287,7 @@ const FormRegister = () => {
                 <TurnstileWidget onVerify={setCfToken}/>
             </div>
 
-            <Button type='submit' form='form-register' width='full' isLoading={loading}>Đăng ký</Button>
+            <Button type='submit' form='form-register' width='full' isLoading={isMutating}>Đăng ký</Button>
         </form>
     )
 }

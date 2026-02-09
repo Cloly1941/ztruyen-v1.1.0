@@ -1,8 +1,5 @@
 'use client'
 
-// ** React
-import {useEffect, useState} from "react";
-
 // ** Next
 import Link from "next/link";
 
@@ -21,40 +18,20 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
-// ** Types
-import {IUserProfile} from "@/types/api";
-
-// ** Services
-import {UserService} from "@/services/user";
-
 // ** Icons
 import {Heart, User} from "lucide-react";
 
 // ** Skeleton
 import AvatarSkeleton from "@/skeletons/layouts/AvatarSkeletons";
 
+// ** Hooks
+import {useProfile} from "@/hooks/auth/useProfile";
+
 const AccountMenu = () => {
 
-    const [user, setUser] = useState<IUserProfile | null>(null)
-    const [loading, setLoading] = useState(true)
+    const { data: user, isLoading } = useProfile()
 
-    useEffect(() => {
-        const fetchProfile = async () => {
-            try {
-                const res = await UserService.getProfile()
-                setUser(res.data ?? null)
-            } catch (error) {
-                console.error('GET thông tin người dùng lỗi', error)
-                setUser(null)
-            } finally {
-                setLoading(false)
-            }
-        }
-
-        fetchProfile()
-    }, [])
-
-    if (loading) {
+    if (isLoading) {
         return (
             <AvatarSkeleton/>
         )
@@ -73,20 +50,20 @@ const AccountMenu = () => {
                         <AvatarFallback>{user.name.charAt(0).toUpperCase()}</AvatarFallback>
                     </Avatar>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-40" align="center">
+                <DropdownMenuContent className="w-45" align="center">
                     <DropdownMenuGroup>
                         <DropdownMenuLabel
                             className='text-black dark:text-white font-bold text-center truncate'>{user.name}</DropdownMenuLabel>
-                        <Link href='thong-tin-nguoi-dung'>
+                        <Link href="/tai-khoan/thong-tin-ca-nhan">
                             <DropdownMenuItem>
-                                <User className='text-inherit'/>
-                                Thông tin
+                                <User className="text-inherit" />
+                                Thông tin cá nhân
                             </DropdownMenuItem>
                         </Link>
-                        <Link href='truyen-yeu-thich'>
+                        <Link href="/tai-khoan/truyen-yeu-thich">
                             <DropdownMenuItem>
-                                <Heart className='text-inherit'/>
-                                Yêu thích
+                                <Heart className="text-inherit" />
+                                Truyện yêu thích
                             </DropdownMenuItem>
                         </Link>
                     </DropdownMenuGroup>

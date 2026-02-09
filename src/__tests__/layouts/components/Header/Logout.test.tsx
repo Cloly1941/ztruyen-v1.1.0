@@ -1,121 +1,76 @@
 // ** Testing Library
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
-import '@testing-library/jest-dom'
 
-// ** Next
-import { useRouter } from 'next/navigation'
-
-// ** Toast
-import toast from 'react-hot-toast'
-
-// ** Component
-import Logout from '@/layouts/components/Header/Logout'
+// ** Hooks
+import { useLogout } from '@/hooks/auth/useLogout'
 
 // ** Services
-import { AuthService } from '@/services/auth'
+import { UserService } from '@/services/user'
 
-// ======================= Mocks ======================= //
-jest.mock('@/services/auth', () => ({
-    AuthService: {
-        logout: jest.fn(),
+// ** Layout Component
+import Logout from "@/layouts/components/Header/Logout";
+
+// ================== MOCKS ==================
+jest.mock('@/hooks/auth/useLogout')
+jest.mock('@/services/user', () => ({
+    UserService: {
+        getProfile: jest.fn(),
     },
 }))
 
-jest.mock('@/utils/sleep', () => ({
-    sleep: jest.fn(() => Promise.resolve()),
-}))
+jest.mock('@/components/common/Loading', () => () => (
+    <div data-testid="loading" />
+))
 
-jest.mock('next/navigation', () => ({
-    useRouter: jest.fn(),
-}))
-
-jest.mock('react-hot-toast', () => ({
-    success: jest.fn(),
-    error: jest.fn(),
-}))
-
-jest.mock('@/components/common/Loading', () => {
-    const MockLoading = () => <div data-testid="loading">Loading...</div>
-    MockLoading.displayName = 'MockLoading'
-    return MockLoading
-})
-
-// ======================= Tests ======================= //
-describe('Logout component', () => {
-    const refreshMock = jest.fn()
+// ================== TEST ==================
+describe('Logout', () => {
+    const trigger = jest.fn()
 
     beforeEach(() => {
-        (useRouter as jest.Mock).mockReturnValue({
-            refresh: refreshMock,
+        (useLogout as jest.Mock).mockReturnValue({
+            trigger,
+            isMutating: false,
+        });
+
+        (UserService.getProfile as jest.Mock).mockResolvedValue({})
+    })
+
+    it('renders logout button', () => {
+        render(<Logout />)
+
+        expect(
+            screen.getByText(/đăng xuất/i)
+        ).toBeInTheDocument()
+    })
+
+    it('calls getProfile and trigger when clicking logout', async () => {
+        render(<Logout />)
+
+        fireEvent.click(screen.getByText(/đăng xuất/i))
+
+        await waitFor(() => {
+            expect(UserService.getProfile).toHaveBeenCalledTimes(1)
+            expect(trigger).toHaveBeenCalledTimes(1)
         })
     })
 
-    afterEach(() => {
-        jest.clearAllMocks()
-    })
-
-    it('shows loading and calls logout when clicked', async () => {
-        (AuthService.logout as jest.Mock).mockResolvedValue({
-            message: 'Logout success',
+    it('shows loading when isMutating is true', () => {
+        (useLogout as jest.Mock).mockReturnValue({
+            trigger: jest.fn(),
+            isMutating: true,
         })
 
         render(<Logout />)
 
-        fireEvent.click(screen.getByText('Đăng xuất'))
-
-        expect(screen.getByTestId('loading')).toBeInTheDocument()
-
-        await waitFor(() => {
-            expect(AuthService.logout).toHaveBeenCalledTimes(1)
-        })
+        expect(
+            screen.getByTestId('loading')
+        ).toBeInTheDocument()
     })
 
-    it('shows success toast and refreshes router on success', async () => {
-        (AuthService.logout as jest.Mock).mockResolvedValue({
-            message: 'Logout success',
-        })
-
+    it('does not call logout if not clicked', () => {
         render(<Logout />)
 
-        fireEvent.click(screen.getByText('Đăng xuất'))
-
-        await waitFor(() => {
-            expect(toast.success).toHaveBeenCalledWith('Logout success')
-            expect(refreshMock).toHaveBeenCalledTimes(1)
-        })
-
-        await waitFor(() => {
-            expect(screen.queryByTestId('loading')).not.toBeInTheDocument()
-        })
-    })
-
-    it('shows error toast when logout fails with Error', async () => {
-        (AuthService.logout as jest.Mock).mockRejectedValue(
-            new Error('Unauthorized')
-        )
-
-        render(<Logout />)
-
-        fireEvent.click(screen.getByText('Đăng xuất'))
-
-        await waitFor(() => {
-            expect(toast.error).toHaveBeenCalledWith('Unauthorized')
-        })
-
-        expect(refreshMock).not.toHaveBeenCalled()
-    })
-
-    it('shows generic error when logout fails with non-Error', async () => {
-        (AuthService.logout as jest.Mock).mockRejectedValue('some error')
-
-        render(<Logout />)
-
-        fireEvent.click(screen.getByText('Đăng xuất'))
-
-        await waitFor(() => {
-            expect(toast.error).toHaveBeenCalledWith(
-                'Đã có lỗi xảy ra khi đăng xuất, vui lòng thử lại sau!'
-            )
-        })
+        expect(UserService.getProfile).not.toHaveBeenCalled()
+        expect(trigger).not.toHaveBeenCalled()
     })
 })

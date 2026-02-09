@@ -26,8 +26,8 @@ import TurnstileWidget from "@/components/auth/TurnstileWidget";
 import {Field, FieldError, FieldLabel} from "@/components/ui/field";
 import {Input} from "@/components/ui/input";
 
-// ** Services
-import {AuthService} from "@/services/auth";
+// ** Hooks
+import {useLogin} from "@/hooks/auth/useLogin";
 
 const formSchema = z.object({
     email: z.string().email({message: 'Email không hợp lệ'}),
@@ -39,8 +39,9 @@ export type TLoginForm = z.infer<typeof formSchema>;
 const FormLogin = () => {
 
     const [cfToken, setCfToken] = useState<string | null>(null);
-    const [loading, setLoading] = useState<boolean>(false);
     const router = useRouter()
+
+    const {trigger, isMutating} = useLogin()
 
     const form = useForm<TLoginForm>({
         resolver: zodResolver(formSchema),
@@ -57,23 +58,16 @@ const FormLogin = () => {
             return;
         }
 
-        setLoading(true);
+        const res = await trigger({
+            payload: values,
+            cfToken,
+        })
 
-        try {
-            const res = await AuthService.login(values, cfToken);
+        if (!res) return
 
-            toast.success(res.message);
+        toast.success(res.message);
 
-            router.push('/');
-        } catch (error) {
-            if (error instanceof Error) {
-                toast.error(error.message);
-            } else {
-                toast.error('Đã có lỗi xảy ra khi đăng nhập, vui lòng thử lại sau!');
-            }
-        } finally {
-            setLoading(false);
-        }
+        router.push('/');
     }
 
     return (
@@ -133,7 +127,7 @@ const FormLogin = () => {
                 </Link>
             </div>
 
-            <Button type='submit' form='form-login' width='full' isLoading={loading}>Đăng nhập</Button>
+            <Button type='submit' form='form-login' width='full' isLoading={isMutating}>Đăng nhập</Button>
         </form>
     )
 }
