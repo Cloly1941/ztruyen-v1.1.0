@@ -3,9 +3,18 @@ import { fetcher } from '@/lib/fetcher'
 import { ApiError } from '@/lib/api-error'
 
 describe('fetcher', () => {
+    const mockFetch = jest.fn()
+
+    beforeAll(() => {
+        global.fetch = mockFetch as unknown as typeof fetch
+    })
+
+    beforeEach(() => {
+        mockFetch.mockReset()
+    })
 
     it('Call fetch with query params correctly', async () => {
-        (fetch as jest.Mock).mockResolvedValue({
+        mockFetch.mockResolvedValue({
             ok: true,
             json: async () => ({ success: true }),
         })
@@ -18,7 +27,7 @@ describe('fetcher', () => {
             },
         })
 
-        expect(fetch).toHaveBeenCalledWith(
+        expect(mockFetch).toHaveBeenCalledWith(
             '/api/test?page=1&keyword=hello',
             expect.objectContaining({
                 credentials: 'include',
@@ -30,7 +39,7 @@ describe('fetcher', () => {
     })
 
     it('Merge custom headers correctly', async () => {
-        (fetch as jest.Mock).mockResolvedValue({
+        mockFetch.mockResolvedValue({
             ok: true,
             json: async () => ({ success: true }),
         })
@@ -41,7 +50,7 @@ describe('fetcher', () => {
             },
         })
 
-        expect(fetch).toHaveBeenCalledWith(
+        expect(mockFetch).toHaveBeenCalledWith(
             '/api/header',
             expect.objectContaining({
                 headers: expect.objectContaining({
@@ -53,9 +62,9 @@ describe('fetcher', () => {
     })
 
     it('Return body when response is ok', async () => {
-        const mockData = { data: { id: 1 } };
+        const mockData = { data: { id: 1 } }
 
-        (fetch as jest.Mock).mockResolvedValue({
+        mockFetch.mockResolvedValue({
             ok: true,
             json: async () => mockData,
         })
@@ -66,7 +75,7 @@ describe('fetcher', () => {
     })
 
     it('Throw ApiError when payload.message is string', async () => {
-        (fetch as jest.Mock).mockResolvedValue({
+        mockFetch.mockResolvedValue({
             ok: false,
             status: 400,
             json: async () => ({
@@ -79,7 +88,7 @@ describe('fetcher', () => {
     })
 
     it('Throw ApiError when payload.message is array', async () => {
-        (fetch as jest.Mock).mockResolvedValue({
+        mockFetch.mockResolvedValue({
             ok: false,
             status: 422,
             json: async () => ({
@@ -93,7 +102,7 @@ describe('fetcher', () => {
     })
 
     it('Throw ApiError when payload.error exists', async () => {
-        (fetch as jest.Mock).mockResolvedValue({
+        mockFetch.mockResolvedValue({
             ok: false,
             status: 401,
             json: async () => ({
@@ -105,7 +114,7 @@ describe('fetcher', () => {
     })
 
     it('Throw default message when response body is not JSON', async () => {
-        (fetch as jest.Mock).mockResolvedValue({
+        mockFetch.mockResolvedValue({
             ok: false,
             status: 500,
             json: async () => {
@@ -115,6 +124,55 @@ describe('fetcher', () => {
 
         await expect(fetcher('/api/error')).rejects.toThrow(
             'Request failed (500)'
+        )
+    })
+
+    it('does not set Content-Type when body is FormData', async () => {
+        const formData = new FormData()
+        formData.append('file', new Blob(['test']), 'test.txt')
+
+        mockFetch.mockResolvedValue({
+            ok: true,
+            json: async () => ({ success: true }),
+        })
+
+        await fetcher('/api/upload', {
+            method: 'POST',
+            body: formData,
+        })
+
+        expect(mockFetch).toHaveBeenCalledWith(
+            '/api/upload',
+            expect.objectContaining({
+                headers: expect.not.objectContaining({
+                    'Content-Type': 'application/json',
+                }),
+                body: formData,
+            })
+        )
+    })
+
+    it('send JSON body correctly when body is string', async () => {
+        const jsonBody = JSON.stringify({ name: 'John' })
+
+        mockFetch.mockResolvedValue({
+            ok: true,
+            json: async () => ({ success: true }),
+        })
+
+        await fetcher('/api/json', {
+            method: 'POST',
+            body: jsonBody,
+        })
+
+        expect(mockFetch).toHaveBeenCalledWith(
+            '/api/json',
+            expect.objectContaining({
+                headers: expect.objectContaining({
+                    'Content-Type': 'application/json',
+                }),
+                body: jsonBody,
+            })
         )
     })
 })

@@ -9,4 +9,7 @@ export const CONFIG_TAG = {
     USER: {
         PROFILE: 'profile',
     },
+    IMAGE: {
+        UPLOAD: 'upload-image',
+    }
 } as const

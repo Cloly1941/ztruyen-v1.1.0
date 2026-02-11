@@ -77,11 +77,11 @@ describe('AccountMenu', () => {
         ).toBeInTheDocument()
 
         expect(
-            screen.getByText(/thông tin cá nhân/i)
+            screen.getByText(/tài khoản/i)
         ).toBeInTheDocument()
 
         expect(
-            screen.getByText(/truyện yêu thích/i)
+            screen.getByText(/yêu thích/i)
         ).toBeInTheDocument()
 
         expect(

@@ -42,3 +42,8 @@ export interface IUserProfile {
     createdAt: string;
     updatedAt: string;
 }
+
+export interface IUploadImage {
+    _id: string;
+    url: string;
+}

@@ -136,6 +136,10 @@
         @apply bg-background text-foreground font-text antialiased select-none overflow-x-hidden;
     }
 
+    button {
+        @apply cursor-pointer;
+    }
+
     body.loading {
         overflow: hidden;
         scrollbar-gutter: stable;
@@ -143,6 +147,10 @@
 }
 
 @layer utilities {
+
+    .heading {
+        @apply font-title text-xl py-5 lg:text-[26px] text-primary dark:text-white
+    }
 
     .text-header {
         @apply text-[15px]
@@ -183,6 +191,11 @@
 
     [data-slot='input-group-control'],
     [data-slot='input'] {
+        @apply focus-visible:ring-0 text-sm
+    }
+
+    /* textarea */
+    [data-slot='textarea'] {
         @apply focus-visible:ring-0 text-sm
     }
 

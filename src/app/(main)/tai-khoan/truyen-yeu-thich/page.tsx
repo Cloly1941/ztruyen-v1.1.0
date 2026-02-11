@@ -1,5 +1,12 @@
+// ** Module Components
+import AccountWrapper from "@/modules/tai-khoan/AccountWrapper";
+
 const FavoriteStories = () => {
-    return <div>Truyện yêu thích</div>;
+    return (
+        <AccountWrapper title='Danh sách truyện yêu thích'>
+            <div></div>
+        </AccountWrapper>
+    );
 }
 
 export default FavoriteStories

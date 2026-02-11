@@ -50,20 +50,20 @@ const AccountMenu = () => {
                         <AvatarFallback>{user.name.charAt(0).toUpperCase()}</AvatarFallback>
                     </Avatar>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-45" align="center">
+                <DropdownMenuContent className="w-40" align="center">
                     <DropdownMenuGroup>
                         <DropdownMenuLabel
                             className='text-black dark:text-white font-bold text-center truncate'>{user.name}</DropdownMenuLabel>
-                        <Link href="/tai-khoan/thong-tin-ca-nhan">
+                        <Link href="/tai-khoan/trang-chu">
                             <DropdownMenuItem>
                                 <User className="text-inherit" />
-                                Thông tin cá nhân
+                                Tài khoản
                             </DropdownMenuItem>
                         </Link>
                         <Link href="/tai-khoan/truyen-yeu-thich">
                             <DropdownMenuItem>
                                 <Heart className="text-inherit" />
-                                Truyện yêu thích
+                                Yêu thích
                             </DropdownMenuItem>
                         </Link>
                     </DropdownMenuGroup>

@@ -62,7 +62,7 @@ const ForgotPassword = async ({searchParams}: { searchParams: Promise<TForgotPas
                     <BreadcrumbList>
                         <BreadcrumbItem>
                             <BreadcrumbLink asChild>
-                                <Link href='dang-nhap'>Đăng nhập</Link>
+                                <Link href='/dang-nhap'>Đăng nhập</Link>
                             </BreadcrumbLink>
                         </BreadcrumbItem>
                         <BreadcrumbSeparator className='text-primary'/>

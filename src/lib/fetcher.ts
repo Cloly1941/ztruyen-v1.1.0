@@ -14,7 +14,8 @@ export async function fetcher<T>(
     url: string,
     options: FetchOptions = {}
 ): Promise<T> {
-    const { params, headers, ...rest } = options;
+
+    const { params, headers, body, ...rest } = options;
 
     const query = params
         ? '?' +
@@ -24,26 +25,32 @@ export async function fetcher<T>(
             .join('&')
         : '';
 
+    const isFormData = body instanceof FormData;
+
     const res = await fetch(`${url}${query}`, {
         credentials: 'include',
+        ...rest,
         headers: {
-            'Content-Type': 'application/json',
+            ...(isFormData ? {} : { 'Content-Type': 'application/json' }),
             ...headers,
         },
-        ...rest,
+        body: isFormData
+            ? body
+            : body
+                ? body
+                : undefined,
     });
 
-    let body: unknown;
+    let responseBody: unknown;
 
     try {
-        body = await res.json();
+        responseBody = await res.json();
     } catch {
-        body = null;
+        responseBody = null;
     }
 
-    // error
     if (!res.ok) {
-        const payload = body as ErrorPayload | null;
+        const payload = responseBody as ErrorPayload | null;
 
         const message =
             Array.isArray(payload?.message)
@@ -55,5 +62,6 @@ export async function fetcher<T>(
         throw new ApiError(message, res.status);
     }
 
-    return body as T;
+    return responseBody as T;
 }
+

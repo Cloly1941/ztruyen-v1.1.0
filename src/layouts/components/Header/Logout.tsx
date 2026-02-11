@@ -16,7 +16,7 @@ const Logout = () => {
     return (
         <>
             <div
-                className="text-red-500 flex gap-2 cursor-pointer"
+                className={`text-red-500 flex gap-2 cursor-pointer ${isMutating ? 'pointer-events-none opacity-50' : ''}`}
                 onClick={() => trigger()}
             >
                 <LogOut className="text-inherit"/>

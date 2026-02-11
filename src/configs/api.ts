@@ -16,4 +16,7 @@ export const CONFIG_API = {
     USER: {
         PROFILE: `${baseUrl}/user/profile`,
     },
+    IMAGE: {
+        UPLOAD: `${baseUrl}/upload`,
+    },
 } as const

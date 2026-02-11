@@ -6,6 +6,8 @@ import {VARIABLE} from "@/configs/variable";
 
 const AUTH_PAGES = ['/dang-nhap', '/dang-ky', '/quen-mat-khau']
 
+const PROTECTED_PREFIXES = ['/tai-khoan']
+
 export function middleware(request: NextRequest) {
     const { pathname, searchParams } = request.nextUrl
 
@@ -26,6 +28,17 @@ export function middleware(request: NextRequest) {
         url.pathname = '/'
         return NextResponse.redirect(url)
     }
+
+    if (
+        !isLoggedIn &&
+        PROTECTED_PREFIXES.some(prefix => pathname.startsWith(prefix))
+    ) {
+        const url = request.nextUrl.clone()
+        url.pathname = '/'
+
+        return NextResponse.redirect(url)
+    }
+
 
     return NextResponse.next()
 }
