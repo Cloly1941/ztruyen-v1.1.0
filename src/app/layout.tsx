@@ -5,6 +5,9 @@ import {ReactNode} from "react";
 import type {Metadata} from "next";
 import {Montserrat, Bangers, Nunito} from "next/font/google";
 
+// ** Shadcn ui
+import {TooltipProvider} from "@/components/ui/tooltip";
+
 // ** Theme provider
 import {ThemeProvider} from "@/theme/ThemeProvider";
 
@@ -57,7 +60,9 @@ export default function RootLayout({children,}: { children: ReactNode }) {
             disableTransitionOnChange
         >
             <ProgressWrapper>
-                {children}
+                <TooltipProvider>
+                    {children}
+                </TooltipProvider>
             </ProgressWrapper>
             <Toast/>
         </ThemeProvider>

@@ -177,7 +177,7 @@ const Carousel = ({
                                             title={`Cập nhật ${formatRelativeTime(item.updatedAt)}`}
                                         >
                                             Cập nhật
-                                            <span className="text-orange-400 ml-1 sm:ml-2">
+                                            <span className="text-subtle ml-1 sm:ml-2">
                                                 {formatRelativeTime(
                                                     item.updatedAt
                                                 )}

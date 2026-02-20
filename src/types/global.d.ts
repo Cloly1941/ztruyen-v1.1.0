@@ -49,6 +49,15 @@ declare global {
         };
     }
 
+    interface IApiOtruyenResDetail<T> {
+        status: number | string;
+        message: string;
+        data?: {
+            item: T;
+            seoOnPage: ISeoOnPage;
+        };
+    }
+
     interface IApiOtruyenResWPagination<T> {
         params: {
             pagination ?: {

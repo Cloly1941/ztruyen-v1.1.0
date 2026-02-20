@@ -1,5 +1,17 @@
+// ** Link
+import Link from "next/link";
+
+// ** Type
+import type { IOtruyenDetailComic } from '@/types/api.otruyen'
+
 // ** Icon
-import {CircleUser, Heart, Home, User} from "lucide-react";
+import {CalendarRange, CircleUser, Heart, Home, Tag, User, Wifi} from "lucide-react";
+
+// ** Config
+import {CONFIG_SLUG} from "@/configs/slug";
+
+// ** Util
+import {convertStatusToVi} from "@/utils/convertStatusComicToVi";
 
 export const navAccount: TLinkWithIcon[] = [
     {
@@ -23,3 +35,70 @@ export const navAccount: TLinkWithIcon[] = [
         icon: Heart,
     }
 ]
+
+// ** Detail
+export const buildMetaList = (detailComic: IOtruyenDetailComic) => [
+    {
+        key: 'author',
+        icon: User,
+        label: 'Tác giả',
+        render: () => (
+            <ul className="flex gap-2 flex-wrap text-sm">
+                {detailComic.author.map((author, index) => (
+                    <li key={index}>
+                        {author.length === 0 ? 'Đang cập nhật' : author}
+                        {index < detailComic.author.length - 1 && ','}
+                    </li>
+                ))}
+            </ul>
+        ),
+    },
+    {
+        key: 'status',
+        icon: Wifi,
+        label: 'Trạng thái',
+        render: () => (
+            <ul className="flex gap-2 flex-wrap text-sm">
+                <li>{convertStatusToVi(detailComic.status)}</li>
+            </ul>
+        ),
+    },
+    {
+        key: 'totalChapter',
+        icon: CalendarRange,
+        label: 'Tổng số chương',
+        render: () => {
+            if (detailComic.chapters.length === 0) return 0;
+            const lastChapter =
+                detailComic.chapters[0].server_data?.[
+                detailComic.chapters[0].server_data.length - 1
+                    ]?.chapter_name
+
+            return (
+                <span className="text-sm">{lastChapter}</span>
+            )
+        },
+    },
+    {
+        key: 'category',
+        icon: Tag,
+        label: 'Thể loại',
+        align: 'start' as const,
+        render: () => (
+            <ul className="flex gap-2 flex-wrap text-sm mt-0.5">
+                {detailComic.category.map((category, index) => (
+                    <li
+                        key={index}
+                        className="text-destructive hover:underline leading-none"
+                    >
+                        <Link href={`${CONFIG_SLUG.GENRE}/${category.slug}.html`}>
+                            {category.name}
+                            {index < detailComic.category.length - 1 && ','}
+                        </Link>
+                    </li>
+                ))}
+            </ul>
+        ),
+    },
+]
+
