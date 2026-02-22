@@ -25,7 +25,7 @@ const RecommendedComic = async () => {
                     Đề xuất dành cho bạn
                 </h2>
 
-                <p className="desc-home">
+                <p className="desc">
                     Hãy chọn bộ truyện bạn thích !
                 </p>
             </div>

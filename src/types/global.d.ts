@@ -59,17 +59,18 @@ declare global {
     }
 
     interface IApiOtruyenResWPagination<T> {
-        params: {
-            pagination ?: {
-                totalItems: number;
-                totalItemsPerPage: number;
-                currentPage: number;
-                pageRange: number;
-            }
-        };
         data?: {
             items: T;
             seoOnPage: ISeoOnPage;
+            params: {
+                pagination ?: {
+                    totalItems: number;
+                    totalItemsPerPage: number;
+                    currentPage: number;
+                    pageRange: number;
+                }
+            };
+            titlePage: string;
         };
     }
 }

@@ -56,9 +56,9 @@ export async function generateMetadata({params}: TDetailComicProps) {
             `đọc truyện tranh ${comicName}`,
         ],
         alternates: {
-            canonical: `${CONFIG_SLUG.DETAIL}/${slugComic}`,
+            canonical: `/${CONFIG_SLUG.DETAIL}/${slugComic}`,
             languages: {
-                vi: `/vi${CONFIG_SLUG.DETAIL}/${slugComic}`,
+                vi: `/vi/${CONFIG_SLUG.DETAIL}/${slugComic}`,
             },
         },
         openGraph: {

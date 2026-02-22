@@ -2,7 +2,7 @@
 import Link from "next/link";
 
 // ** Type
-import type { IOtruyenDetailComic } from '@/types/api.otruyen'
+import type {IOtruyenDetailComic} from '@/types/api.otruyen'
 
 // ** Icon
 import {CalendarRange, CircleUser, Heart, Home, Tag, User, Wifi} from "lucide-react";
@@ -12,6 +12,9 @@ import {CONFIG_SLUG} from "@/configs/slug";
 
 // ** Util
 import {convertStatusToVi} from "@/utils/convertStatusComicToVi";
+
+// ** Enum
+import {ESortOrder} from "@/types/enum";
 
 export const navAccount: TLinkWithIcon[] = [
     {
@@ -91,7 +94,7 @@ export const buildMetaList = (detailComic: IOtruyenDetailComic) => [
                         key={index}
                         className="text-destructive hover:underline leading-none"
                     >
-                        <Link href={`${CONFIG_SLUG.GENRE}/${category.slug}.html`}>
+                        <Link href={`/${CONFIG_SLUG.GENRE}/${category.slug}.html`}>
                             {category.name}
                             {index < detailComic.category.length - 1 && ','}
                         </Link>
@@ -100,5 +103,18 @@ export const buildMetaList = (detailComic: IOtruyenDetailComic) => [
             </ul>
         ),
     },
+]
+
+
+// ** Genre
+export const listSortByDate = [
+    {
+        label: 'Mới nhất',
+        value: ESortOrder.UPDATED_AT_DESC
+    },
+    {
+        label: 'Cũ nhất',
+        value: ESortOrder.UPDATED_AT_ASC
+    }
 ]
 

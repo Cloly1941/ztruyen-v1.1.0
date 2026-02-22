@@ -89,9 +89,17 @@ jest.mock("@/configs/slug", () => ({
     },
 }));
 
+// ** Hook
 import useMounted from "@/hooks/common/useMounted";
+
+// ** Module component
 import Carousel from "@/modules/home/Carousel";
+
+// ** Type
 import { IOtruyenListComic } from "@/types/api.otruyen";
+
+// ** Config
+import {CONFIG_SLUG} from "@/configs/slug";
 
 const mockedUseMounted = useMounted as jest.MockedFunction<typeof useMounted>;
 
@@ -134,7 +142,6 @@ describe("Carousel", () => {
 
     describe("when mounted", () => {
         beforeEach(() => {
-            jest.clearAllMocks();
             mockedUseMounted.mockReturnValue(true);
         });
 
@@ -210,7 +217,7 @@ describe("Carousel", () => {
 
             mockData.forEach((item) => {
                 const link = screen.getByText(item.name).closest("a");
-                expect(link).toHaveAttribute("href", `/truyen-tranh/${item.slug}.html`);
+                expect(link).toHaveAttribute("href", `/${CONFIG_SLUG.DETAIL}/${item.slug}.html`);
             });
         });
 
@@ -221,7 +228,7 @@ describe("Carousel", () => {
             expect(chapterTag).toBeInTheDocument();
             expect(chapterTag).toHaveAttribute(
                 "href",
-                "/doc-truyen/comic-1-chuong-1-abc123.html"
+                `/${CONFIG_SLUG.READING}/comic-1-chuong-1-abc123.html`
             );
         });
 
@@ -281,7 +288,7 @@ describe("Carousel", () => {
             const overlay = document.querySelector('[style*="linear-gradient"]') as HTMLElement;
             fireEvent.click(overlay);
 
-            expect(mockPush).toHaveBeenCalledWith("/truyen-tranh/comic-1.html");
+            expect(mockPush).toHaveBeenCalledWith(`/${CONFIG_SLUG.DETAIL}/comic-1.html`);
         });
 
         // Swiper

@@ -26,7 +26,7 @@ type TReadingBtnProps = {
 const ReadingBtn = ({chapter, slug}: TReadingBtnProps) => {
 
     const isComicHistory = false
-    const hrefFirstChapter = `${CONFIG_SLUG.READING}/${slug}-chuong-${chapter.chapter_name}-${getIdFromUrl(chapter.chapter_api_data, '/')}.html`
+    const hrefFirstChapter = `/${CONFIG_SLUG.READING}/${slug}-chuong-${chapter.chapter_name}-${getIdFromUrl(chapter.chapter_api_data, '/')}.html`
 
     if (!isComicHistory)
         return (

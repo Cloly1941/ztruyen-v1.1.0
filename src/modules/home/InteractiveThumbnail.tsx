@@ -76,7 +76,7 @@ const InteractiveThumbnail = ({ listRecommendedComic }: { listRecommendedComic: 
                     {!isLg ? (
                         <Link
                             title={selectedComic.name}
-                            href={`${CONFIG_SLUG.DETAIL}/${selectedComic.slug}.html`}
+                            href={`/${CONFIG_SLUG.DETAIL}/${selectedComic.slug}.html`}
                             className="lg:text-2xl line-clamp-2"
                         >
                             {selectedComic.name}
@@ -92,7 +92,7 @@ const InteractiveThumbnail = ({ listRecommendedComic }: { listRecommendedComic: 
                     {selectedComic.category.slice(0, 5).map((tag, index) => (
                         <Tag
                             key={`${index}-${tag._id}-thumbnail`}
-                            href={`${CONFIG_SLUG.GENRE}/${tag.slug}.html`}
+                            href={`/${CONFIG_SLUG.GENRE}/${tag.slug}.html`}
                             title={tag.name}
                             theme="gray"
                         >
@@ -129,7 +129,7 @@ const InteractiveThumbnail = ({ listRecommendedComic }: { listRecommendedComic: 
                 </div>
 
                 <Link
-                    href={`${CONFIG_SLUG.DETAIL}/${selectedComic.slug}.html`}
+                    href={`/${CONFIG_SLUG.DETAIL}/${selectedComic.slug}.html`}
                     className="hidden lg:block rounded-2xl overflow-hidden aspect-video absolute top-4 right-6 sm:-top-8 w-[45%]"
                 >
                     <ComicImage

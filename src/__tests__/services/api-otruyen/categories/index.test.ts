@@ -2,7 +2,7 @@
 
 // ** Types
 import { IOtruyenListComic, IOtruyenListGenre } from "@/types/api.otruyen";
-import { ESortField } from "@/types/enum";
+import { ESortField, ESortType } from "@/types/enum";
 
 // =============================== Mocks =============================//
 jest.mock("next/cache", () => ({
@@ -74,12 +74,12 @@ const mockComicResponse = {
     message: "success",
     data: {
         items: mockComicList,
-    },
-    params: {
-        pagination: {
-            totalItems: 1,
-            totalPages: 1,
-            currentPage: 1,
+        params: {
+            pagination: {
+                totalItems: 1,
+                totalPages: 1,
+                currentPage: 1,
+            },
         },
     },
 };
@@ -139,34 +139,54 @@ describe("getListByGender", () => {
         jest.clearAllMocks();
     });
 
-    it("should call fetcher with default page and sortField", async () => {
+    it("should call fetcher with default page, sortField and sortType", async () => {
         mockedFetcher.mockResolvedValueOnce(mockComicResponse as any);
 
         await getListByGender("action");
 
         expect(mockedFetcher).toHaveBeenCalledTimes(1);
         expect(mockedFetcher).toHaveBeenCalledWith(
-            "https://api.example.com/the-loai/action?page=1&sort_field=updatedAt"
+            "https://api.example.com/the-loai/action?page=1&sort_field=updatedAt&sort_type=desc"
         );
     });
 
-    it("should call fetcher with custom page and default sortField", async () => {
+    it("should call fetcher with custom page and default sortField, sortType", async () => {
         mockedFetcher.mockResolvedValueOnce(mockComicResponse as any);
 
         await getListByGender("romance", 2);
 
         expect(mockedFetcher).toHaveBeenCalledWith(
-            "https://api.example.com/the-loai/romance?page=2&sort_field=updatedAt"
+            "https://api.example.com/the-loai/romance?page=2&sort_field=updatedAt&sort_type=desc"
         );
     });
 
-    it("should call fetcher with custom page and custom sortField", async () => {
+    it("should call fetcher with custom page and custom sortField and default sortType", async () => {
         mockedFetcher.mockResolvedValueOnce(mockComicResponse as any);
 
         await getListByGender("fantasy", 3, ESortField.CREATED_AT);
 
         expect(mockedFetcher).toHaveBeenCalledWith(
-            "https://api.example.com/the-loai/fantasy?page=3&sort_field=createdAt"
+            "https://api.example.com/the-loai/fantasy?page=3&sort_field=createdAt&sort_type=desc"
+        );
+    });
+
+    it("should call fetcher with all custom params including sortType ASC", async () => {
+        mockedFetcher.mockResolvedValueOnce(mockComicResponse as any);
+
+        await getListByGender("action", 2, ESortField.CREATED_AT, ESortType.ASC);
+
+        expect(mockedFetcher).toHaveBeenCalledWith(
+            "https://api.example.com/the-loai/action?page=2&sort_field=createdAt&sort_type=asc"
+        );
+    });
+
+    it("should call fetcher with sortType DESC explicitly", async () => {
+        mockedFetcher.mockResolvedValueOnce(mockComicResponse as any);
+
+        await getListByGender("action", 1, ESortField.UPDATED_AT, ESortType.DESC);
+
+        expect(mockedFetcher).toHaveBeenCalledWith(
+            "https://api.example.com/the-loai/action?page=1&sort_field=updatedAt&sort_type=desc"
         );
     });
 
@@ -182,7 +202,7 @@ describe("getListByGender", () => {
             slug: "one-piece",
             status: "ongoing",
         });
-        expect(result?.params?.pagination?.currentPage).toBe(1);
+        expect(result?.data?.params?.pagination?.currentPage).toBe(1);
     });
 
     it("should return empty items when API returns no comics", async () => {

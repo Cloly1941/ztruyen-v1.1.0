@@ -54,9 +54,17 @@ jest.mock("@/configs/slug", () => ({
     },
 }));
 
+// ** Hook
 import useTailwindBreakpoints from "@/hooks/common/useTailwindBreakpoints";
+
+// ** Module component
 import InteractiveThumbnail from "@/modules/home/InteractiveThumbnail";
+
+// ** Type
 import { IOtruyenListComic } from "@/types/api.otruyen";
+
+// ** Config
+import {CONFIG_SLUG} from "@/configs/slug";
 
 const mockedUseTailwindBreakpoints = useTailwindBreakpoints as jest.MockedFunction<typeof useTailwindBreakpoints>;
 
@@ -158,7 +166,7 @@ describe("InteractiveThumbnail", () => {
         render(<InteractiveThumbnail listRecommendedComic={mockData} />);
 
         const link = screen.getByRole("link", { name: "Comic 1" });
-        expect(link).toHaveAttribute("href", "/truyen-tranh/comic-1.html");
+        expect(link).toHaveAttribute("href", `/${CONFIG_SLUG.DETAIL}/comic-1.html`);
     });
 
     it("should render comic name as h3 when isLg is true", () => {
@@ -187,7 +195,7 @@ describe("InteractiveThumbnail", () => {
 
         const firstTag = mockData[0].category[0];
         const tagEls = screen.getAllByTitle(firstTag.name);
-        expect(tagEls[0]).toHaveAttribute("href", `/the-loai/${firstTag.slug}.html`);
+        expect(tagEls[0]).toHaveAttribute("href", `/${CONFIG_SLUG.GENRE}/${firstTag.slug}.html`);
     });
 
     // Background image
@@ -281,7 +289,7 @@ describe("InteractiveThumbnail", () => {
 
         const links = screen.getAllByRole("link");
         const detailLinks = links.filter((l) =>
-            l.getAttribute("href")?.includes("/truyen-tranh/comic-1.html")
+            l.getAttribute("href")?.includes(`/${CONFIG_SLUG.DETAIL}/comic-1.html`)
         );
         expect(detailLinks.length).toBeGreaterThan(0);
     });

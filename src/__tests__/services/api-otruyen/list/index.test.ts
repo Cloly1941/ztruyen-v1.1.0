@@ -2,7 +2,7 @@
 
 // ** Types
 import { IOtruyenListComic } from "@/types/api.otruyen";
-import { ESlug, ESortField } from "@/types/enum";
+import { ESlug, ESortField, ESortType } from "@/types/enum";
 
 // =============================== Mocks =============================//
 jest.mock("next/cache", () => ({
@@ -56,12 +56,12 @@ const mockResponse = {
     message: "success",
     data: {
         items: mockComicList,
-    },
-    params: {
-        pagination: {
-            totalItems: 1,
-            totalPages: 1,
-            currentPage: 1,
+        params: {
+            pagination: {
+                totalItems: 1,
+                totalPages: 1,
+                currentPage: 1,
+            },
         },
     },
 };
@@ -72,34 +72,44 @@ describe("getListByStatus", () => {
         jest.clearAllMocks();
     });
 
-    it("should call fetcher with default page and sortField", async () => {
+    it("should call fetcher with default page, sortField and sortType", async () => {
         mockedFetcher.mockResolvedValueOnce(mockResponse as any);
 
         await getListByStatus(ESlug.NEW);
 
         expect(mockedFetcher).toHaveBeenCalledTimes(1);
         expect(mockedFetcher).toHaveBeenCalledWith(
-            "https://api.example.com/danh-sach/truyen-moi?page=1&sort_field=updatedAt"
+            "https://api.example.com/danh-sach/truyen-moi?page=1&sort_field=updatedAt&sort_type=desc"
         );
     });
 
-    it("should call fetcher with custom page and default sortField", async () => {
+    it("should call fetcher with custom page and default sortField, sortType", async () => {
         mockedFetcher.mockResolvedValueOnce(mockResponse as any);
 
         await getListByStatus(ESlug.ONGOING, 3);
 
         expect(mockedFetcher).toHaveBeenCalledWith(
-            "https://api.example.com/danh-sach/dang-phat-hanh?page=3&sort_field=updatedAt"
+            "https://api.example.com/danh-sach/dang-phat-hanh?page=3&sort_field=updatedAt&sort_type=desc"
         );
     });
 
-    it("should call fetcher with custom page and custom sortField", async () => {
+    it("should call fetcher with custom page and custom sortField and default sortType", async () => {
         mockedFetcher.mockResolvedValueOnce(mockResponse as any);
 
         await getListByStatus(ESlug.COMPLETED, 2, ESortField.CREATED_AT);
 
         expect(mockedFetcher).toHaveBeenCalledWith(
-            "https://api.example.com/danh-sach/hoan-thanh?page=2&sort_field=createdAt"
+            "https://api.example.com/danh-sach/hoan-thanh?page=2&sort_field=createdAt&sort_type=desc"
+        );
+    });
+
+    it("should call fetcher with all custom params including sortType ASC", async () => {
+        mockedFetcher.mockResolvedValueOnce(mockResponse as any);
+
+        await getListByStatus(ESlug.COMPLETED, 2, ESortField.CREATED_AT, ESortType.ASC);
+
+        expect(mockedFetcher).toHaveBeenCalledWith(
+            "https://api.example.com/danh-sach/hoan-thanh?page=2&sort_field=createdAt&sort_type=asc"
         );
     });
 
@@ -109,7 +119,17 @@ describe("getListByStatus", () => {
         await getListByStatus(ESlug.COMING_SOON);
 
         expect(mockedFetcher).toHaveBeenCalledWith(
-            "https://api.example.com/danh-sach/sap-ra-mat?page=1&sort_field=updatedAt"
+            "https://api.example.com/danh-sach/sap-ra-mat?page=1&sort_field=updatedAt&sort_type=desc"
+        );
+    });
+
+    it("should call fetcher with sortType DESC explicitly", async () => {
+        mockedFetcher.mockResolvedValueOnce(mockResponse as any);
+
+        await getListByStatus(ESlug.NEW, 1, ESortField.UPDATED_AT, ESortType.DESC);
+
+        expect(mockedFetcher).toHaveBeenCalledWith(
+            "https://api.example.com/danh-sach/truyen-moi?page=1&sort_field=updatedAt&sort_type=desc"
         );
     });
 
@@ -126,7 +146,7 @@ describe("getListByStatus", () => {
             status: "ongoing",
         });
 
-        expect(result?.params?.pagination?.currentPage).toBe(1);
+        expect(result?.data?.params?.pagination?.currentPage).toBe(1);
     });
 
     it("should return empty items when API returns no comics", async () => {

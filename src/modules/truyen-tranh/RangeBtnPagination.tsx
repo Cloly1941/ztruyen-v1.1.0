@@ -12,7 +12,7 @@ import Link from "next/link";
 
 // ** Shadcn ui
 import {Button} from "@/components/ui/button";
-import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from '@/components/ui/tooltip';
+import {Tooltip, TooltipContent, TooltipTrigger} from '@/components/ui/tooltip';
 
 // ** Skeleton
 import ListChapterSkeleton from "@/skeletons/truyen-tranh/ListChapterSkeleton";
@@ -106,7 +106,7 @@ const RangeBtnPagination = ({chapters, slug}: Props) => {
                                     <Tooltip>
                                         <TooltipTrigger asChild>
                                             <Link
-                                                href={`${CONFIG_SLUG.READING}/${slug}-chuong-${item.chapter_name}-${getIdFromUrl(item.chapter_api_data, '/')}.html`}
+                                                href={`/${CONFIG_SLUG.READING}/${slug}-chuong-${item.chapter_name}-${getIdFromUrl(item.chapter_api_data, '/')}.html`}
                                             >
                                                 <Button
                                                     variant="outline"
@@ -124,7 +124,7 @@ const RangeBtnPagination = ({chapters, slug}: Props) => {
                                     </Tooltip>
                                 </div>
                                 <Link
-                                    href={`${CONFIG_SLUG.READING}/${slug}-chuong-${item.chapter_name}-${getIdFromUrl(item.chapter_api_data, '/')}.html`}
+                                    href={`/${CONFIG_SLUG.READING}/${slug}-chuong-${item.chapter_name}-${getIdFromUrl(item.chapter_api_data, '/')}.html`}
                                     className='block md:hidden'
                                 >
                                     <Button
@@ -139,7 +139,7 @@ const RangeBtnPagination = ({chapters, slug}: Props) => {
                             </>
                         ) : (
                             <Link
-                                href={`${CONFIG_SLUG.READING}/${slug}-chuong-${item.chapter_name}-${getIdFromUrl(item.chapter_api_data, '/')}.html`}
+                                href={`/${CONFIG_SLUG.READING}/${slug}-chuong-${item.chapter_name}-${getIdFromUrl(item.chapter_api_data, '/')}.html`}
                             >
                                 <Button
                                     variant="outline"

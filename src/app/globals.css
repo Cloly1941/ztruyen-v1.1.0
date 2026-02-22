@@ -160,6 +160,7 @@
     .custom-scroll::-webkit-scrollbar {
         width: 6px;
     }
+
     .custom-scroll::-webkit-scrollbar-thumb {
         background-color: #E5E7EB;
         border-radius: 4px;
@@ -169,62 +170,8 @@
     .custom-scroll::-webkit-scrollbar-thumb:hover {
         background-color: #D1D5DB;
     }
+
     /* End scroll */
-
-    .text-subtle {
-        @apply text-orange-400
-    }
-
-    .heading {
-        @apply font-title text-xl py-5 lg:text-[26px] text-primary dark:text-white tracking-wide
-    }
-
-    /* header */
-    .text-header {
-        @apply text-[15px]
-    }
-
-    .mt-header {
-        @apply mt-[56px];
-    }
-
-    /* footer */
-    .shadow-layout {
-        @apply shadow-[0_0_5px_1px_rgba(158,179,193,0.5)]
-    }
-
-    /* home */
-    .section-home {
-        @apply container pb-[30px] sm:pb-10 md:pb-[50px] lg:pb-[65px] mt-5 sm:mt-[30px] md:mt-10 lg:mt-[50px]
-    }
-
-    .section-header {
-        @apply flex items-baseline gap-4
-    }
-
-    .heading-home {
-        @apply font-title text-xl sm:text-2xl py-5 lg:text-3xl text-primary dark:text-white inline tracking-wide
-    }
-
-    .desc-home {
-        @apply text-xs sm:text-sm text-muted-foreground
-    }
-
-    /* End home */
-    /* detail */
-    .heading-detail {
-        @apply font-ui line-clamp-none sm:line-clamp-2 text-xl font-semibold
-    }
-
-    .text-meta {
-        @apply text-sm text-black/50 dark:text-white/50 flex gap-1.5 items-center flex-shrink-0 min-w-[123px]
-    }
-
-    .bg-section-detail {
-        @apply bg-white dark:bg-black/10 shadow-[0_1px_3px_0_rgba(106,115,133,.08)]  rounded-xs
-    }
-
-    /* End detail */
     /*  Carousel  */
     .btn-carousel {
         @apply absolute z-20 top-[40%] -translate-y-[40%] shadow-[0_0_19px_0_rgba(0,0,0,0.251)] bg-white/80 hover:bg-white/90
@@ -334,12 +281,76 @@
         @apply text-wrap
     }
 
+    /* Pagination */
+    [data-slot='pagination-link'] > span {
+        @apply hidden
+    }
+
+    /* State active */
+    [data-slot="pagination-link"][data-active="true"] {
+        @apply bg-primary text-white border-primary;
+    }
+
     /* End Shadcn ui component*/
 }
 
 
 @layer components {
 
+    .text-subtle {
+        @apply text-orange-400
+    }
+
+    .heading {
+        @apply font-title text-xl py-5 lg:text-[26px] text-primary dark:text-white tracking-wide
+    }
+
+    /* header */
+    .text-header {
+        @apply text-[15px]
+    }
+
+    .mt-header {
+        @apply mt-[56px];
+    }
+
+    /* footer */
+    .shadow-layout {
+        @apply shadow-[0_0_5px_1px_rgba(158,179,193,0.5)]
+    }
+
+    /* home */
+    .section-home {
+        @apply container pb-[30px] sm:pb-10 md:pb-[50px] lg:pb-[65px] mt-5 sm:mt-[30px] md:mt-10 lg:mt-[50px]
+    }
+
+    .section-header {
+        @apply flex items-baseline gap-4
+    }
+
+    .heading-home {
+        @apply font-title text-xl sm:text-2xl py-5 lg:text-3xl text-primary dark:text-white inline tracking-wide
+    }
+
+    .desc {
+        @apply text-xs sm:text-sm text-muted-foreground
+    }
+
+    /* End home */
+    /* detail */
+    .heading-detail {
+        @apply font-ui line-clamp-none sm:line-clamp-2 text-xl font-semibold
+    }
+
+    .text-meta {
+        @apply text-sm text-black/50 dark:text-white/50 flex gap-1.5 items-center flex-shrink-0 min-w-[123px]
+    }
+
+    .bg-section-detail {
+        @apply bg-white dark:bg-black/10 shadow-[0_1px_3px_0_rgba(106,115,133,.08)]  rounded-xs
+    }
+
+    /* End detail */
     /* Sheet */
     [data-hide-close] > button.absolute.top-4.right-4 {
         @apply hidden;

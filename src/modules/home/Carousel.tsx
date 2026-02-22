@@ -77,7 +77,7 @@ const Carousel = ({
                         {title}
                     </h2>
 
-                    <p className="desc-home">
+                    <p className="desc">
                         {desc}
                     </p>
                 </div>
@@ -125,13 +125,17 @@ const Carousel = ({
                                         title={item.name}
                                     >
                                        <div className='absolute top-2 left-2 z-10'>
-                                           <Tag
-                                               theme='dark'
-                                               href={`${CONFIG_SLUG.READING}/${item.slug}-chuong-${item.chaptersLatest[0].chapter_name}-${getIdFromUrl(item.chaptersLatest[0].chapter_api_data, '/')}.html`}
-                                               title={`Chương mới nhất: ${item.chaptersLatest[0].chapter_name}`}
-                                           >
-                                               {`Chương ${item.chaptersLatest[0].chapter_name}`}
-                                           </Tag>
+                                           {
+                                               item.chaptersLatest && (
+                                                   <Tag
+                                                       theme='dark'
+                                                       href={`/${CONFIG_SLUG.READING}/${item.slug}-chuong-${item.chaptersLatest[0].chapter_name}-${getIdFromUrl(item.chaptersLatest[0].chapter_api_data, '/')}.html`}
+                                                       title={`Chương mới nhất: ${item.chaptersLatest[0].chapter_name}`}
+                                                   >
+                                                       {`Chương ${item.chaptersLatest[0].chapter_name}`}
+                                                   </Tag>
+                                               )
+                                           }
                                        </div>
                                         <ComicImage
                                             src={`${process.env.NEXT_PUBLIC_API_OTRUYEN_IMAGE_COMIC}/${item.thumb_url}`}
@@ -149,7 +153,7 @@ const Carousel = ({
                                             }}
                                             onClick={() =>
                                                 router.push(
-                                                    `${CONFIG_SLUG.DETAIL}/${item.slug}.html`
+                                                    `/${CONFIG_SLUG.DETAIL}/${item.slug}.html`
                                                 )
                                             }
                                         />
@@ -159,7 +163,7 @@ const Carousel = ({
                                                 .map((tag, j) => (
                                                     <Tag
                                                         key={j}
-                                                        href={`${CONFIG_SLUG.GENRE}/${tag.slug}.html`}
+                                                        href={`/${CONFIG_SLUG.GENRE}/${tag.slug}.html`}
                                                         title={tag.name}
                                                     >
                                                         {tag.name}
@@ -168,7 +172,7 @@ const Carousel = ({
                                         </ul>
                                     </div>
                                     <figcaption className="sm:w-[180px] flex flex-col justify-between">
-                                        <Link href={`${CONFIG_SLUG.DETAIL}/${item.slug}.html`}
+                                        <Link href={`/${CONFIG_SLUG.DETAIL}/${item.slug}.html`}
                                               className="mt-1.5 sm:mt-2.5 sm:mb-1 line-clamp-1 text-sm md:text-base">
                                             {item.name}
                                         </Link>

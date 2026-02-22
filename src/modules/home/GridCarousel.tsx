@@ -5,18 +5,21 @@ import ErrorText from "@/components/common/ErrorText";
 import GridCarouselClient from "@/modules/home/GridCarouselClient";
 
 // ** Service
-import {getListHome} from "@/services/api-otruyen/home";
+import {getListByStatus} from "@/services/api-otruyen/list";
+
+// ** Enum
+import {ESlug} from "@/types/enum";
 
 const GridCarousel = async () => {
 
-    const res = await getListHome();
+    const res = await getListByStatus(ESlug.NEW);
 
-    const listHome = res.data?.items;
+    const listNewComic = res.data?.items;
 
-    if(!listHome) return <ErrorText/>;
+    if(!listNewComic) return <ErrorText/>;
 
     return (
-        <GridCarouselClient data={listHome} />
+        <GridCarouselClient data={listNewComic} />
     )
 }
 

@@ -1,8 +1,9 @@
 // ** Next
 import Link from "next/link";
 
-// ** Component
+// ** Components
 import ErrorText from "@/components/common/ErrorText";
+import ComicImage from "@/components/common/ComicImage";
 
 // ** Services
 import {getListByStatus} from "@/services/api-otruyen/list";
@@ -12,9 +13,14 @@ import {ESlug} from "@/types/enum";
 
 // ** Configs
 import {CONFIG_SLUG} from "@/configs/slug";
+
+// ** Type
 import {IOtruyenListComic} from "@/types/api.otruyen";
-import ComicImage from "@/components/common/ComicImage";
+
+// ** Icon
 import {CalendarRange, Wifi} from "lucide-react";
+
+// ** Util
 import {convertStatusToVi} from "@/utils/convertStatusComicToVi";
 
 const DetailRecommendedComic = async () => {
@@ -29,7 +35,7 @@ const DetailRecommendedComic = async () => {
         <section className="bg-section-detail p-5 lg:w-[29%] xl:w-[23%] h-min">
             <div className="flex items-center justify-between">
                 <h2 className='text-lg font-medium'>Đề xuất</h2>
-                <Link href={`${CONFIG_SLUG.LIST}/truyen-moi`} className="text-sm">
+                <Link href={`/${CONFIG_SLUG.LIST}/truyen-moi`} className="text-sm">
                     Xem thêm
                 </Link>
             </div>
@@ -40,17 +46,13 @@ const DetailRecommendedComic = async () => {
                             <div className="lg:w-[35%]">
                                 {/* Thumbnail */}
                                 <Link
-                                    href={`${CONFIG_SLUG.DETAIL}/${item.slug}.html`}
+                                    href={`/${CONFIG_SLUG.DETAIL}/${item.slug}.html`}
                                     key={index}
                                 >
                                     <ComicImage
                                         src={`${process.env.NEXT_PUBLIC_API_OTRUYEN_IMAGE_COMIC}/${item.thumb_url}`}
                                         alt={item.name}
-                                        priority={
-                                            index <= 0
-                                                ? true
-                                                : false
-                                        }
+                                        priority={index <= 0}
                                         imgSize="sm"
                                     />
                                 </Link>
@@ -60,7 +62,7 @@ const DetailRecommendedComic = async () => {
                             <figcaption className="w-[64%] flex justify-between flex-col">
                                 {/* Title */}
                                 <Link
-                                    href={`${CONFIG_SLUG.DETAIL}/${item.slug}.html`}
+                                    href={`/${CONFIG_SLUG.DETAIL}/${item.slug}.html`}
                                     key={index}
                                 >
                                     <h3 className='line-clamp-2 text-sm'>{item.name}</h3>

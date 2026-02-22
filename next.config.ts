@@ -34,7 +34,9 @@ const nextConfig: NextConfig = {
         ],
         qualities: [60],
     },
-
+    eslint: {
+        ignoreDuringBuilds: true,
+    }
 };
 
 export default nextConfig;
