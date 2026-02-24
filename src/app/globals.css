@@ -136,6 +136,10 @@
         @apply bg-background text-foreground font-text antialiased select-none overflow-x-hidden;
     }
 
+    li {
+        list-style: none;
+    }
+
     body.loading {
         overflow: hidden;
         scrollbar-gutter: stable;
@@ -291,6 +295,15 @@
         @apply bg-primary text-white border-primary;
     }
 
+    /* Slider */
+    [data-slot="slider-track"] {
+        @apply bg-white/10
+    }
+
+    [data-slot="slider-thumb"] {
+        @apply ring-ring/0
+    }
+
     /* End Shadcn ui component*/
 }
 
@@ -361,6 +374,16 @@
     }
 
     /* End detail */
+    /* reading page */
+    .bg-setting {
+        @apply bg-[#212121] border-[#3e3e3e] text-white
+    }
+
+    .text-setting {
+        @apply text-[#777]
+    }
+
+    /* End reading page */
     /* Sheet */
     [data-hide-close] > button.absolute.top-4.right-4 {
         @apply hidden;

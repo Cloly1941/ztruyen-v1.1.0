@@ -22,6 +22,7 @@ import {CalendarRange, Wifi} from "lucide-react";
 
 // ** Util
 import {convertStatusToVi} from "@/utils/convertStatusComicToVi";
+import {CONFIG_API_OTRUYEN} from "@/configs/api-otruyen";
 
 const DetailRecommendedComic = async () => {
 
@@ -50,7 +51,7 @@ const DetailRecommendedComic = async () => {
                                     key={index}
                                 >
                                     <ComicImage
-                                        src={`${process.env.NEXT_PUBLIC_API_OTRUYEN_IMAGE_COMIC}/${item.thumb_url}`}
+                                        src={`${CONFIG_API_OTRUYEN.IMAGE_COMIC}/${item.thumb_url}`}
                                         alt={item.name}
                                         priority={index <= 0}
                                         imgSize="sm"

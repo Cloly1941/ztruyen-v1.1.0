@@ -9,14 +9,11 @@ import {BookOpen} from "lucide-react";
 // ** Component
 import Button from "@/components/common/Button";
 
-// ** Config
-import {CONFIG_SLUG} from "@/configs/slug";
-
 // ** Type
 import {TOtruyenChapter} from "@/types/api.otruyen";
 
 // ** Util
-import getIdFromUrl from "@/utils/getIdFromUrl";
+import {buildReadingUrl} from "@/utils/buildReadingUrl ";
 
 type TReadingBtnProps = {
     chapter: TOtruyenChapter;
@@ -26,7 +23,7 @@ type TReadingBtnProps = {
 const ReadingBtn = ({chapter, slug}: TReadingBtnProps) => {
 
     const isComicHistory = false
-    const hrefFirstChapter = `/${CONFIG_SLUG.READING}/${slug}-chuong-${chapter.chapter_name}-${getIdFromUrl(chapter.chapter_api_data, '/')}.html`
+    const hrefFirstChapter = buildReadingUrl(slug, chapter.chapter_name, chapter.chapter_api_data)
 
     if (!isComicHistory)
         return (

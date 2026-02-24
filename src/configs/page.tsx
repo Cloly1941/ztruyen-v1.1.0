@@ -45,6 +45,7 @@ export const buildMetaList = (detailComic: IOtruyenDetailComic) => [
         key: 'author',
         icon: User,
         label: 'Tác giả',
+        align: 'start' as const,
         render: () => (
             <ul className="flex gap-2 flex-wrap text-sm">
                 {detailComic.author.map((author, index) => (

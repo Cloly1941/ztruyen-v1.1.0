@@ -18,7 +18,7 @@ export const getListGenre = unstable_cache(
     async () => {
         return fetcher<IApiOtruyenRes<IOtruyenListGenre[]>>(CONFIG_API_OTRUYEN.CATEGORY);
     },
-    [CONFIG_TAG_OTRUYEN.CATEGORY],
+    [CONFIG_TAG_OTRUYEN.LIST_CATEGORY],
     {
         revalidate: 3600,
     }

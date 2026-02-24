@@ -22,7 +22,7 @@ import Button from '@/components/common/Button';
 
 // ** utils
 import formatRelativeTime from '@/utils/formatRelativeTime';
-import getIdFromUrl from "@/utils/getIdFromUrl";
+import {buildReadingUrl} from "@/utils/buildReadingUrl ";
 
 // ** next progress bar
 import {useRouter} from 'next-nprogress-bar';
@@ -38,6 +38,7 @@ import {IOtruyenListComic} from "@/types/api.otruyen";
 
 // ** Configs
 import {CONFIG_SLUG} from "@/configs/slug";
+import {CONFIG_API_OTRUYEN} from "@/configs/api-otruyen";
 
 // ** Hook
 import useMounted from "@/hooks/common/useMounted";
@@ -124,26 +125,26 @@ const Carousel = ({
                                         className="relative overflow-hidden"
                                         title={item.name}
                                     >
-                                       <div className='absolute top-2 left-2 z-10'>
-                                           {
-                                               item.chaptersLatest && (
-                                                   <Tag
-                                                       theme='dark'
-                                                       href={`/${CONFIG_SLUG.READING}/${item.slug}-chuong-${item.chaptersLatest[0].chapter_name}-${getIdFromUrl(item.chaptersLatest[0].chapter_api_data, '/')}.html`}
-                                                       title={`Chương mới nhất: ${item.chaptersLatest[0].chapter_name}`}
-                                                   >
-                                                       {`Chương ${item.chaptersLatest[0].chapter_name}`}
-                                                   </Tag>
-                                               )
-                                           }
-                                       </div>
+                                        <div className='absolute top-2 left-2 z-10'>
+                                            {
+                                                item.chaptersLatest && (
+                                                    <Tag
+                                                        theme='dark'
+                                                        href={buildReadingUrl(item.slug, item.chaptersLatest[0].chapter_name, item.chaptersLatest[0].chapter_api_data)}
+                                                        title={`Chương mới nhất: ${item.chaptersLatest[0].chapter_name}`}
+                                                    >
+                                                        {`Chương ${item.chaptersLatest[0].chapter_name}`}
+                                                    </Tag>
+                                                )
+                                            }
+                                        </div>
                                         <ComicImage
-                                            src={`${process.env.NEXT_PUBLIC_API_OTRUYEN_IMAGE_COMIC}/${item.thumb_url}`}
+                                            src={`${CONFIG_API_OTRUYEN.IMAGE_COMIC}/${item.thumb_url}`}
                                             alt={item.name}
                                             priority={i <= 0}
                                             rounded="md"
                                             size="full"
-                                            imgSize="xl"
+                                            imgSize="2xl"
                                         />
                                         <div
                                             className="absolute top-0 left-0 w-full h-full rounded-[8px] cursor-pointer"

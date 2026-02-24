@@ -1,6 +1,6 @@
 // ** Next
 import Link from "next/link";
-import type { Metadata } from 'next'
+import type {Metadata} from 'next'
 
 // ** Shadcn ui
 import {
@@ -11,9 +11,6 @@ import {
     BreadcrumbPage,
     BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
-
-// ** Layout
-import DefaultLayout from "@/layouts/DefaultLayout";
 
 // ** Module
 import FormSendMail from "@/modules/quen-mat-khau/FormSendMail";
@@ -52,34 +49,32 @@ type TForgotPasswordSearchParams = { token?: string }
 
 const ForgotPassword = async ({searchParams}: { searchParams: Promise<TForgotPasswordSearchParams> }) => {
 
-    const { token } = await searchParams
+    const {token} = await searchParams
 
     return (
-        <DefaultLayout>
-            {/* Breadcrumb*/}
-            <div className="container mt-[52px]">
-                <Breadcrumb>
-                    <BreadcrumbList>
-                        <BreadcrumbItem>
-                            <BreadcrumbLink asChild>
-                                <Link href='/dang-nhap'>Đăng nhập</Link>
-                            </BreadcrumbLink>
-                        </BreadcrumbItem>
-                        <BreadcrumbSeparator className='text-primary'/>
-                        <BreadcrumbItem>
-                            <BreadcrumbPage>Quên mật khẩu</BreadcrumbPage>
-                        </BreadcrumbItem>
-                    </BreadcrumbList>
-                </Breadcrumb>
-                <div className='flex justify-center items-center mt-10'>
-                    <div className='w-[400px]'>
-                        {
-                            token ? <FormChangePassword token={token}/> : <FormSendMail/>
-                        }
-                    </div>
+        // Breadcrumb
+        <div className="container mt-[52px]">
+            <Breadcrumb>
+                <BreadcrumbList>
+                    <BreadcrumbItem>
+                        <BreadcrumbLink asChild>
+                            <Link href='/dang-nhap'>Đăng nhập</Link>
+                        </BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator className='text-primary'/>
+                    <BreadcrumbItem>
+                        <BreadcrumbPage>Quên mật khẩu</BreadcrumbPage>
+                    </BreadcrumbItem>
+                </BreadcrumbList>
+            </Breadcrumb>
+            <div className='flex justify-center items-center mt-10'>
+                <div className='w-[400px]'>
+                    {
+                        token ? <FormChangePassword token={token}/> : <FormSendMail/>
+                    }
                 </div>
             </div>
-        </DefaultLayout>
+        </div>
     )
 }
 

@@ -1,16 +1,21 @@
+'use client'
+
 // ** React
-import * as React from 'react';
+import {forwardRef} from "react";
 
 // ** Next
-import Image, { type ImageProps } from 'next/image';
+import Image, {type ImageProps} from 'next/image';
 
 // ** class variance authority
-import { cva, type VariantProps } from 'class-variance-authority';
+import {cva, type VariantProps} from 'class-variance-authority';
 
 // ** utils
-import { cn } from '@/lib/utils';
+import {cn} from '@/lib/utils';
 
-const comicImageVariants = cva('aspect-[3/4] bg-black dark:bg-white/90 object-cover', {
+// ** Config
+import {CONFIG_IMAGE} from "@/configs/image";
+
+const comicImageVariants = cva('aspect-[3/4] object-cover', {
     variants: {
         rounded: {
             default: '',
@@ -36,13 +41,13 @@ interface ComicImageDimension {
 }
 
 const comicImageSizes: Record<ComicImageSize, ComicImageDimension> = {
-    xs: { width: 62, height: 83 },
-    sm: { width: 100, height: 240 },
-    default: { width: 135, height: 180 },
-    lg: { width: 180, height: 240 },
-    xl: { width: 219, height: 288 },
-    '2xl': { width: 240, height: 320 },
-    '3xl': { width: 522, height: 300 },
+    xs: {width: 62, height: 83},
+    sm: {width: 100, height: 240},
+    default: {width: 135, height: 180},
+    lg: {width: 180, height: 240},
+    xl: {width: 192.7, height: 258},
+    '2xl': {width: 219, height: 288},
+    '3xl': {width: 522, height: 300},
 };
 
 export interface ComicImageProps
@@ -51,14 +56,13 @@ export interface ComicImageProps
     imgSize?: ComicImageSize;
 }
 
-const ComicImage = React.forwardRef<HTMLImageElement, ComicImageProps>(
-    ({ size, rounded, className, imgSize = 'default', src, alt, ...props }, ref) => {
-        if (!src) {
-            console.warn('ComicImage missing src prop!');
-        }
+const ComicImage = forwardRef<HTMLImageElement, ComicImageProps>(
+    ({size, rounded, className, imgSize = 'default', src, alt, ...props}, ref) => {
+
         const key = imgSize in comicImageSizes ? imgSize : 'default';
         const safeSize = comicImageSizes[key as ComicImageSize];
-        const { width, height } = safeSize;
+        const {width, height} = safeSize;
+
         return (
             <Image
                 ref={ref}
@@ -66,8 +70,11 @@ const ComicImage = React.forwardRef<HTMLImageElement, ComicImageProps>(
                 alt={alt}
                 width={width}
                 height={height}
-                quality="60"
-                className={cn(comicImageVariants({ size, rounded, className }))}
+                placeholder={CONFIG_IMAGE.BLUR_DATA_URL as 'data:image/'}
+                onError={(e) => {
+                    e.currentTarget.src = CONFIG_IMAGE.BLUR_DATA_URL
+                }}
+                className={cn(comicImageVariants({size, rounded, className}))}
                 {...props}
             />
         );

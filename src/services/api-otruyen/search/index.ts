@@ -17,7 +17,7 @@ export const getListBySearch = unstable_cache(
     async (keyword: string, pageQuery: number = 1) => {
         return fetcher<IApiOtruyenResWPagination<IOtruyenSearchComic[]>>(`${CONFIG_API_OTRUYEN.SEARCH}?keyword=${keyword}&page=${pageQuery}`);
     },
-    [CONFIG_TAG_OTRUYEN.LIST],
+    [CONFIG_TAG_OTRUYEN.SEARCH],
     {
         revalidate: 30,
     }

@@ -45,6 +45,12 @@ type TOtruyenChapterServer = {
     server_data?: TOtruyenChapter[];
 };
 
+// Chapter
+type TOtruyenChapterImage = {
+    image_page: number;
+    image_file: string;
+}
+
 export interface IOtruyenDetailComic {
     _id: string;
     name: string;
@@ -69,4 +75,12 @@ export interface IOtruyenSearchComic {
     chapters: TOtruyenChapterServer[]
     updatedAt: string;
     chaptersLatest: TOtruyenChapterLatest[];
+}
+
+export interface IOTruyenChapter {
+    _id: string;
+    comic_name: string;
+    chapter_name: string;
+    chapter_path: string;
+    chapter_image: TOtruyenChapterImage[];
 }

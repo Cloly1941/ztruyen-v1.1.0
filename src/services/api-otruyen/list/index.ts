@@ -20,7 +20,7 @@ export const getListByStatus = unstable_cache(
     async (slug: ESlug, pageQuery: number = 1, sortField: ESortField = ESortField.UPDATED_AT, sortType: ESortType = ESortType.DESC) => {
         return fetcher<IApiOtruyenResWPagination<IOtruyenListComic[]>>(`${CONFIG_API_OTRUYEN.LIST}/${slug}?page=${pageQuery}&sort_field=${sortField}&sort_type=${sortType}`);
     },
-    [CONFIG_TAG_OTRUYEN.LIST],
+    [CONFIG_TAG_OTRUYEN.STATUS],
     {
         revalidate: 30,
     }

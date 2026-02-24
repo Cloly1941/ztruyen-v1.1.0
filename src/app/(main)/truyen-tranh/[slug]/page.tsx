@@ -22,8 +22,9 @@ import {cn} from "@/lib/utils";
 // ** Service
 import {getDetailComic} from "@/services/api-otruyen/comic";
 
-// ** Config
+// ** Configs
 import {CONFIG_SLUG} from "@/configs/slug";
+import {CONFIG_API_OTRUYEN} from "@/configs/api-otruyen";
 import {buildMetaList} from "@/configs/page";
 
 // ** Icons
@@ -69,7 +70,7 @@ export async function generateMetadata({params}: TDetailComicProps): Promise<Met
             description: `Đọc truyện tranh ${comicName} tiếng việt. Mới nhất nhanh nhất tại ztruyen.io.vn`,
             images: [
                 {
-                    url: `${process.env.NEXT_PUBLIC_API_OTRUYEN_IMAGE_COMIC}/${detailComic?.thumb_url}`,
+                    url: `${CONFIG_API_OTRUYEN.IMAGE_COMIC}/${detailComic?.thumb_url}`,
                 },
             ],
         },
@@ -96,12 +97,10 @@ const DetailComic = async ({params}: TDetailComicProps) => {
                 className='bg-section-detail container flex flex-col items-center md:items-stretch md:flex-row gap-4 md:gap-7 p-5'>
                 {/* Comic Image */}
                 <ComicImage
-                    src={`${process.env.NEXT_PUBLIC_API_OTRUYEN_IMAGE_COMIC}/${detailComic.thumb_url}`}
-                    width={240}
-                    height={320}
+                    src={`${CONFIG_API_OTRUYEN.IMAGE_COMIC}/${detailComic.thumb_url}`}
                     alt={detailComic.name}
                     priority={true}
-                    imgSize="2xl"
+                    imgSize="xl"
                     rounded='sm'
                 />
 

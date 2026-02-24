@@ -47,3 +47,14 @@ export interface IUploadImage {
     _id: string;
     url: string;
 }
+
+export interface IHistory {
+    _id: string
+    title: string
+    slug: string
+    thumb: string
+    chapter_id: string
+    chapter_name: string
+    image_name: number
+    path: string
+}

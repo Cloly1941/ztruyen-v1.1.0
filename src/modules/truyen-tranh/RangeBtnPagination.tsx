@@ -26,6 +26,9 @@ import {CONFIG_SLUG} from "@/configs/slug";
 // ** Type
 import {TOtruyenChapter} from "@/types/api.otruyen";
 
+// ** Utils
+import {buildReadingUrl} from "@/utils/buildReadingUrl ";
+
 interface Props {
     chapters: TOtruyenChapter[];
     slug: string;
@@ -106,7 +109,7 @@ const RangeBtnPagination = ({chapters, slug}: Props) => {
                                     <Tooltip>
                                         <TooltipTrigger asChild>
                                             <Link
-                                                href={`/${CONFIG_SLUG.READING}/${slug}-chuong-${item.chapter_name}-${getIdFromUrl(item.chapter_api_data, '/')}.html`}
+                                                href={buildReadingUrl(slug, item.chapter_name, item.chapter_api_data)}
                                             >
                                                 <Button
                                                     variant="outline"
@@ -124,7 +127,7 @@ const RangeBtnPagination = ({chapters, slug}: Props) => {
                                     </Tooltip>
                                 </div>
                                 <Link
-                                    href={`/${CONFIG_SLUG.READING}/${slug}-chuong-${item.chapter_name}-${getIdFromUrl(item.chapter_api_data, '/')}.html`}
+                                    href={buildReadingUrl(slug, item.chapter_name, item.chapter_api_data)}
                                     className='block md:hidden'
                                 >
                                     <Button
@@ -139,7 +142,7 @@ const RangeBtnPagination = ({chapters, slug}: Props) => {
                             </>
                         ) : (
                             <Link
-                                href={`/${CONFIG_SLUG.READING}/${slug}-chuong-${item.chapter_name}-${getIdFromUrl(item.chapter_api_data, '/')}.html`}
+                                href={buildReadingUrl(slug, item.chapter_name, item.chapter_api_data)}
                             >
                                 <Button
                                     variant="outline"

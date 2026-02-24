@@ -11,7 +11,7 @@ const DetailComicSkeleton = () => {
             <section className="bg-section-detail container flex flex-col items-center md:items-stretch md:flex-row gap-4 md:gap-7 p-5">
 
                 {/* Comic Image */}
-                <Skeleton className="w-[240px] h-[320px] sm:w-[192.7px] sm:h-[258px] rounded-sm shrink-0" />
+                <Skeleton className="w-[192.7px] h-[256.93px] sm:w-[192.7px] sm:h-[258px] rounded-sm shrink-0" />
 
                 {/* Right Content */}
                 <div className="flex flex-col justify-between w-full">

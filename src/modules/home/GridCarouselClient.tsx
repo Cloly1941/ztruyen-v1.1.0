@@ -37,6 +37,10 @@ import {IOtruyenListComic} from "@/types/api.otruyen";
 // ** Hook
 import useMounted from "@/hooks/common/useMounted";
 
+// ** Configs
+import {CONFIG_API_OTRUYEN} from "@/configs/api-otruyen";
+import {CONFIG_SLUG} from "@/configs/slug";
+
 type TGridCarouselClientProps = {
     data: IOtruyenListComic[];
 }
@@ -118,11 +122,11 @@ const GridCarouselClient = ({data}: TGridCarouselClientProps) => {
                                             className={`${position?.className} relative`}
                                         >
                                             <Link
-                                                href={`/truyen-tranh/${item.slug}.html`}
+                                                href={`/${CONFIG_SLUG.DETAIL}/${item.slug}.html`}
                                                 className='block'
                                             >
                                                 <ComicImage
-                                                    src={`${process.env.NEXT_PUBLIC_API_OTRUYEN_IMAGE_COMIC}/${item.thumb_url}`}
+                                                    src={`${CONFIG_API_OTRUYEN.IMAGE_COMIC}/${item.thumb_url}`}
                                                     alt={item.name}
                                                     title={item.name}
                                                     priority={

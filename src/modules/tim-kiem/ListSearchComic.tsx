@@ -11,10 +11,11 @@ import {getListBySearch} from "@/services/api-otruyen/search";
 
 // ** Config
 import {CONFIG_SLUG} from "@/configs/slug";
+import {CONFIG_API_OTRUYEN} from "@/configs/api-otruyen";
 
 // ** Utils
-import getIdFromUrl from "@/utils/getIdFromUrl";
 import {convertStatusToVi} from "@/utils/convertStatusComicToVi";
+import {buildReadingUrl} from "@/utils/buildReadingUrl ";
 
 type TListSearchComicProps = {
     keyword: string
@@ -45,7 +46,7 @@ const ListSearchComic = async ({keyword, pageQuery}: TListSearchComicProps) => {
                             {/* Thumb */}
                             <Link href={`/${CONFIG_SLUG.DETAIL}/${item.slug}.html`}>
                                 <ComicImage
-                                    src={`${process.env.NEXT_PUBLIC_API_OTRUYEN_IMAGE_COMIC}/${item.thumb_url}`}
+                                    src={`${CONFIG_API_OTRUYEN.IMAGE_COMIC}/${item.thumb_url}`}
                                     alt={item.name}
                                     priority={index <= 0}
                                 />
@@ -63,7 +64,7 @@ const ListSearchComic = async ({keyword, pageQuery}: TListSearchComicProps) => {
                                 {/* Chapter */}
                                 {item.chaptersLatest && (
                                     <Link
-                                        href={`/${CONFIG_SLUG.READING}/${item.slug}-chuong-${item.chaptersLatest[0].chapter_name}-${getIdFromUrl(item.chaptersLatest[0].chapter_api_data, '/')}.html`}
+                                        href={buildReadingUrl(item.slug, item.chaptersLatest[0].chapter_name, item.chaptersLatest[0].chapter_api_data)}
                                         className='text-link text-xs'
                                     >
                                         {`Chương ${item.chaptersLatest[0].chapter_name}`}

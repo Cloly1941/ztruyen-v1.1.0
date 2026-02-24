@@ -17,10 +17,11 @@ import {ESlug, ESortOrder} from "@/types/enum";
 
 // ** Config
 import {CONFIG_SLUG} from "@/configs/slug";
+import {CONFIG_API_OTRUYEN} from "@/configs/api-otruyen";
 
 // ** Util
-import getIdFromUrl from "@/utils/getIdFromUrl";
-import {convertSortQuery} from "@/utils/covertSortQuery";
+import {convertSortQuery} from "@/utils/covertSortQuery"
+import {buildReadingUrl} from "@/utils/buildReadingUrl ";
 
 type TListComicByStatusProps = {
     slug: ESlug | string,
@@ -73,7 +74,7 @@ const ListComicByStatus = async ({slug, pageQuery, sortQuery}: TListComicByStatu
                                     {item.chaptersLatest && (
                                         <Tag
                                             theme='dark'
-                                            href={`/${CONFIG_SLUG.READING}/${item.slug}-chuong-${item.chaptersLatest[0].chapter_name}-${getIdFromUrl(item.chaptersLatest[0].chapter_api_data, '/')}.html`}
+                                            href={buildReadingUrl(item.slug, item.chaptersLatest[0].chapter_name, item.chaptersLatest[0].chapter_api_data)}
                                             title={`Chương mới nhất: ${item.chaptersLatest[0].chapter_name}`}
                                         >
                                             {`Chương ${item.chaptersLatest[0].chapter_name}`}
@@ -82,7 +83,7 @@ const ListComicByStatus = async ({slug, pageQuery, sortQuery}: TListComicByStatu
                                 </div>
                                 <Link href={`/${CONFIG_SLUG.DETAIL}/${item.slug}`}>
                                     <ComicImage
-                                        src={`${process.env.NEXT_PUBLIC_API_OTRUYEN_IMAGE_COMIC}/${item.thumb_url}`}
+                                        src={`${CONFIG_API_OTRUYEN.IMAGE_COMIC}/${item.thumb_url}`}
                                         imgSize="lg"
                                         alt={item.name}
                                         priority={index <= 0}

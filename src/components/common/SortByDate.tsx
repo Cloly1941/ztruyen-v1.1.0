@@ -6,8 +6,8 @@ import {useRouter, useSearchParams} from "next/navigation"
 // ** Config
 import {listSortByDate} from "@/configs/page"
 
-// ** Clsx
-import clsx from "clsx"
+// ** Lib
+import {cn} from "@/lib/utils";
 
 // ** Enum
 import {ESortOrder} from "@/types/enum";
@@ -44,11 +44,9 @@ const SortByDate = () => {
                         <li
                             key={item.value}
                             onClick={() => handleSort(item.value)}
-                            className={clsx(
-                                "px-[10px] py-1 cursor-pointer transition active:text-primary",
-                                isActive
-                                    ? "text-primary"
-                                    : ""
+                            className={cn(
+                                "cursor-pointer px-[10px] py-1 transition active:text-primary",
+                                isActive && "text-primary"
                             )}
                         >
                             {item.label}
