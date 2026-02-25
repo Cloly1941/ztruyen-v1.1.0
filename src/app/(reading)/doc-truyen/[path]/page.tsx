@@ -65,7 +65,7 @@ const ReadingComic = async ({params}: TReadingComic) => {
             <Header asChild>
                 <h1 className="text-sm line-clamp-1 hidden md:block">
                     <Link
-                        href={`/${CONFIG_SLUG.DETAIL}/${listDetailComic.slug}`}
+                        href={`/${CONFIG_SLUG.DETAIL}/${listDetailComic.slug}.html`}
                         className="hover:text-primary"
                     >
                         {listDetailComic.name} {' - '}

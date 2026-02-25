@@ -1,5 +1,8 @@
 'use client'
 
+// ** Next
+import Link from "next/link";
+
 // ** React
 import {useEffect, useState} from "react";
 
@@ -18,19 +21,24 @@ import {Checkbox} from "@/components/ui/checkbox";
 
 // ** Components
 import Button from "@/components/common/Button";
+import ComicImage from "@/components/common/ComicImage";
+
+// ** Module component
+import EmptyPage from "@/modules/lich-su/EmptyPage";
 
 // ** Types
 import {IHistory} from "@/types/api";
+
+// ** Local Storage
 import {historyService, IHistoryStorage} from "@/localStorage/historyServices";
 
 // ** Skeleton
-import ListComicByStatusSkeleton from "@/skeletons/common/ListComicByStatusSkeleton";
+import ListComicHistorySkeleton from "@/skeletons/lich-su/ListComicHistorySkeleton";
 
 // ** icons
 import {Trash, X} from "lucide-react";
-import EmptyPage from "@/modules/lich-su/EmptyPage";
-import Link from "next/link";
-import ComicImage from "@/components/common/ComicImage";
+
+// ** Configs
 import {CONFIG_API_OTRUYEN} from "@/configs/api-otruyen";
 import {CONFIG_SLUG} from "@/configs/slug";
 
@@ -92,7 +100,7 @@ const ListComicHistory = () => {
         }
     };
 
-    if (isLoading) return <ListComicByStatusSkeleton/>
+    if (isLoading) return <ListComicHistorySkeleton />
 
     return (
         <section className="min-h-[54vh] container pt-2 pb-20">

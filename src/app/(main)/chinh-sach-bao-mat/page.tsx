@@ -40,7 +40,7 @@ export const metadata: Metadata = {
 const PrivacyPolicy = () => {
     return (
         <main className="min-h-screen bg-background">
-            <div className="mx-auto max-w-4xl px-4 py-8 sm:py-12 lg:py-16">
+            <div className="container py-8 sm:py-12 lg:py-16">
                 <h1 className="mb-4 text-xl font-semibold tracking-tight sm:text-3xl lg:text-4xl">
                     Chính sách bảo mật
                 </h1>

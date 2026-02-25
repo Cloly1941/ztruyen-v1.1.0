@@ -350,7 +350,7 @@
 
     /* home */
     .section-home {
-        @apply container pb-[30px] sm:pb-10 md:pb-[50px] lg:pb-[65px] mt-5 sm:mt-[30px] md:mt-10 lg:mt-[50px]
+        @apply container pb-[30px] sm:pb-10 md:pb-[50px] lg:pb-[65px] pt-5 sm:pt-[30px] md:pt-10 lg:pt-[50px]
     }
 
     .section-header {
