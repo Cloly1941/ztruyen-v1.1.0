@@ -310,6 +310,11 @@
         @apply ring-ring/0
     }
 
+    /* Avatar */
+    [data-slot='avatar-image'] {
+        @apply object-cover
+    }
+
     /* End Shadcn ui component*/
 }
 
@@ -340,7 +345,7 @@
     }
 
     .mt-header {
-        @apply mt-[56px];
+        @apply mt-[60px];
     }
 
     /* footer */

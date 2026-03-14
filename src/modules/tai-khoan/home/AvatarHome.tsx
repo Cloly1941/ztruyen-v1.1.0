@@ -1,7 +1,7 @@
 'use client'
 
-// ** Shadcn ui
-import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
+// ** Component
+import AvatarWithFrame from "@/components/common/AvatarWithFrame";
 
 // ** Hooks
 import useGetMethod from "@/hooks/common/useGetMethod";
@@ -13,13 +13,13 @@ import HomeAccountSkeleton from "@/skeletons/tai-khoan/trang-chu/HomeAccountSkel
 import DialogDeleteAccount from "@/modules/tai-khoan/home/DialogDeleteAccount";
 
 // ** Services
-import { UserService } from "@/services/api/user"
+import {UserService} from "@/services/api/user"
 
 // ** Config
-import { CONFIG_TAG } from "@/configs/tag"
+import {CONFIG_TAG} from "@/configs/tag"
 
 // ** Type
-import { IUserProfile } from "@/types/api"
+import {IUserProfile} from "@/types/api"
 
 const AvatarHome = () => {
 
@@ -34,13 +34,19 @@ const AvatarHome = () => {
 
     if (!user) return null
 
+    const frameUrl = user.avatar_frame?.image.url
+
     return (
         <div className='flex justify-between items-center'>
-            <div className='flex items-center gap-4'>
-                <Avatar className='size-10 lg:size-14'>
-                    <AvatarImage src={user.avatar?.url} alt={user.name}/>
-                    <AvatarFallback>{user.name.charAt(0).toUpperCase()}</AvatarFallback>
-                </Avatar>
+            <div className='flex items-center gap-2'>
+                <AvatarWithFrame
+                    className='size-14 lg:size-20'
+                    classAvatar='size-10 lg:size-14'
+                    avatarUrl={user.avatar?.url}
+                    avatarName={user.name}
+                    frameUrl={frameUrl}
+                    frameName={user.avatar_frame?.name}
+                />
                 <div className='flex flex-col justify-between'>
                     <div className='font-semibold text-sm lg:text-lg'>{user.name}</div>
                 </div>

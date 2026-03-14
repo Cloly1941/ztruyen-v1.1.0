@@ -35,6 +35,7 @@ import { CONFIG_TAG } from "@/configs/tag"
 
 // ** Type
 import { IUserProfile } from "@/types/api"
+import AvatarWithFrame from "@/components/common/AvatarWithFrame";
 
 const AccountMenu = () => {
 
@@ -56,11 +57,15 @@ const AccountMenu = () => {
     return (
         <div className="relative">
             <DropdownMenu modal={false}>
-                <DropdownMenuTrigger asChild>
-                    <Avatar className='cursor-pointer'>
-                        <AvatarImage src={user.avatar?.url} alt={user.name}/>
-                        <AvatarFallback>{user.name.charAt(0).toUpperCase()}</AvatarFallback>
-                    </Avatar>
+                <DropdownMenuTrigger>
+                    <AvatarWithFrame
+                        className='cursor-pointer size-10'
+                        classAvatar='mt-1'
+                        avatarName={user.name}
+                        avatarUrl={user.avatar?.url}
+                        frameName={user.avatar_frame?.name}
+                        frameUrl={user.avatar_frame?.image.url}
+                    />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-40" align="center">
                     <DropdownMenuGroup>
