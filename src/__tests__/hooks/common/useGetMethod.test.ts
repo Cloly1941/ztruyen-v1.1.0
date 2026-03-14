@@ -8,14 +8,13 @@ import { SWRConfig } from 'swr'
 import { createElement } from 'react'
 
 // ** Hook
-import useGetMethod from "@/hooks/common/useGetMethod";
+import useGetMethod from '@/hooks/common/useGetMethod'
 
+// ===== WRAPPER =====
 const wrapper = ({ children }: { children: React.ReactNode }) =>
     createElement(SWRConfig, { value: { provider: () => new Map() } }, children)
 
-// ===== Mock =====
-
-const mockData: IApiRes<{ name: string }> = {
+const mockApiRes: IApiRes<{ name: string }> = {
     data: { name: 'Test' },
     message: 'Success',
     statusCode: 200,
@@ -26,21 +25,17 @@ const mockError: BackendError = {
     statusCode: 500,
 }
 
-// ===== Test =====
+// ===== TESTS =====
 describe('useGetMethod', () => {
     afterEach(() => {
         jest.clearAllMocks()
     })
 
-    it('should fetch data successfully', async () => {
-        const mockApi = jest.fn().mockResolvedValue(mockData)
+    it('returns unwrapped data on success', async () => {
+        const mockApi = jest.fn().mockResolvedValue(mockApiRes)
 
         const { result } = renderHook(
-            () =>
-                useGetMethod({
-                    api: mockApi,
-                    key: 'test-key',
-                }),
+            () => useGetMethod({ api: mockApi, key: 'test-key' }),
             { wrapper }
         )
 
@@ -50,21 +45,16 @@ describe('useGetMethod', () => {
             expect(result.current.isLoading).toBe(false)
         })
 
-        expect(result.current.data).toEqual(mockData)
+        expect(result.current.data).toEqual({ name: 'Test' })
         expect(result.current.error).toBeUndefined()
         expect(mockApi).toHaveBeenCalledTimes(1)
     })
 
-    it('should not fetch when enabled = false', async () => {
-        const mockApi = jest.fn().mockResolvedValue(mockData)
+    it('does not fetch when enabled is false', async () => {
+        const mockApi = jest.fn().mockResolvedValue(mockApiRes)
 
         const { result } = renderHook(
-            () =>
-                useGetMethod({
-                    api: mockApi,
-                    key: 'test-key-disabled',
-                    enabled: false,
-                }),
+            () => useGetMethod({ api: mockApi, key: 'test-key-disabled', enabled: false }),
             { wrapper }
         )
 
@@ -76,15 +66,11 @@ describe('useGetMethod', () => {
         expect(result.current.data).toBeUndefined()
     })
 
-    it('should return error when api fails', async () => {
+    it('returns error when api fails', async () => {
         const mockApi = jest.fn().mockRejectedValue(mockError)
 
         const { result } = renderHook(
-            () =>
-                useGetMethod({
-                    api: mockApi,
-                    key: 'test-key-error',
-                }),
+            () => useGetMethod({ api: mockApi, key: 'test-key-error' }),
             { wrapper }
         )
 
@@ -96,19 +82,12 @@ describe('useGetMethod', () => {
         expect(result.current.data).toBeUndefined()
     })
 
-    it('should refetch when key changes', async () => {
-        const mockApi = jest.fn().mockResolvedValue(mockData)
+    it('refetches when key changes', async () => {
+        const mockApi = jest.fn().mockResolvedValue(mockApiRes)
 
         const { result, rerender } = renderHook(
-            ({ key }: { key: string }) =>
-                useGetMethod({
-                    api: mockApi,
-                    key,
-                }),
-            {
-                wrapper,
-                initialProps: { key: 'key-1' },
-            }
+            ({ key }: { key: string }) => useGetMethod({ api: mockApi, key }),
+            { wrapper, initialProps: { key: 'key-1' } }
         )
 
         await waitFor(() => expect(result.current.isLoading).toBe(false))
@@ -120,20 +99,30 @@ describe('useGetMethod', () => {
         expect(mockApi).toHaveBeenCalledTimes(2)
     })
 
-    it('should expose mutate function', async () => {
-        const mockApi = jest.fn().mockResolvedValue(mockData)
+    it('exposes mutate function', async () => {
+        const mockApi = jest.fn().mockResolvedValue(mockApiRes)
 
         const { result } = renderHook(
-            () =>
-                useGetMethod({
-                    api: mockApi,
-                    key: 'test-key-mutate',
-                }),
+            () => useGetMethod({ api: mockApi, key: 'test-key-mutate' }),
             { wrapper }
         )
 
         await waitFor(() => expect(result.current.isLoading).toBe(false))
 
         expect(typeof result.current.mutate).toBe('function')
+    })
+
+    it('fetches by default when enabled is not provided', async () => {
+        const mockApi = jest.fn().mockResolvedValue(mockApiRes)
+
+        const { result } = renderHook(
+            () => useGetMethod({ api: mockApi, key: 'test-key-default' }),
+            { wrapper }
+        )
+
+        await waitFor(() => expect(result.current.isLoading).toBe(false))
+
+        expect(mockApi).toHaveBeenCalledTimes(1)
+        expect(result.current.data).toEqual({ name: 'Test' })
     })
 })

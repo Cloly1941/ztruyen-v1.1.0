@@ -25,11 +25,23 @@ import {Heart, User} from "lucide-react";
 import AvatarSkeleton from "@/skeletons/layouts/AvatarSkeletons";
 
 // ** Hooks
-import {useProfile} from "@/hooks/auth/useProfile";
+import useGetMethod from "@/hooks/common/useGetMethod"
+
+// ** Services
+import { UserService } from "@/services/api/user"
+
+// ** Config
+import { CONFIG_TAG } from "@/configs/tag"
+
+// ** Type
+import { IUserProfile } from "@/types/api"
 
 const AccountMenu = () => {
 
-    const { data: user, isLoading } = useProfile()
+    const { data: user, isLoading } = useGetMethod<IUserProfile>({
+        api: () => UserService.getProfile(),
+        key: CONFIG_TAG.USER.PROFILE,
+    })
 
     if (isLoading) {
         return (

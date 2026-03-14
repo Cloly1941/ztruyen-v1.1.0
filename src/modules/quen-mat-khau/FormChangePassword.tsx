@@ -21,7 +21,13 @@ import InputPassword from "@/components/common/InputPassword";
 import {Field, FieldError, FieldLabel} from "@/components/ui/field";
 
 // ** Hooks
-import {useChangePassword} from "@/hooks/auth/useChangePassword";
+import useMutateMethod from "@/hooks/common/useMutateMethod";
+
+// ** Service
+import {AuthService} from "@/services/api/auth";
+
+// ** Config
+import {CONFIG_TAG} from "@/configs/tag";
 
 const formSchema = z.object({
     newPassword: z.string().min(1, 'Mật khẩu không được để trống'),
@@ -42,10 +48,24 @@ export type TChangePasswordPayload = {
     newPassword: string;
 }
 
+type TChangePasswordArgs = {
+    payload: TChangePasswordPayload
+    token: string
+}
+
 const FormChangePassword = ({token}: Props) => {
 
     const router = useRouter()
-    const {trigger, isMutating} = useChangePassword()
+
+    const {trigger, isMutating} = useMutateMethod<null, TChangePasswordArgs>({
+        api: (arg) => AuthService.resetPassword(arg.payload, arg.token),
+        key: CONFIG_TAG.AUTH.RESET,
+        onSuccess: data => {
+            toast.success(data.message)
+            router.push('/dang-nhap')
+        }
+    })
+
 
     const form = useForm<TChangePasswordForm>({
         resolver: zodResolver(formSchema),
@@ -68,15 +88,10 @@ const FormChangePassword = ({token}: Props) => {
             ...rest
         }
 
-        const res = await trigger({
+        await trigger({
             payload,
             token,
         })
-
-        if (res?.message) {
-            toast.success(res.message)
-            router.push('/dang-nhap')
-        }
     }
 
     return (

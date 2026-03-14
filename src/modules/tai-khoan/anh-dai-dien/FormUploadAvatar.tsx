@@ -10,8 +10,14 @@ import { Separator } from "@/components/ui/separator"
 import { ImagePlus, Loader2 } from "lucide-react"
 
 // ** Hooks
-import { useProfile } from "@/hooks/auth/useProfile"
 import { useUploadAvatar } from "@/hooks/user/useUploadAvatar"
+import useGetMethod from "@/hooks/common/useGetMethod"
+
+// ** Services
+import { UserService } from "@/services/api/user"
+
+// ** Config
+import { CONFIG_TAG } from "@/configs/tag"
 
 // ** Module component
 import AvatarAcc from "@/modules/tai-khoan/anh-dai-dien/AvatarAcc"
@@ -21,7 +27,11 @@ import { IUserProfile } from "@/types/api"
 
 const FormUploadAvatar = () => {
     const inputRef = useRef<HTMLInputElement>(null)
-    const { data: user, isLoading, mutate } = useProfile()
+
+    const { data: user, isLoading, mutate } = useGetMethod<IUserProfile>({
+        api: () => UserService.getProfile(),
+        key: CONFIG_TAG.USER.PROFILE,
+    })
 
     const { trigger, isMutating } = useUploadAvatar(async () => {
         await mutate()
@@ -43,11 +53,11 @@ const FormUploadAvatar = () => {
                         onClick={handleChooseFile}
                         disabled={isMutating}
                         className="flex gap-2 items-center text-sm
-              bg-gray-100 text-black/60 hover:bg-gray-200
-              dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700
-              py-8 px-5 rounded-md
-              transition-colors duration-200
-              disabled:opacity-50 disabled:cursor-not-allowed"
+                            bg-gray-100 text-black/60 hover:bg-gray-200
+                            dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700
+                            py-8 px-5 rounded-md
+                            transition-colors duration-200
+                            disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         {isMutating ? (
                             <>
@@ -86,7 +96,9 @@ const FormUploadAvatar = () => {
                     />
                 </div>
             </div>
-            <p className='text-center mt-10 sm:mt-20 text-xs text-gray-400'>Vui lòng chọn ảnh để tải lên: kích thước 80 * 80 pixel, hỗ trợ các định dạng JPG, PNG và các định dạng khác, dung lượng ảnh phải nhỏ hơn 2MB.</p>
+            <p className='text-center mt-10 sm:mt-20 text-xs text-gray-400'>
+                Vui lòng chọn ảnh để tải lên: kích thước 80 * 80 pixel, hỗ trợ các định dạng JPG, PNG và các định dạng khác, dung lượng ảnh phải nhỏ hơn 2MB.
+            </p>
         </div>
     )
 }

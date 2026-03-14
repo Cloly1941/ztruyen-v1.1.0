@@ -1,4 +1,4 @@
-import useSWR from 'swr'
+import useSWR, { type BareFetcher, type SWRConfiguration } from 'swr'
 
 type TUseGetMethod<TData> = {
     api: () => Promise<IApiRes<TData>>
@@ -7,13 +7,20 @@ type TUseGetMethod<TData> = {
 }
 
 const useGetMethod = <TData>({ api, key, enabled = true }: TUseGetMethod<TData>) => {
-    const { data, isLoading, error, mutate } = useSWR<IApiRes<TData>, BackendError>(
+    const fetcher: BareFetcher<TData> = async () => {
+        const res = await api()
+        return res.data as TData
+    }
+
+    const config: SWRConfiguration<TData, BackendError> = {
+        revalidateOnFocus: false,
+        shouldRetryOnError: false,
+    }
+
+    const { data, isLoading, error, mutate } = useSWR<TData, BackendError>(
         enabled ? key : null,
-        api,
-        {
-            revalidateOnFocus: false,
-            shouldRetryOnError: false,
-        }
+        fetcher,
+        config
     )
 
     return { data, isLoading, error, mutate }

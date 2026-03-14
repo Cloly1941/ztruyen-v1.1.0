@@ -1,117 +1,122 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 // ** Testing Library
 import { render, screen, fireEvent } from '@testing-library/react'
 
 // ** Hooks
-import { useProfile } from '@/hooks/auth/useProfile'
+import useGetMethod from '@/hooks/common/useGetMethod'
 import { useUploadAvatar } from '@/hooks/user/useUploadAvatar'
 
+// ** Services
+import { UserService } from '@/services/api/user'
+
 // ** Module component
-import FormUploadAvatar from "@/modules/tai-khoan/anh-dai-dien/FormUploadAvatar";
+import FormUploadAvatar from '@/modules/tai-khoan/anh-dai-dien/FormUploadAvatar'
+
+// ** Types
+import { IUserProfile } from '@/types/api'
 
 // ---------------- MOCKS ----------------
-
-jest.mock('@/hooks/auth/useProfile')
+jest.mock('@/hooks/common/useGetMethod')
 jest.mock('@/hooks/user/useUploadAvatar')
-
+jest.mock('@/services/api/user', () => ({
+    UserService: {
+        getProfile: jest.fn(),
+    },
+}))
 jest.mock('@/modules/tai-khoan/anh-dai-dien/AvatarAcc', () => ({
     __esModule: true,
     default: () => <div data-testid="avatar">Avatar</div>,
 }))
-
 jest.mock('@/components/ui/separator', () => ({
     Separator: () => <div data-testid="separator" />,
 }))
 
-const mockUseProfile = useProfile as jest.MockedFunction<typeof useProfile>
-const mockUseUploadAvatar =
-    useUploadAvatar as jest.MockedFunction<typeof useUploadAvatar>
+// ---------------- TYPES ----------------
+type TUseGetMethodReturn = {
+    data: IUserProfile | undefined
+    isLoading: boolean
+    error: unknown
+    mutate: jest.Mock
+}
 
+type TUseUploadAvatarReturn = {
+    trigger: jest.Mock
+    isMutating: boolean
+}
+
+// ---------------- TESTS ----------------
 describe('FormUploadAvatar', () => {
     const mockTrigger = jest.fn()
     const mockMutate = jest.fn()
 
+    const mockUser: IUserProfile = { name: 'John' } as IUserProfile
+
     beforeEach(() => {
-
-        mockUseProfile.mockReturnValue({
-            data: { name: 'John' },
+        ;(useGetMethod as jest.Mock).mockReturnValue({
+            data: mockUser,
             isLoading: false,
+            error: undefined,
             mutate: mockMutate,
-        } as unknown as any)
+        } as TUseGetMethodReturn)
 
-        mockUseUploadAvatar.mockReturnValue({
+        ;(useUploadAvatar as jest.Mock).mockReturnValue({
             trigger: mockTrigger,
             isMutating: false,
-        } as unknown as any)
+        } as TUseUploadAvatarReturn)
     })
 
-    it('render upload button and avatar', () => {
+    afterEach(() => {
+        jest.clearAllMocks()
+    })
+
+    it('renders upload button and avatar', () => {
         render(<FormUploadAvatar />)
 
         expect(screen.getByText('Chọn ảnh đại diện')).toBeInTheDocument()
         expect(screen.getByTestId('avatar')).toBeInTheDocument()
+        expect(screen.getByTestId('separator')).toBeInTheDocument()
     })
 
-    it('show loading state when isMutating = true', () => {
-        mockUseUploadAvatar.mockReturnValue({
+    it('shows loading state when isMutating is true', () => {
+        ;(useUploadAvatar as jest.Mock).mockReturnValue({
             trigger: mockTrigger,
             isMutating: true,
-        } as unknown as any)
+        } as TUseUploadAvatarReturn)
 
         render(<FormUploadAvatar />)
 
         expect(screen.getByText('Đang upload...')).toBeInTheDocument()
-
-        const button = screen.getByRole('button')
-        expect(button).toBeDisabled()
+        expect(screen.getByRole('button')).toBeDisabled()
     })
 
-    it('trigger upload when file selected', () => {
+    it('triggers upload with file and userName when file is selected', () => {
         const { container } = render(<FormUploadAvatar />)
 
-        const file = new File(['avatar'], 'avatar.png', {
-            type: 'image/png',
-        })
+        const file = new File(['avatar'], 'avatar.png', { type: 'image/png' })
+        const input = container.querySelector('input[type="file"]') as HTMLInputElement
 
-        const input = container.querySelector(
-            'input[type="file"]'
-        ) as HTMLInputElement
-
-        expect(input).toBeInTheDocument()
-
-        fireEvent.change(input, {
-            target: { files: [file] },
-        })
+        fireEvent.change(input, { target: { files: [file] } })
 
         expect(mockTrigger).toHaveBeenCalledWith({
             file,
-            userName: 'John',
+            userName: mockUser.name,
         })
     })
 
-    it('do not trigger when no file selected', () => {
+    it('does not trigger when no file is selected', () => {
         const { container } = render(<FormUploadAvatar />)
 
-        const input = container.querySelector(
-            'input[type="file"]'
-        ) as HTMLInputElement
+        const input = container.querySelector('input[type="file"]') as HTMLInputElement
 
-        fireEvent.change(input, {
-            target: { files: [] },
-        })
+        fireEvent.change(input, { target: { files: [] } })
 
         expect(mockTrigger).not.toHaveBeenCalled()
     })
 
-    it('click button triggers file input click when not mutating', () => {
+    it('clicks file input when button is clicked and not mutating', () => {
         render(<FormUploadAvatar />)
 
         const button = screen.getByRole('button')
-        const input = document.querySelector(
-            'input[type="file"]'
-        ) as HTMLInputElement
-
+        const input = document.querySelector('input[type="file"]') as HTMLInputElement
         const clickSpy = jest.spyOn(input, 'click')
 
         fireEvent.click(button)
@@ -119,19 +124,16 @@ describe('FormUploadAvatar', () => {
         expect(clickSpy).toHaveBeenCalled()
     })
 
-    it('click button does nothing when mutating', () => {
-        mockUseUploadAvatar.mockReturnValue({
+    it('does not click file input when button is clicked while mutating', () => {
+        ;(useUploadAvatar as jest.Mock).mockReturnValue({
             trigger: mockTrigger,
             isMutating: true,
-        } as unknown as any)
+        } as TUseUploadAvatarReturn)
 
         render(<FormUploadAvatar />)
 
         const button = screen.getByRole('button')
-        const input = document.querySelector(
-            'input[type="file"]'
-        ) as HTMLInputElement
-
+        const input = document.querySelector('input[type="file"]') as HTMLInputElement
         const clickSpy = jest.spyOn(input, 'click')
 
         fireEvent.click(button)
@@ -140,12 +142,31 @@ describe('FormUploadAvatar', () => {
     })
 
     it('calls mutate after successful upload', async () => {
-        const { } = render(<FormUploadAvatar />)
+        render(<FormUploadAvatar />)
 
-        const onSuccessCallback = mockUseUploadAvatar.mock.calls[0][0]
+        const onSuccessCallback = (useUploadAvatar as jest.Mock).mock.calls[0][0]
 
         await onSuccessCallback?.()
 
         expect(mockMutate).toHaveBeenCalled()
+    })
+
+    it('passes correct key and api to useGetMethod', () => {
+        render(<FormUploadAvatar />)
+
+        const options = (useGetMethod as jest.Mock).mock.calls[0][0]
+
+        expect(options.key).toBeDefined()
+        expect(typeof options.api).toBe('function')
+    })
+
+    it('calls UserService.getProfile when api is invoked', async () => {
+        render(<FormUploadAvatar />)
+
+        const options = (useGetMethod as jest.Mock).mock.calls[0][0]
+
+        await options.api()
+
+        expect(UserService.getProfile).toHaveBeenCalledTimes(1)
     })
 })

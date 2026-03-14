@@ -41,7 +41,16 @@ import {vi} from 'react-day-picker/locale';
 import {getAgeToBirthday, getDefaultBirthdayMonth, isBirthdayValid} from "@/utils/date";
 
 // ** Hooks
-import {useRegister} from "@/hooks/auth/useRegister";
+import useMutateMethod from "@/hooks/common/useMutateMethod";
+
+// ** Service
+import {AuthService} from "@/services/api/auth";
+
+// ** Config
+import {CONFIG_TAG} from "@/configs/tag";
+
+// ** Type
+import {IRegister} from "@/types/api";
 
 const formSchema = z
     .object({
@@ -85,12 +94,25 @@ export type TRegisterPayload = {
     age: number;
 }
 
+type TRegisterArgs = {
+    payload: TRegisterPayload
+    cfToken: string
+}
+
 const FormRegister = () => {
 
     const router = useRouter()
     const [cfToken, setCfToken] = useState<string | null>(null);
 
-    const {trigger, isMutating} = useRegister()
+    const {trigger, isMutating} = useMutateMethod<IRegister, TRegisterArgs>({
+        api: (arg) => AuthService.register(arg.payload, arg.cfToken),
+        key: CONFIG_TAG.AUTH.REGISTER,
+        onSuccess: data => {
+
+            toast.success(data.message);
+            router.push('/dang-nhap');
+        }
+    })
 
     const form = useForm<TRegisterForm>({
         resolver: zodResolver(formSchema),
@@ -119,14 +141,10 @@ const FormRegister = () => {
             age: getAgeToBirthday(birthday),
         }
 
-        const res = await trigger({
+        await trigger({
             payload,
             cfToken,
         })
-
-        toast.success(res.message);
-
-        router.push('/dang-nhap');
     }
 
     return (

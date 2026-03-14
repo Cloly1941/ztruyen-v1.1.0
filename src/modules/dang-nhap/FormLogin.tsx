@@ -27,7 +27,16 @@ import {Field, FieldError, FieldLabel} from "@/components/ui/field";
 import {Input} from "@/components/ui/input";
 
 // ** Hooks
-import {useLogin} from "@/hooks/auth/useLogin";
+import useMutateMethod from "@/hooks/common/useMutateMethod";
+
+// ** Config
+import {CONFIG_TAG} from "@/configs/tag";
+
+// ** Service
+import {AuthService} from "@/services/api/auth";
+
+// ** Type
+import {ILogin} from "@/types/api";
 
 const formSchema = z.object({
     email: z.string().email({message: 'Email không hợp lệ'}),
@@ -36,12 +45,24 @@ const formSchema = z.object({
 
 export type TLoginForm = z.infer<typeof formSchema>;
 
+type TLoginArgs = {
+    payload: TLoginForm
+    cfToken: string
+}
+
 const FormLogin = () => {
 
     const [cfToken, setCfToken] = useState<string | null>(null);
     const router = useRouter()
 
-    const {trigger, isMutating} = useLogin()
+    const {trigger, isMutating} = useMutateMethod<ILogin, TLoginArgs>({
+        api: (arg) => AuthService.login(arg.payload, arg.cfToken),
+        key: CONFIG_TAG.AUTH.LOGIN,
+        onSuccess: data => {
+            toast.success(data.message)
+            router.push("/")
+        }
+    })
 
     const form = useForm<TLoginForm>({
         resolver: zodResolver(formSchema),
@@ -58,16 +79,10 @@ const FormLogin = () => {
             return;
         }
 
-        const res = await trigger({
+        await trigger({
             payload: values,
             cfToken,
         })
-
-        if (!res) return
-
-        toast.success(res.message);
-
-        router.push('/');
     }
 
     return (

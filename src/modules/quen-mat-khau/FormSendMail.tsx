@@ -1,47 +1,77 @@
 'use client'
 
 // ** React
-import {useState} from "react";
+import { useState } from "react"
 
 // ** zod
-import {z} from "zod";
+import { z } from "zod"
 
 // ** React hook form
-import {Controller, useForm} from "react-hook-form";
-import {zodResolver} from "@hookform/resolvers/zod";
+import { Controller, useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+
+// ** React hot toast
+import toast from "react-hot-toast"
 
 // ** Components
-import Button from "@/components/common/Button";
-import TurnstileWidget from "@/components/auth/TurnstileWidget";
+import Button from "@/components/common/Button"
+import TurnstileWidget from "@/components/auth/TurnstileWidget"
 
 // ** Shadcn ui
-import {Field, FieldError, FieldLabel} from "@/components/ui/field";
-import {Input} from "@/components/ui/input";
+import { Field, FieldError, FieldLabel } from "@/components/ui/field"
+import { Input } from "@/components/ui/input"
 
 // ** Hooks
-import {useForgotPassword} from "@/hooks/auth/useForgotPassword";
+import useMutateMethod from "@/hooks/common/useMutateMethod"
+
+// ** Services
+import { AuthService } from "@/services/api/auth"
+
+// ** Config
+import { CONFIG_TAG } from "@/configs/tag"
+
+// ** Next
+import { useRouter } from "next/navigation"
 
 const formSchema = z.object({
-    email: z.string().email({message: 'Email không hợp lệ'}),
-});
+    email: z.string().email({ message: 'Email không hợp lệ' }),
+})
 
-export type TForgotPassForm = z.infer<typeof formSchema>;
+export type TForgotPassForm = z.infer<typeof formSchema>
+
+type TForgotPasswordArgs = {
+    payload: TForgotPassForm
+    cfToken: string
+}
 
 const FormSendMail = () => {
+    const router = useRouter()
+    const [cfToken, setCfToken] = useState<string | null>(null)
 
-    const [cfToken, setCfToken] = useState<string | null>(null);
-
-    const { trigger, isMutating } = useForgotPassword(cfToken)
+    const { trigger, isMutating } = useMutateMethod<null, TForgotPasswordArgs>({
+        api: (arg) => AuthService.forgotPassword(arg.payload, arg.cfToken),
+        key: CONFIG_TAG.AUTH.FORGOT,
+        showToast: false,
+        onSuccess: (data) => {
+            toast.success(data.message)
+            router.push('/')
+        },
+    })
 
     const form = useForm<TForgotPassForm>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             email: '',
         },
-    });
+    })
 
-    const onSubmit = (values: TForgotPassForm) => {
-        trigger(values)
+    const onSubmit = async (values: TForgotPassForm) => {
+        if (!cfToken) {
+            toast.error('Vui lòng xác thực bạn không phải bot')
+            return
+        }
+
+        await trigger({ payload: values, cfToken })
     }
 
     return (
@@ -50,7 +80,7 @@ const FormSendMail = () => {
             <Controller
                 name='email'
                 control={form.control}
-                render={({field, fieldState}) => (
+                render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
                         <FieldLabel htmlFor='form-forgot-password-email'>Email</FieldLabel>
                         <Input
@@ -61,20 +91,22 @@ const FormSendMail = () => {
                             autoComplete="email"
                         />
                         {fieldState.invalid && (
-                            <FieldError errors={[fieldState.error]}/>
+                            <FieldError errors={[fieldState.error]} />
                         )}
                     </Field>
                 )}
             />
 
-            {/* Cloudflare turnstile*/}
+            {/* Cloudflare turnstile */}
             <div className="mt-4">
-                <TurnstileWidget onVerify={setCfToken}/>
+                <TurnstileWidget onVerify={setCfToken} />
             </div>
 
-            <Button type='submit' form='form-forgot-password' width='full' isLoading={isMutating}>Gửi email</Button>
+            <Button type='submit' form='form-forgot-password' width='full' isLoading={isMutating}>
+                Gửi email
+            </Button>
         </form>
     )
 }
 
-export default FormSendMail;
+export default FormSendMail
