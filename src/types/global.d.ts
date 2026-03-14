@@ -29,6 +29,11 @@ declare global {
         result: T[]
     }
 
+    interface BackendError {
+        statusCode: number;
+        message: string;
+    }
+
     // Otruyen api
 
     interface ISeoOnPage {

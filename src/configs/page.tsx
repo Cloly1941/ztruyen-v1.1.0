@@ -5,7 +5,7 @@ import Link from "next/link";
 import type {IOtruyenDetailComic} from '@/types/api.otruyen'
 
 // ** Icon
-import {CalendarRange, CircleUser, Heart, Home, Tag, User, Wifi} from "lucide-react";
+import {CalendarRange, CircleUser, Frame, Heart, Home, Tag, User, Wifi} from "lucide-react";
 
 // ** Config
 import {CONFIG_SLUG} from "@/configs/slug";
@@ -36,6 +36,11 @@ export const navAccount: TLinkWithIcon[] = [
         title: 'Truyện yêu thích',
         href: '/tai-khoan/truyen-yeu-thich',
         icon: Heart,
+    },
+    {
+        title: 'Khung avatar',
+        href: '/tai-khoan/khung-avatar',
+        icon: Frame,
     }
 ]
 

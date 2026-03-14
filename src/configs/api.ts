@@ -2,6 +2,7 @@ const baseUrl = process.env.NEXT_PUBLIC_API_URL;
 
 const authUrl = baseUrl + '/auth';
 const userUrl = baseUrl + '/user';
+const frameUrl = baseUrl + '/frame';
 
 export const CONFIG_API = {
     AUTH: {
@@ -16,6 +17,9 @@ export const CONFIG_API = {
     },
     USER: {
         PROFILE: `${userUrl}/profile`,
+    },
+    FRAME: {
+        INDEX: frameUrl
     },
     IMAGE: {
         UPLOAD: `${baseUrl}/upload`,
