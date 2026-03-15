@@ -70,3 +70,12 @@ export interface IHistory {
     image_name: number
     path: string
 }
+
+// Favorite
+export interface IFavorite {
+    _id: string
+}
+
+export interface IFavoriteToggle {
+    isFavorite: boolean
+}

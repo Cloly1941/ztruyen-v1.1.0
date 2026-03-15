@@ -3,6 +3,7 @@ const baseUrl = process.env.NEXT_PUBLIC_API_URL;
 const authUrl = baseUrl + '/auth';
 const userUrl = baseUrl + '/user';
 const frameUrl = baseUrl + '/frame';
+const favoriteUrl = baseUrl + '/favorite';
 
 export const CONFIG_API = {
     AUTH: {
@@ -20,6 +21,11 @@ export const CONFIG_API = {
     },
     FRAME: {
         INDEX: frameUrl
+    },
+    FAVORITE: {
+        INDEX: favoriteUrl,
+        CHECK: `${favoriteUrl}/check`,
+        TOGGLE: `${favoriteUrl}/toggle`,
     },
     IMAGE: {
         UPLOAD: `${baseUrl}/upload`,

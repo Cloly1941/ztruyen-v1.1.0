@@ -4,6 +4,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 // ** Skeleton
 import ListChapterSkeleton from "@/skeletons/truyen-tranh/ListChapterSkeleton";
 import DetailRecommendedComicSkeleton from "@/skeletons/truyen-tranh/DetailRecommendedComicSkeleton";
+import FavoriteBtnSkeleton from "@/skeletons/truyen-tranh/FavoriteBtnSkeleton";
 
 const DetailComicSkeleton = () => {
     return (
@@ -37,8 +38,8 @@ const DetailComicSkeleton = () => {
 
                     {/* Buttons */}
                     <div className="flex gap-3 mt-6">
-                        <Skeleton className="h-10 w-full rounded-md" />
-                        <Skeleton className="h-10 w-[41px] rounded-md" />
+                        <Skeleton className="h-[36px] w-full rounded-md" />
+                        <FavoriteBtnSkeleton/>
                     </div>
                 </div>
             </section>

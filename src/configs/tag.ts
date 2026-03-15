@@ -14,6 +14,10 @@ export const CONFIG_TAG = {
         INDEX: 'frame',
         UPDATE: 'update-frame'
     },
+    FAVORITE: {
+        INDEX: 'favorite',
+        TOGGLE: 'favorite-toggle'
+    },
     IMAGE: {
         UPLOAD: 'upload-image',
     }

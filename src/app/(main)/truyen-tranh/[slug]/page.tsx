@@ -6,7 +6,6 @@ import {Suspense} from "react";
 
 // ** Component
 import ErrorText from "@/components/common/ErrorText";
-import Button from "@/components/common/Button";
 import ComicImage from "@/components/common/ComicImage";
 
 // ** Module components
@@ -14,6 +13,7 @@ import DetailDesc from "@/modules/truyen-tranh/DetailDesc";
 import DetailListChapter from "@/modules/truyen-tranh/DetailListChapter";
 import DetailRecommendedComic from "@/modules/truyen-tranh/DetailRecommendedComic";
 import ReadingBtn from "@/modules/truyen-tranh/ReadingBtn";
+import FavoriteBtn from "@/modules/truyen-tranh/FavoriteBtn";
 
 // ** Utils
 import removeExtension from "@/utils/removeExtension";
@@ -28,13 +28,16 @@ import {CONFIG_API_OTRUYEN} from "@/configs/api-otruyen";
 import {buildMetaList} from "@/configs/page";
 
 // ** Icons
-import {Heart, Wifi} from "lucide-react";
+import {Wifi} from "lucide-react";
 
 // ** Type
 import {TOtruyenChapter} from "@/types/api.otruyen";
 
 // ** Skeleton
 import DetailRecommendedComicSkeleton from "@/skeletons/truyen-tranh/DetailRecommendedComicSkeleton";
+
+// ** Lib
+import {getCookie} from "@/lib/cookie";
 
 type TDetailComicProps = {
     params: Promise<{ slug: string }>
@@ -78,6 +81,8 @@ export async function generateMetadata({params}: TDetailComicProps): Promise<Met
 }
 
 const DetailComic = async ({params}: TDetailComicProps) => {
+
+    const isLogin = await getCookie()
 
     const {slug} = await params
 
@@ -141,9 +146,12 @@ const DetailComic = async ({params}: TDetailComicProps) => {
                         <div className='flex gap-3 mt-4 w-full'>
                             <ReadingBtn slug={slugComic}
                                         chapter={detailComic.chapters[0].server_data?.[0] as TOtruyenChapter}/>
-                            <Button size='icon' variant='outline'>
-                                <Heart/>
-                            </Button>
+                            <FavoriteBtn
+                                slug={slugComic}
+                                comicName={detailComic.name}
+                                comicCover={detailComic.thumb_url}
+                                isLogin={isLogin}
+                            />
                         </div>
                     )}
                 </div>
