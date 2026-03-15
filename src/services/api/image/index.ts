@@ -14,17 +14,15 @@ export type TFormUploadAvatarPayload = {
 }
 
 export const ImageService = {
-    upload: async (payload: TFormUploadAvatarPayload): Promise<IApiRes<IUploadImage>> => {
+    upload: (payload: TFormUploadAvatarPayload): Promise<IApiRes<IUploadImage>> => {
 
         const formData = new FormData()
         formData.append("file", payload.file)
         formData.append("caption", payload.caption)
 
-        const res = await authFetcherWithRefresh<IApiRes<IUploadImage>>(CONFIG_API.IMAGE.UPLOAD, {
+        return authFetcherWithRefresh<IApiRes<IUploadImage>>(CONFIG_API.IMAGE.UPLOAD, {
             method: 'POST',
             body: formData,
         });
-
-        return res;
     }
 }

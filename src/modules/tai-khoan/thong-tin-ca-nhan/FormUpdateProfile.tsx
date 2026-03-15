@@ -242,7 +242,7 @@ const FormUpdateProfile = ({user}: TFormUpdateProfileProps) => {
             </Field>
 
             <div className='text-center mt-4'>
-                <Button className='w-min text-xs lg:text-sm' type='submit' form='form-update-profile'
+                <Button className='btn-acc' type='submit' form='form-update-profile'
                         isLoading={isMutating}>Cập nhật</Button>
             </div>
         </form>

@@ -18,26 +18,20 @@ export type TUploadProfileImagePayload = {
 }
 
 export const UserService = {
-    getProfile: async (): Promise<IApiRes<IUserProfile>> => {
-        const res = await authFetcherWithRefresh<IApiRes<IUserProfile>>(CONFIG_API.USER.PROFILE)
-
-        return res
+    getProfile: (): Promise<IApiRes<IUserProfile>> => {
+         return authFetcherWithRefresh<IApiRes<IUserProfile>>(CONFIG_API.USER.PROFILE)
     },
-    updateProfile: async (payload: TUpdateProfilePayload): Promise<IApiRes<IUserProfile>> => {
-        const res = await authFetcherWithRefresh<IApiRes<IUserProfile>>(CONFIG_API.USER.PROFILE, {
+    updateProfile: (payload: TUpdateProfilePayload): Promise<IApiRes<IUserProfile>> => {
+         return authFetcherWithRefresh<IApiRes<IUserProfile>>(CONFIG_API.USER.PROFILE, {
             method: 'PATCH',
             body: JSON.stringify(payload),
         })
-
-        return res
     },
-    updateProfileImage: async (payload: TUploadProfileImagePayload): Promise<IApiRes<IUserProfile>> => {
-        const res = await authFetcherWithRefresh<IApiRes<IUserProfile>>(CONFIG_API.USER.PROFILE, {
+    updateProfileImage: (payload: TUploadProfileImagePayload): Promise<IApiRes<IUserProfile>> => {
+         return authFetcherWithRefresh<IApiRes<IUserProfile>>(CONFIG_API.USER.PROFILE, {
             method: 'PATCH',
             body: JSON.stringify(payload),
         })
-
-        return res
     },
     deleteProfile: async (): Promise<IApiRes<void>> => {
         const res = await authFetcherWithRefresh<IApiRes<void>>(CONFIG_API.USER.PROFILE, {

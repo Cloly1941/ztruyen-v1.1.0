@@ -7,7 +7,6 @@ import Link from "next/link";
 import Logout from "@/layouts/components/Header/Logout";
 
 // ** Shadcn ui
-import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar"
 import {
     DropdownMenu,
     DropdownMenuContent,

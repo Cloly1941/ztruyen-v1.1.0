@@ -217,6 +217,12 @@
         @apply bg-no-repeat bg-cover bg-center bg-[url('/auth-bg.png')];
     }
 
+    /* Account */
+    .btn-acc {
+        @apply w-full md:w-auto text-xs lg:text-sm
+    }
+    /* End Account*/
+
     /* Shadcn ui component*/
     /* form */
     .form {
@@ -405,6 +411,7 @@
     }
 
     /* End Sheet */
+
     /*  Loading  */
     .text-loading {
         @apply flex items-center gap-3 text-2xl text-zinc-700 dark:text-zinc-300;

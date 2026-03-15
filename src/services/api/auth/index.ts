@@ -38,40 +38,34 @@ export const AuthService = {
         return res
     },
 
-    register: async (payload: TRegisterPayload, cftoken: string): Promise<IApiRes<IRegister>> => {
-        const res = await fetcher<IApiRes<IRegister>>(CONFIG_API.AUTH.REGISTER, {
+    register: (payload: TRegisterPayload, cftoken: string): Promise<IApiRes<IRegister>> => {
+        return fetcher<IApiRes<IRegister>>(CONFIG_API.AUTH.REGISTER, {
             method: 'POST',
             body: JSON.stringify({
                 ...payload,
                 cfToken: cftoken
             }),
         });
-
-        return res
     },
 
-    forgotPassword: async (payload: TForgotPassForm, cftoken: string): Promise<IApiRes<null>> => {
-        const res = await fetcher<IApiRes<null>>(CONFIG_API.AUTH.FORGOT, {
+    forgotPassword: (payload: TForgotPassForm, cftoken: string): Promise<IApiRes<null>> => {
+        return fetcher<IApiRes<null>>(CONFIG_API.AUTH.FORGOT, {
             method: 'POST',
             body: JSON.stringify({
                 ...payload,
                 cfToken: cftoken
             }),
         });
-
-        return res
     },
 
-    resetPassword: async (payload: TChangePasswordPayload, token: string): Promise<IApiRes<null>> => {
-        const res = await fetcher<IApiRes<null>>(CONFIG_API.AUTH.RESET, {
+    resetPassword: (payload: TChangePasswordPayload, token: string): Promise<IApiRes<null>> => {
+        return fetcher<IApiRes<null>>(CONFIG_API.AUTH.RESET, {
             method: 'POST',
             body: JSON.stringify({
                 ...payload,
                 token: token
             }),
         });
-
-        return res
     },
 
     logout: async (): Promise<IApiRes<null>> => {

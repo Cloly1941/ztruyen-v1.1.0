@@ -10,6 +10,10 @@ export const CONFIG_TAG = {
         PROFILE: 'profile',
         DELETE_PROFILE: 'delete-profile',
     },
+    FRAME: {
+        INDEX: 'frame',
+        UPDATE: 'update-frame'
+    },
     IMAGE: {
         UPLOAD: 'upload-image',
     }
