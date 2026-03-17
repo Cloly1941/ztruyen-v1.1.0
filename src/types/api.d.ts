@@ -74,6 +74,11 @@ export interface IHistory {
 // Favorite
 export interface IFavorite {
     _id: string
+    comic_slug: string
+    comic_name: string
+    comic_cover: string
+    createdAt: string
+    updatedAt: string
 }
 
 export interface IFavoriteToggle {

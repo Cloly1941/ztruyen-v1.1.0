@@ -23,8 +23,7 @@ const useMutateMethod = <TData, TPayload>({
         useSWRMutation<IApiRes<TData>, BackendError, string | string[], TPayload>(
             key,
             async (_key: string | string[], { arg }: { arg: TPayload }) => {
-                const res = await api(arg)
-                return res
+                return await api(arg)
             },
             {
                 onSuccess(data) {

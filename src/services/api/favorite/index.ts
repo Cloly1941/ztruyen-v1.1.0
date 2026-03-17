@@ -32,5 +32,18 @@ export const FavoriteService = {
             method: 'POST',
             body: JSON.stringify(payload),
         })
+    },
+
+    delete: (id: string) => {
+      return authFetcherWithRefresh<IApiRes<void>>(`${CONFIG_API.FAVORITE.DELETE}/${id}`, {
+          method: 'DELETE'
+      })
+    },
+
+    deleteMulti: (ids: string[]) => {
+        return authFetcherWithRefresh<IApiRes<void>>(CONFIG_API.FAVORITE.DELETE_MULTI, {
+            method: 'DELETE',
+            body: JSON.stringify({ids: ids})
+        })
     }
 }

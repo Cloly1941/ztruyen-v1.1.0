@@ -16,7 +16,10 @@ export const CONFIG_TAG = {
     },
     FAVORITE: {
         INDEX: 'favorite',
-        TOGGLE: 'favorite-toggle'
+        LIST: 'favorite-list',
+        TOGGLE: 'favorite-toggle',
+        DELETE: 'delete-favorite',
+        DELETE_MULTI: 'delete-multi-favorite'
     },
     IMAGE: {
         UPLOAD: 'upload-image',

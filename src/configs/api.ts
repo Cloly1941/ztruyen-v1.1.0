@@ -26,6 +26,8 @@ export const CONFIG_API = {
         INDEX: favoriteUrl,
         CHECK: `${favoriteUrl}/check`,
         TOGGLE: `${favoriteUrl}/toggle`,
+        DELETE: `${favoriteUrl}/delete`,
+        DELETE_MULTI: `${favoriteUrl}/delete-multi`
     },
     IMAGE: {
         UPLOAD: `${baseUrl}/upload`,

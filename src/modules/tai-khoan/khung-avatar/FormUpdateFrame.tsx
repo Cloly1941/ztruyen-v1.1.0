@@ -39,7 +39,8 @@ import {ArrowUpDown, Check, Search} from "lucide-react";
 // ** Skeleton
 import {FrameSkeleton} from "@/skeletons/tai-khoan/khung-avatar/FrameSkeleton";
 
-type TSortOption = { label: string; value: string };
+// ** Type
+import {TSortOption} from "@/types/component";
 
 const SORT_OPTIONS: TSortOption[] = [
     {label: "Mới nhất", value: "-updatedAt"},

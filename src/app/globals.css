@@ -221,8 +221,8 @@
     .btn-acc {
         @apply w-full md:w-auto text-xs lg:text-sm
     }
-    /* End Account*/
 
+    /* End Account*/
     /* Shadcn ui component*/
     /* form */
     .form {
@@ -321,6 +321,10 @@
         @apply object-cover
     }
 
+    [data-slot="checkbox-indicator"] {
+        @apply dark:text-white
+    }
+
     /* End Shadcn ui component*/
 }
 
@@ -401,6 +405,7 @@
     }
 
     /* End reading page */
+    /* Fav*/
     /* Sheet */
     [data-hide-close] > button.absolute.top-4.right-4 {
         @apply hidden;
@@ -411,7 +416,6 @@
     }
 
     /* End Sheet */
-
     /*  Loading  */
     .text-loading {
         @apply flex items-center gap-3 text-2xl text-zinc-700 dark:text-zinc-300;
