@@ -1,13 +1,12 @@
 // ** Next
-import { Metadata } from 'next';
+import {Metadata} from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
 
 // ** Shadcn ui
 import Button from "@/components/common/Button";
 
-// ** Config
-import {CONFIG_IMAGE} from "@/configs/image";
+import NotFoundImage from '@/public/notfound.webp'
 
 export const metadata: Metadata = {
     title: '404 - Không tìm thấy trang này',
@@ -17,15 +16,16 @@ export const metadata: Metadata = {
 export default function NotFound() {
     return (
         <div className="flex flex-col gap-4 sm:gap-6 justify-center items-center h-screen">
-            <Image
-                src="/notfound.png"
-                width={192}
-                height={192}
-                alt="404 - Ztruyện | ztruyen.io.vn"
-                placeholder={CONFIG_IMAGE.BLUR_DATA_URL as 'data:image/'}
-                className="hover:scale-105 transition-transform"
-            />
-            <h1 className="text-lg sm:text-2xl mt-4 font-title tracking-wide">
+            <div className='relative size-[300px]'>
+                <Image
+                    src={NotFoundImage}
+                    fill
+                    alt="404 - Ztruyện | ztruyen.io.vn"
+                    placeholder="blur"
+                    className="hover:scale-105 transition-transform filter-img"
+                />
+            </div>
+            <h1 className="text-lg sm:text-2xl mt-1 font-title tracking-wide">
                 (つ≧▽≦)つ Hình như bạn đi lạc mất rồi ⊂(・▽・⊂)
             </h1>
             <p className="text-xs sm:text-sm text-center">

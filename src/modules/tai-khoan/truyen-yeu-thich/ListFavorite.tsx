@@ -28,13 +28,14 @@ import {TSortOption} from "@/types/component";
 import {IFavorite} from "@/types/api";
 
 // UI
-import {ArrowUpDown, Check, Search, Trash} from "lucide-react";
+import {ArrowUpDown, Check, Search} from "lucide-react";
 import {cn} from "@/lib/utils";
 
 // Modules
 import ListFavoriteSkeleton from "@/skeletons/tai-khoan/truyen-yeu-thich/ListFavoriteSkeleton";
 import FormDeleteFavorite from "@/modules/tai-khoan/truyen-yeu-thich/FormDeleteFavorite";
 import FormDeleteMulti from "@/modules/tai-khoan/truyen-yeu-thich/FormDeleteMulti";
+import EmptyFavorite from "@/modules/tai-khoan/truyen-yeu-thich/EmptyFavorite";
 
 const SORT_OPTIONS: TSortOption[] = [
     {label: "Ngày lưu mới", value: "-updatedAt"},
@@ -77,7 +78,7 @@ const ListFavorite = () => {
         if (!list.length) {
             return (
                 <div className="text-center py-10 text-sm text-muted-foreground">
-                    {search ? `Không tìm thấy truyện "${search}"` : "Không có truyện nào."}
+                    {search ? `Không tìm thấy truyện "${search}"` : <EmptyFavorite/>}
                 </div>
             );
         }

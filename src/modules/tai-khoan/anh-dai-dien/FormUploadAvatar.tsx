@@ -124,7 +124,7 @@ const FormUploadAvatar = () => {
                     />
                 </div>
             </div>
-            <p className='text-center mt-10 sm:mt-20 text-xs text-gray-400'>
+            <p className='text-center mt-10 sm:mt-20 text-[13px] text-img'>
                 Vui lòng chọn ảnh để tải lên: kích thước 80 * 80 pixel, hỗ trợ các định dạng JPG, PNG và các định dạng khác, dung lượng ảnh phải nhỏ hơn 2MB.
             </p>
         </div>

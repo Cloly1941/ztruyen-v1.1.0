@@ -336,6 +336,14 @@
         @apply container pt-2 pb-20
     }
 
+    .filter-img {
+        @apply grayscale brightness-90 dark:invert object-contain
+    }
+
+    .text-img {
+        @apply text-[#9f9f9f] dark:text-[#9f9f9f]
+    }
+
     .text-subtle {
         @apply text-orange-400
     }

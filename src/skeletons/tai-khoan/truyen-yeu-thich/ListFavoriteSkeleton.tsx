@@ -9,7 +9,7 @@ const ListFavoriteSkeleton = () => {
                     <Skeleton className="aspect-[3/4] w-full rounded"/>
                     <div className="mt-1.5">
                         <Skeleton className="h-5"/>
-                        <Skeleton className="h-5 w-28"/>
+                        <Skeleton className="h-5 w-28 mt-1"/>
                     </div>
                 </div>
             ))}

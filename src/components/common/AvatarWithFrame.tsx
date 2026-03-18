@@ -7,6 +7,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 // ** Lib
 import { cn } from "@/lib/utils";
 
+// ** Image
+import AvatarFallBack from '@/public/avatar-fallback.webp'
+
 type TAvatarWithFrameProps = {
     avatarUrl?: string;
     avatarName?: string;
@@ -31,7 +34,7 @@ const AvatarWithFrame = ({
                 <Avatar className={classAvatar}>
                     <AvatarImage src={avatarUrl} alt={avatarName} />
                     <AvatarFallback>
-                        {avatarName?.charAt(0).toUpperCase()}
+                        <Image src={AvatarFallBack} alt='ảnh đại diện dự phòng' width={48} height={48} className='object-cover'/>
                     </AvatarFallback>
                 </Avatar>
             </div>
@@ -51,7 +54,7 @@ const AvatarWithFrame = ({
                 <Avatar className="size-full">
                     <AvatarImage src={avatarUrl} alt={avatarName} />
                     <AvatarFallback className="text-xs">
-                        {avatarName?.charAt(0).toUpperCase()}
+                        <Image src={AvatarFallBack} alt='ảnh đại diện dự phòng' width={48} height={48} className='object-cover'/>
                     </AvatarFallback>
                 </Avatar>
             </div>

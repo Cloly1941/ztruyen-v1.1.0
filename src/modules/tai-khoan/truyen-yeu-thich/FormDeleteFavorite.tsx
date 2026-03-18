@@ -90,7 +90,7 @@ const FormDeleteFavorite = ({listFavorite, mutate, deleteMulti, setSelected, sel
                                             !selected.includes(item._id)
                                         )
                                     }
-                                    className='cursor-pointer'
+                                    className='cursor-pointer relative  '
                                 >
                                     <ComicImage
                                         src={`${CONFIG_API_OTRUYEN.IMAGE_COMIC}/${item.comic_cover}`}
@@ -98,6 +98,7 @@ const FormDeleteFavorite = ({listFavorite, mutate, deleteMulti, setSelected, sel
                                         alt={item.comic_name}
                                         priority={i <= 0}
                                     />
+                                    <div className='bg-black/60 absolute inset-0'/>
                                 </div>
                             ) : (
                                 <Link href={`/${CONFIG_SLUG.DETAIL}/${item.comic_slug}`}>

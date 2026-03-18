@@ -1,3 +1,6 @@
+// ** Next
+import Image from "next/image";
+
 // ** Shadcn ui
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
 
@@ -6,6 +9,9 @@ import {IUserProfile} from "@/types/api";
 
 // ** Skeleton
 import HomeAccountSkeleton from "@/skeletons/tai-khoan/trang-chu/HomeAccountSkeleton";
+
+// ** Image
+import AvatarFallBack from "@/public/avatar-fallback.webp";
 
 type TAvatarAccount = {
     user: IUserProfile;
@@ -21,7 +27,9 @@ const AvatarAcc = ({user, isLoading}: TAvatarAccount) => {
     return (
         <Avatar className='size-15 lg:size-20'>
             <AvatarImage src={user.avatar?.url} alt={user.name}/>
-            <AvatarFallback>{user.name.charAt(0).toUpperCase()}</AvatarFallback>
+            <AvatarFallback className='relative size-15 lg:size-20'>
+                <Image src={AvatarFallBack} alt='ảnh đại diện dự phòng' fill placeholder='blur'/>
+            </AvatarFallback>
         </Avatar>
     );
 }
