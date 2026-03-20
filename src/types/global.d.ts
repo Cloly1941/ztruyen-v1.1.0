@@ -29,6 +29,16 @@ declare global {
         result: T[]
     }
 
+    interface IModelPaginateComment<T> extends IModelPaginate<T> {
+        meta: {
+            page: number;
+            limit: number;
+            totalPages: number;
+            totalItems: number;
+            totalComments: number;
+        },
+    }
+
     interface BackendError {
         statusCode: number;
         message: string;
@@ -68,7 +78,7 @@ declare global {
             items: T;
             seoOnPage: ISeoOnPage;
             params: {
-                pagination ?: {
+                pagination?: {
                     totalItems: number;
                     totalItemsPerPage: number;
                     currentPage: number;

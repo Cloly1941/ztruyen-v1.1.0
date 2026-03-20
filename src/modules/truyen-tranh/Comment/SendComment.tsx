@@ -168,7 +168,7 @@ const SendComment = ({
                             onFocus={() => setIsFocus(true)}
                             value={comment}
                             onChange={(e) => setComment(e.target.value)}
-                            placeholder={parent ? `Phản hồi @${replyName ?? ""}...` : "Viết bình luận..."}
+                            placeholder={parent ? `Phản hồi @${replyName ?? ""}: ...` : "Viết bình luận..."}
                             className="
                                 w-full py-2 px-4 text-sm outline-none rounded-md
                                 bg-[#f1f2f3] dark:bg-zinc-800

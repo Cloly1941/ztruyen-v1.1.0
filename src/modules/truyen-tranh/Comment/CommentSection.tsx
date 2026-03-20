@@ -38,7 +38,7 @@ const CommentSection = ({name, slug}: TCommentSection) => {
 
     const {
         data: comments,
-        totalCount,
+        meta,
         hasMore,
         isLoading,
         isValidating,
@@ -54,9 +54,11 @@ const CommentSection = ({name, slug}: TCommentSection) => {
                 page,
                 limit: LIMIT,
                 sort,
-                filters: {comicSlug: [slug]},
-            }).then(res => res.data as IModelPaginate<IComment>),
+                filters: { comicSlug: [slug] },
+            }).then(res => res.data as IModelPaginateComment<IComment>),
     });
+
+    const totalCount = (meta as IModelPaginateComment<IComment>['meta'] & { totalComments?: number })?.totalComments ?? meta?.totalItems ?? 0;
 
     const {sentinelRef} = useSentinel({onIntersect: loadMore});
 

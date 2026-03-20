@@ -14,9 +14,9 @@ import {buildQueryString, TQueryParams} from "@/utils/buildQueryString";
 import {TSendCommentPayload, TSendReplyPayload} from "@/modules/truyen-tranh/Comment/SendComment";
 
 export const CommentService = {
-    list: (params: TQueryParams): Promise<IApiRes<IModelPaginate<IComment>>> => {
+    list: (params: TQueryParams): Promise<IApiRes<IModelPaginateComment<IComment>>> => {
         const query = buildQueryString(params)
-        return authFetcherWithRefresh<IApiRes<IModelPaginate<IComment>>>(
+        return authFetcherWithRefresh<IApiRes<IModelPaginateComment<IComment>>>(
             `${CONFIG_API.COMMENT.INDEX}?${query}`
         )
     },

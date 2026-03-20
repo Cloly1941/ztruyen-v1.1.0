@@ -1,4 +1,3 @@
-// ** SWR
 import useSWRInfinite from "swr/infinite";
 
 type TUseInfiniteLoad<T> = {
@@ -23,7 +22,7 @@ const useInfiniteLoad = <T>({
         if (!previousPageData) return null;
         const { page, totalPages } = previousPageData.meta;
         if (page >= totalPages) return null;
-        return [key, sort, pageIndex + 1];
+        return [key, sort, page + 1];
     };
 
     const {
@@ -39,25 +38,26 @@ const useInfiniteLoad = <T>({
         },
         {
             revalidateFirstPage: false,
+            revalidateOnFocus: false,
+            revalidateOnReconnect: false,
         }
     );
 
     const data = pages?.flatMap(p => p.result) ?? [];
-    const totalCount = pages?.[0]?.meta?.totalItems ?? 0;
     const lastPage = pages?.[pages.length - 1];
     const hasMore = lastPage ? lastPage.meta.page < lastPage.meta.totalPages : false;
+    const meta = pages?.[0]?.meta ?? null;
 
     const loadMore = () => {
-        if (hasMore && !isValidating) {
-            setSize(prev => prev + 1);
-        }
+        if (!hasMore || isValidating || isLoading) return;
+        setSize(prev => prev + 1);
     };
 
     const reset = () => setSize(1);
 
     return {
         data,
-        totalCount,
+        meta,
         hasMore,
         isLoading,
         isValidating,
