@@ -5,9 +5,14 @@ type TUseGetMethod<TData> = {
     key: string | string[]
     enabled?: boolean
     keepPreviousData?: boolean
+    revalidateIfStale?: boolean
 }
 
-const useGetMethod = <TData>({api, key, enabled = true, keepPreviousData = false}: TUseGetMethod<TData>) => {
+const useGetMethod = <TData>({
+                                 api, key, enabled = true,
+                                 keepPreviousData = false,
+                                 revalidateIfStale = true
+                             }: TUseGetMethod<TData>) => {
     const fetcher: BareFetcher<TData> = async () => {
         const res = await api()
         return res.data as TData
@@ -16,16 +21,17 @@ const useGetMethod = <TData>({api, key, enabled = true, keepPreviousData = false
     const config: SWRConfiguration<TData, BackendError> = {
         revalidateOnFocus: false,
         shouldRetryOnError: false,
-        keepPreviousData
+        keepPreviousData,
+        revalidateIfStale
     }
 
-    const {data, isLoading, error, mutate, isValidating } = useSWR<TData, BackendError>(
+    const {data, isLoading, error, mutate, isValidating} = useSWR<TData, BackendError>(
         enabled ? key : null,
         fetcher,
         config
     )
 
-    return {data, isLoading, error, mutate, isValidating }
+    return {data, isLoading, error, mutate, isValidating}
 }
 
 export default useGetMethod

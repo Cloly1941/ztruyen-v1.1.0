@@ -11,6 +11,7 @@ export type TQueryParams = {
     sort?: string
     filters?: Record<string, string[]>
     rangeFilters?: Record<string, TRangeFilter>
+    userId?: string
 }
 
 export const buildQueryString = (params: TQueryParams): string => {
@@ -20,6 +21,8 @@ export const buildQueryString = (params: TQueryParams): string => {
     query.set("limit", String(params.limit))
 
     if (params.sort) query.set("sort", params.sort)
+
+    if (params.userId) query.set("userId", params.userId)
 
     if (params.search && params.search.trim()) {
         query.set("search", params.search.trim())

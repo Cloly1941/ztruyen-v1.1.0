@@ -35,13 +35,13 @@ import {CONFIG_TAG} from "@/configs/tag"
 // ** Type
 import {IUserProfile} from "@/types/api"
 import AvatarWithFrame from "@/components/common/AvatarWithFrame";
-import {cn} from "@/lib/utils";
 
 const AccountMenu = () => {
 
     const {data: user, isLoading} = useGetMethod<IUserProfile>({
         api: () => UserService.getProfile(),
         key: CONFIG_TAG.USER.PROFILE,
+        revalidateIfStale: false,
     })
 
     if (isLoading) {

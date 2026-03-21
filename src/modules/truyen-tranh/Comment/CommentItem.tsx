@@ -4,12 +4,13 @@ import {useRef, useState} from "react";
 import {Separator} from "@/components/ui/separator";
 import AvatarWithFrame from "@/components/common/AvatarWithFrame";
 import {IComment, IUserComment, IUserProfile} from "@/types/api";
-import {ThumbsUp, ChevronDown, ChevronUp} from "lucide-react";
+import {ChevronDown, ChevronUp} from "lucide-react";
 import dayjs from "dayjs";
 import ReplyList from "@/modules/truyen-tranh/Comment/ReplyList";
 import SendComment from "@/modules/truyen-tranh/Comment/SendComment";
 import useGetMethod from "@/hooks/common/useGetMethod";
 import {CommentService} from "@/services/api/comment";
+import LikeComment from "@/modules/truyen-tranh/Comment/LikeComment";
 
 type TCommentItem = {
     user: IUserComment;
@@ -22,7 +23,7 @@ type TCommentItem = {
     profile?: IUserProfile
 }
 
-const REPLY_LIMIT = 2;
+const REPLY_LIMIT = 10;
 const PARENT_REPLY_ID = (commentId: string) => `parent-${commentId}`;
 
 const CommentItem = ({
@@ -39,8 +40,12 @@ const CommentItem = ({
     const [activeReplyName, setActiveReplyName] = useState<string | null>(null);
 
     const {data, isValidating, mutate: mutateReply} = useGetMethod<IModelPaginate<IComment>>({
-        api: () => CommentService.listReplies(comment._id, {page, limit: REPLY_LIMIT}),
-        key: [`replies-${comment._id}`, page.toString()],
+        api: () => CommentService.listReplies(comment._id, {
+            page,
+            limit: REPLY_LIMIT,
+            userId: profile?._id,
+        }),
+        key: [`replies-${comment._id}-${profile?._id ?? 'guest'}`, page.toString()],
         enabled: fetchEnabled,
         keepPreviousData: true,
     });
@@ -64,7 +69,7 @@ const CommentItem = ({
         setShowReplies(prev => !prev);
         if (!hasFetchedRef.current) {
             hasFetchedRef.current = true;
-            setFetchEnabled(true); // chỉ bật 1 lần duy nhất
+            setFetchEnabled(true);
         }
     };
 
@@ -92,10 +97,12 @@ const CommentItem = ({
 
                 <div className='flex gap-5 text-sm mt-1 text-[#9499A0] dark:text-gray-400'>
                     <div>{dayjs(comment.createdAt).format("DD-MM-YYYY HH:mm")}</div>
-                    <div className='flex gap-1 items-center hover:text-primary cursor-pointer'>
-                        <ThumbsUp className='size-3.5'/>
-                        {comment.likeCount > 0 && <span>{comment.likeCount}</span>}
-                    </div>
+                    <LikeComment
+                        likeCount={comment.likeCount}
+                        mutate={mutate}
+                        commentId={comment._id}
+                        isLiked={comment.isLiked}
+                    />
                     <span
                         onClick={() => handleToggleReply(
                             PARENT_REPLY_ID(comment._id),
@@ -129,6 +136,7 @@ const CommentItem = ({
                     onPageChange={setPage}
                     activeReplyId={activeCommentId}
                     onToggleReply={handleToggleReply}
+                    mutateReply={mutateReply}
                 />
 
                 {activeCommentId && activeCommentId.startsWith(`parent-${comment._id}`) ||

@@ -76,9 +76,6 @@ const SendComment = ({
     const popoverRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
 
-    console.log(replyTo
-    )
-
     const {trigger, isMutating} = useMutateMethod<void, TSendCommentPayload | TSendReplyPayload>({
         api: (arg) => parent
             ? CommentService.createReply(arg as TSendReplyPayload)
@@ -87,9 +84,10 @@ const SendComment = ({
         onSuccess: async (data) => {
             toast.success(data.message)
             if (parent) {
-                await mutateReply?.()
+                mutateReply?.()
+                mutate()
             } else {
-                await mutate()
+                mutate()
             }
             setComment('')
         }
@@ -184,7 +182,10 @@ const SendComment = ({
                         <div className='flex justify-between items-center mt-2.5 ml-20'>
                             <PopoverEmoji popoverRef={popoverRef}/>
                             <div className='flex gap-2'>
-                                <Button isLoading={isMutating} onClick={handleSendComment}>
+                                <Button
+                                    sizeCustom='xs'
+                                    isLoading={isMutating}
+                                    onClick={handleSendComment}>
                                     <Send/>
                                 </Button>
                             </div>

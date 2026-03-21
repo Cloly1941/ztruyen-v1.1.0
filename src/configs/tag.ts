@@ -23,6 +23,7 @@ export const CONFIG_TAG = {
     },
     COMMENT: {
         LIST: 'comment-list',
+        LIKE: 'comment-like'
     },
     IMAGE: {
         UPLOAD: 'upload-image',

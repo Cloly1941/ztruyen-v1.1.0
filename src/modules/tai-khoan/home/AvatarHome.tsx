@@ -26,6 +26,7 @@ const AvatarHome = () => {
     const {data: user, isLoading} = useGetMethod<IUserProfile>({
         api: () => UserService.getProfile(),
         key: CONFIG_TAG.USER.PROFILE,
+        revalidateIfStale: false,
     })
 
     if (isLoading) {

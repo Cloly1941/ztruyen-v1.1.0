@@ -40,6 +40,7 @@ const FormUploadAvatar = () => {
     const { data: user, isLoading, mutate } = useGetMethod<IUserProfile>({
         api: () => UserService.getProfile(),
         key: CONFIG_TAG.USER.PROFILE,
+        revalidateIfStale: false,
     })
 
     const { trigger, isMutating } = useMutateMethod<IUserProfile, TUploadAvatarArgs>({

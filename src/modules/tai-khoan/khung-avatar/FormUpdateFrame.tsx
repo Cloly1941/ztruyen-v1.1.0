@@ -70,11 +70,13 @@ const FormUpdateFrame = () => {
     const {data: user, isLoading: isUserLoading, mutate} = useGetMethod<IUserProfile>({
         api: () => UserService.getProfile(),
         key: CONFIG_TAG.USER.PROFILE,
+        revalidateIfStale: false,
     })
 
     const {data: frame, isLoading: isFrameLoading} = useGetMethod<IModelPaginate<IFrame>>({
         api: () => FrameService.list(queryParams),
         key: [CONFIG_TAG.FRAME.INDEX, page.toString(), limit.toString(), sort, debouncedSearch],
+        revalidateIfStale: false,
     })
 
     const { trigger, isMutating } = useMutateMethod<IUserProfile, void>({

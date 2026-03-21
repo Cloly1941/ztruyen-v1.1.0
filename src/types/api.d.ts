@@ -114,4 +114,5 @@ export interface IComment {
     replyCount: number;
     createdAt: string;
     updatedAt: string;
+    isLiked: boolean;
 }

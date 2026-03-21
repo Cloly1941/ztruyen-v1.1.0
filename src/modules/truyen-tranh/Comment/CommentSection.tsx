@@ -21,7 +21,7 @@ type TCommentSection = {
 
 const SORT_OPTIONS: TSortOption[] = [
     {label: "Mới nhất", value: "-updatedAt"},
-    {label: "Nổi bật", value: "-likeCount"},
+    {label: "Nổi bật", value: "-replyCount"},
 ];
 
 const LIMIT = 10;
@@ -31,10 +31,13 @@ const CommentSection = ({name, slug}: TCommentSection) => {
 
     const {ref: containerRef, enabled} = useLazyLoad({threshold: 0.1});
 
-    const { data: profile } = useGetMethod<IUserProfile>({
+    const {data: profile, isLoading: isProfileLoading} = useGetMethod<IUserProfile>({
         api: () => UserService.getProfile(),
         key: CONFIG_TAG.USER.PROFILE,
+        revalidateIfStale: false,
     })
+
+    const profileReady = !isProfileLoading;
 
     const {
         data: comments,
@@ -46,19 +49,22 @@ const CommentSection = ({name, slug}: TCommentSection) => {
         loadMore,
         reset,
     } = useInfiniteLoad<IComment>({
-        key: `${CONFIG_TAG.COMMENT.LIST}-${slug}`,
-        enabled,
+        key: `${CONFIG_TAG.COMMENT.LIST}-${slug}-${profile?._id ?? 'guest'}`,
+        enabled: enabled && profileReady,
         sort,
         api: (page) =>
             CommentService.list({
                 page,
                 limit: LIMIT,
                 sort,
-                filters: { comicSlug: [slug] },
+                filters: {comicSlug: [slug]},
+                userId: profile?._id,
             }).then(res => res.data as IModelPaginateComment<IComment>),
     });
 
-    const totalCount = (meta as IModelPaginateComment<IComment>['meta'] & { totalComments?: number })?.totalComments ?? meta?.totalItems ?? 0;
+    const totalCount = (meta as IModelPaginateComment<IComment>['meta'] & {
+        totalComments?: number
+    })?.totalComments ?? meta?.totalItems ?? 0;
 
     const {sentinelRef} = useSentinel({onIntersect: loadMore});
 

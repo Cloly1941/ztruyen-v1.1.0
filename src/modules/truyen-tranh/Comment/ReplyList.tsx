@@ -1,6 +1,6 @@
 'use client'
 
-import {IComment, IUserProfile} from "@/types/api";
+import {IComment} from "@/types/api";
 import ReplyItem from "@/modules/truyen-tranh/Comment/ReplyItem";
 import {ChevronLeft, ChevronRight} from "lucide-react";
 import {cn} from "@/lib/utils";
@@ -15,6 +15,7 @@ type TReplyList = {
     onPageChange: (page: number) => void;
     activeReplyId: string | null;
     onToggleReply: (id: string, replyTo: string, name: string) => void;
+    mutateReply: () => void;
 }
 
 const ReplyList = ({
@@ -26,6 +27,7 @@ const ReplyList = ({
                        onPageChange,
                        activeReplyId,
                        onToggleReply,
+                       mutateReply,
                    }: TReplyList) => {
     return (
         <div className={cn('mt-4', !show && 'hidden')}>
@@ -36,6 +38,7 @@ const ReplyList = ({
                         reply={reply}
                         isReplyOpen={activeReplyId === reply._id}
                         onToggleReply={() => onToggleReply(reply._id, reply.userId._id, reply.userId.name)}
+                        mutateReply={mutateReply}
                     />
                 ))}
             </ul>

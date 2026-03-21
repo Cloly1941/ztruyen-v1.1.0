@@ -19,6 +19,7 @@ const ProfileClient = () => {
     const {data: user, isLoading} = useGetMethod<IUserProfile | null>({
         api: () => UserService.getProfile(),
         key: CONFIG_TAG.USER.PROFILE,
+        revalidateIfStale: false,
     })
 
     if (isLoading) {

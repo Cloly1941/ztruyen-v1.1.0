@@ -48,6 +48,7 @@ const FavoriteBtn = ({slug, comicName, comicCover, isLogin}: TFavoriteBtn) => {
     const {data: favorite, isLoading, mutate} = useGetMethod<IFavoriteToggle>({
         api: () => FavoriteService.check(slug),
         key: `${CONFIG_TAG.FAVORITE.INDEX}-${slug}`,
+        revalidateIfStale: false,
     })
 
     const {trigger, isMutating} = useMutateMethod<IFavoriteToggle, TFavoriteBtnPayload>({

@@ -1,17 +1,18 @@
 'use client'
 
 import AvatarWithFrame from "@/components/common/AvatarWithFrame";
-import { IComment } from "@/types/api";
-import { ThumbsUp } from "lucide-react";
+import {IComment} from "@/types/api";
 import dayjs from "dayjs";
+import LikeComment from "@/modules/truyen-tranh/Comment/LikeComment";
 
 type TReplyItem = {
     reply: IComment;
     isReplyOpen: boolean;
     onToggleReply: () => void;
+    mutateReply: () => void;
 }
 
-const ReplyItem = ({ reply, isReplyOpen, onToggleReply }: TReplyItem) => {
+const ReplyItem = ({reply, isReplyOpen, onToggleReply, mutateReply}: TReplyItem) => {
     return (
         <li>
             <div className='flex items-start'>
@@ -37,10 +38,12 @@ const ReplyItem = ({ reply, isReplyOpen, onToggleReply }: TReplyItem) => {
                 </div>
                 <div className='flex gap-5 text-sm mt-1 text-[#9499A0] dark:text-gray-400'>
                     <div>{dayjs(reply.createdAt).format("DD-MM-YYYY HH:mm")}</div>
-                    <div className='flex gap-1 items-center hover:text-primary cursor-pointer'>
-                        <ThumbsUp className='size-3.5' />
-                        {reply.likeCount > 0 && <span>{reply.likeCount}</span>}
-                    </div>
+                    <LikeComment
+                        likeCount={reply.likeCount}
+                        commentId={reply._id}
+                        mutate={mutateReply}
+                        isLiked={reply.isLiked}
+                    />
                     <span
                         onClick={onToggleReply}
                         className='cursor-pointer hover:text-primary'

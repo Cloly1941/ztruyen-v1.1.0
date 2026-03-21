@@ -38,4 +38,10 @@ export const CommentService = {
             body: JSON.stringify(payload),
         })
     },
+    toggleLike: (id: string): Promise<IApiRes<void>> => {
+        return authFetcherWithRefresh<IApiRes<void>>(CONFIG_API.COMMENT.LIKE, {
+            method: 'POST',
+            body: JSON.stringify({commentId: id}),
+        })
+    },
 }

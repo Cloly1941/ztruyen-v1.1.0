@@ -64,6 +64,7 @@ const ListFavorite = () => {
                 searchField: "comic_name",
             }),
         key: [CONFIG_TAG.FAVORITE.LIST, page.toString(), limit.toString(), sort, debouncedSearch],
+        revalidateIfStale: false,
     });
 
     useEffect(() => setPage(1), [debouncedSearch, sort]);
