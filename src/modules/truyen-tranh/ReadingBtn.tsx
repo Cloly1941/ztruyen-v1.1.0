@@ -21,6 +21,12 @@ import {historyService} from "@/localStorage/historyServices";
 // ** Config
 import {CONFIG_SLUG} from "@/configs/slug";
 
+// ** Hook
+import useMounted from "@/hooks/common/useMounted";
+
+// ** SKeleton
+import ReadingBtnSkeleton from "@/skeletons/truyen-tranh/ReadingBtnSkeleton";
+
 type TReadingBtnProps = {
     chapter: TOtruyenChapter;
     slug: string;
@@ -28,8 +34,12 @@ type TReadingBtnProps = {
 
 const ReadingBtn = ({chapter, slug}: TReadingBtnProps) => {
 
+    const mounted = useMounted();
+
     const isComicHistory = historyService.getBySlug(slug);
     const hrefFirstChapter = buildReadingUrl(slug, chapter.chapter_name, chapter.chapter_api_data)
+
+    if (!mounted) return <ReadingBtnSkeleton/>;
 
     if (!isComicHistory)
         return (

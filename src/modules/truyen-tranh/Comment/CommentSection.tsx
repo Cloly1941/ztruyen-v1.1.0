@@ -13,6 +13,7 @@ import useInfiniteLoad from "@/hooks/common/useInfiniteLoad";
 import useSentinel from "@/hooks/common/useSentinel";
 import useGetMethod from "@/hooks/common/useGetMethod";
 import {UserService} from "@/services/api/user";
+import CommentSectionSkeleton from "@/skeletons/truyen-tranh/CommentSectionSkeleton";
 
 type TCommentSection = {
     slug: string;
@@ -118,7 +119,7 @@ const CommentSection = ({name, slug}: TCommentSection) => {
 
                     {/* Sentinel */}
                     <div ref={sentinelRef} className="mt-16 mb-[100px] text-sm text-third text-center">
-                        {isValidating && <span>Đang tải...</span>}
+                        {isValidating && <CommentSectionSkeleton/>}
                         {!isValidating && !hasMore && comments.length > 0 && (
                             <span>Không còn bình luận nữa</span>
                         )}
