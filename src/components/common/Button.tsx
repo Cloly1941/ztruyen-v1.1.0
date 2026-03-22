@@ -11,26 +11,28 @@ import {cn} from "@/lib/utils";
 import {cva, VariantProps} from "class-variance-authority";
 
 const buttonVariants = cva(
-    "cursor-pointer font-ui",
+    "cursor-pointer font-ui dark:text-white",
     {
         variants: {
             shape: {
                 normal: "rounded-md",
                 pill: "rounded-full",
+                verticalRectangle: 'w-8 h-20 rounded-none',
+                circle: 'size-12 sm:size-[60px] md:size-[64px] lg:size-[74px] rounded-full',
             },
             width: {
                 auto: "",
                 full: "w-full",
             },
             sizeCustom: {
-                sm: "px-4 py-2 text-xs",
-                md: "px-5 py-2.5 text-sm",
+                xs: "px-4 py-2 text-xs",
+                sm: "px-5 py-2.5 text-sm",
             },
         },
         defaultVariants: {
             shape: "normal",
             width: "auto",
-            sizeCustom: "md",
+            sizeCustom: "sm",
         },
     }
 )

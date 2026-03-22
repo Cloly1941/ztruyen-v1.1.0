@@ -1,0 +1,34 @@
+export const CONFIG_TAG = {
+    AUTH: {
+        LOGIN: 'login',
+        LOGOUT: 'logout',
+        REGISTER: 'register',
+        RESET: 'reset-password',
+        FORGOT: 'forgot-password',
+    },
+    USER: {
+        PROFILE: 'profile',
+        DELETE_PROFILE: 'delete-profile',
+    },
+    FRAME: {
+        INDEX: 'frame',
+        UPDATE: 'update-frame'
+    },
+    FAVORITE: {
+        INDEX: 'favorite',
+        LIST: 'favorite-list',
+        TOGGLE: 'favorite-toggle',
+        DELETE: 'delete-favorite',
+        DELETE_MULTI: 'delete-multi-favorite'
+    },
+    COMMENT: {
+        LIST: 'comment-list',
+        LIKE: 'comment-like',
+        CREATE: 'create-comment',
+        DELETE: 'delete-comment',
+        REPORT: 'report-comment',
+    },
+    IMAGE: {
+        UPLOAD: 'upload-image',
+    }
+} as const

@@ -2,15 +2,17 @@
 import React from 'react';
 
 // ** Layout components
+import Header from "@/layouts/components/Header";
 import Footer from "@/layouts/components/Footer";
 
-const DefaultLayout = ({ children }: { children: React.ReactNode }) => {
+const DefaultLayout = ({children}: { children: React.ReactNode }) => {
     return (
         <>
-            <main className='flex flex-col min-h-[70vh]'>
+            <Header/>
+            <main className='flex flex-col min-h-[70vh] mt-header'>
                 {children}
             </main>
-            <Footer />
+            <Footer/>
         </>
     );
 };

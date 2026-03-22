@@ -1,0 +1,247 @@
+'use client'
+
+// ** Next
+import Link from "next/link";
+import Image from "next/image";
+
+// ** React
+import {useEffect, useRef, useState} from "react";
+
+// ** Components
+import Button from "@/components/common/Button";
+
+// ** Module components
+import Overlay from "@/modules/doc-truyen/Overlay";
+import OverlaySettings from "@/modules/doc-truyen/OverlaySettings";
+import ImageSaver from "@/modules/doc-truyen/ImageSaver";
+
+// ** Hook
+import useTailwindBreakpoints from "@/hooks/common/useTailwindBreakpoints";
+
+// ** Types
+import {IOtruyenDetailComic, TOtruyenChapter, TOtruyenChapterImage} from "@/types/api.otruyen";
+
+// ** Config
+import {CONFIG_API_OTRUYEN} from "@/configs/api-otruyen";
+import {CONFIG_IMAGE} from "@/configs/image";
+
+// ** Util
+import {buildReadingUrl} from "@/utils/buildReadingUrl ";
+
+// ** Icon
+import {SettingsIcon} from "lucide-react";
+
+type TListImageChapter = {
+    listImageChapter: TOtruyenChapterImage[]
+    nextChapter: TOtruyenChapter
+    prevChapter: TOtruyenChapter
+    currentChapter: string
+    slugComic: string
+    chapter_path: string
+    chapters: TOtruyenChapter[]
+    currentChapterId: string
+    path: string
+    listDetailComic: IOtruyenDetailComic
+}
+
+let showGuide = false
+
+const ListImageChapter = ({
+                              listImageChapter, nextChapter, prevChapter,
+                              chapters, currentChapterId, path, listDetailComic,
+                              currentChapter, slugComic, chapter_path
+                          }: TListImageChapter) => {
+
+    const totalImage = listImageChapter.length;
+
+    // Hook
+    const {isLg} = useTailwindBreakpoints();
+
+    // States
+    const [imgWidth, setImgWidth] = useState(0);
+    const [isOverlayOpen, setIsOverlayOpen] = useState(false);
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+    // Ref
+    const imgRefs = useRef<(HTMLImageElement | null)[]>([]);
+
+    // Toast Guide mobile
+    useEffect(() => {
+        const hasSeenGuide = localStorage.getItem('ZTC-hasSeenGuide');
+        if (!hasSeenGuide) {
+            showGuide = true;
+            localStorage.setItem('ZTC-hasSeenGuide', 'true');
+        }
+    }, []);
+
+    // Image Size
+    useEffect(() => {
+        if (isLg) {
+            setImgWidth(50);
+        } else {
+            setImgWidth(100);
+        }
+    }, [isLg]);
+
+    // Clicks (mobile and desktop)
+    const handleOnClick = (e: React.MouseEvent<HTMLDivElement>) => {
+        if (!isLg) {
+            e.preventDefault();
+            setIsOverlayOpen(!isOverlayOpen);
+            setIsDropdownOpen(false);
+        }
+    };
+
+    const handleRightClick = (e: React.MouseEvent<HTMLDivElement>) => {
+        e.preventDefault();
+        setIsOverlayOpen(!isOverlayOpen);
+        setIsDropdownOpen(false);
+    };
+
+    return (
+        <>
+            {/* List Image */}
+            <section
+                className='flex flex-col items-center min-h-screen'
+                onContextMenu={handleRightClick}
+                onClick={handleOnClick}
+            >
+                {
+                    listImageChapter.map((img, index) => {
+                        return (
+                            <Image
+                                key={`${img.image_file}-${index}`}
+                                ref={(el) => {
+                                    imgRefs.current[index] = el;
+                                }}
+                                src={`${CONFIG_API_OTRUYEN.IMAGE_CHAPTER}/${chapter_path}/${img.image_file}`}
+                                alt={`${slugComic}-${img.image_page}`}
+                                width={925}
+                                height={1387}
+                                placeholder={CONFIG_IMAGE.BLUR_DATA_URL as 'data:image/'}
+                                onError={(e) => {
+                                    e.currentTarget.src = CONFIG_IMAGE.BLUR_DATA_URL
+                                }}
+                                sizes="(max-width: 50px) 2vw, (max-width: 1920px) 925px)"
+                                priority={index === 0}
+                                loading={index === 0 ? 'eager' : 'lazy'}
+                                className="bg-black dark:bg-white"
+                                style={{width: `${imgWidth}%`}}
+                            />
+                        )
+                    })
+                }
+
+                {/* Overlay settings */}
+                {
+                    <Overlay isOverlayOpen={isOverlayOpen}>
+                        <OverlaySettings
+                            imgWidth={imgWidth}
+                            setImgWidth={setImgWidth}
+                            totalImage={totalImage}
+                            slugComic={slugComic}
+                            prevChapter={prevChapter}
+                            nextChapter={nextChapter}
+                            currentImageIndex={currentImageIndex}
+                            setCurrentImageIndex={setCurrentImageIndex}
+                            imgRefs={imgRefs}
+                            chapters={chapters}
+                            currentChapterId={currentChapterId}
+                            isDropdownOpen={isDropdownOpen}
+                            setIsDropdownOpen={setIsDropdownOpen}
+                        />
+                    </Overlay>
+                }
+
+                {/*  TotalImage  */}
+                <div
+                    className="hidden xl:flex fixed bottom-[18px] left-[38px] bg-[#fafafa] dark:bg-[#030303] py-2 px-3 rounded-[3px] border dark:border-[#3e3e3e] gap-[11px] items-center">
+                    <div
+                        className="dark:text-white/30 relative flex items-center justify-center text-xs"
+                        title={`Ảnh ${currentImageIndex + 1}`}
+                    >
+                        <Image
+                            className="rotate-90 filter brightness-0 dark:filter-none"
+                            src="/page.png"
+                            width={32}
+                            height={32}
+                            alt="currentpage"
+                        ></Image>
+                        <span className="absolute">
+                            {currentImageIndex + 1}
+                        </span>
+                    </div>
+                    <div className="dark:text-white/85 text-xs">
+                        <div title={`${totalImage} ảnh`}>{totalImage}P</div>
+                        <div>Chương {currentChapter}</div>
+                    </div>
+                </div>
+
+                {/* Toggle setting */}
+                <div
+                    className="fixed bottom-[24px] right-[65px] bg-[#fafafa] shadow dark:bg-[#030303] border dark:border-[#3e3e3e] hidden lg:flex gap-[11px] items-center rounded-full py-2 px-4 cursor-pointer"
+                    onClick={() => setIsOverlayOpen((prevState) => !prevState)}
+                >
+                    {isOverlayOpen ? (
+                        <>
+                            <SettingsIcon className="size-5 text-primary"/>
+                            <span className="hidden xl:block dark:text-white/85 text-xs">
+                                Ẩn thanh công cụ
+                            </span>
+                        </>
+                    ) : (
+                        <>
+                            <SettingsIcon className="size-5"/>
+                            <span className="hidden xl:block dark:text-white/85 text-xs">
+                                Hiển thị thanh công cụ
+                            </span>
+                        </>
+                    )}
+                </div>
+            </section>
+            {/* Btn next chapter */}
+            {nextChapter && (
+                <div className="text-center py-10">
+                    <Link
+                        href={buildReadingUrl(slugComic, nextChapter.chapter_name, nextChapter.chapter_api_data)}
+                    >
+                        <Button
+                            sizeCustom='xs'
+                        >
+                            Đọc chương tiếp theo thôi~ (≧▽≦)
+                        </Button>
+                    </Link>
+                </div>
+            )}
+
+            {/* Toast guide with mobile*/}
+            {showGuide && !isLg && listImageChapter && (
+                <div className="fixed top-1/4 left-1/2 -translate-x-1/2 pointer-events-none">
+                    <div
+                        className="z-50 bg-primary text-white
+                 text-xs sm:text-sm w-fit text-center
+                 px-4 py-2 rounded-md shadow-lg
+                 animate-fadeInOut"
+                    >
+                        Nhấp vào ảnh để hiển thị thanh công cụ nhé ~ (≧▽≦)
+                    </div>
+                </div>
+            )}
+
+            <ImageSaver
+                title={listDetailComic.name}
+                path={path}
+                thumb={listDetailComic.thumb_url}
+                slug={listDetailComic.slug}
+                chapter_id={currentChapterId}
+                chapter_name={currentChapter}
+                image_name={currentImageIndex}
+                setCurrentImageIndex={setCurrentImageIndex}
+                imgRefs={imgRefs}
+            />
+        </>
+    )
+}
+
+export default ListImageChapter;
