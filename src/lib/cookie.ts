@@ -8,5 +8,5 @@ import {VARIABLE} from "@/configs/variable";
 
 export const getCookie = async () => {
     const cookieStore = await cookies()
-    return cookieStore.get(VARIABLE.REFRESH_TOKEN)
+    return cookieStore.get(VARIABLE.IS_LOGGED_IN)
 }

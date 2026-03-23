@@ -31,6 +31,12 @@ const nextConfig: NextConfig = {
                 port: '',
                 pathname: '/uploads/**',
             },
+            {
+                protocol: 'https',
+                hostname: 'api.ztruyen.io.vn',
+                port: '',
+                pathname: '/**',
+            },
         ],
         // qualities: [60],
         unoptimized: true,

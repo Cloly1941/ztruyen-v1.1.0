@@ -2,6 +2,7 @@
 import {fetcher} from "@/lib/fetcher";
 import {removeAccessToken, setAccessToken} from "@/lib/localStorage";
 import {authFetcherWithRefresh} from "@/lib/auth-fetch";
+import {removeLoggedInCookie, setLoggedInCookie} from "@/lib/cookie-client";
 
 // ** Types
 import {ILogin, IRegister} from "@/types/api";
@@ -26,6 +27,7 @@ export const AuthService = {
         });
 
         setAccessToken(res.data?.access_token as string);
+        setLoggedInCookie();
 
         return res
     },
@@ -34,6 +36,7 @@ export const AuthService = {
         const res = await fetcher<IApiRes<ILogin>>(CONFIG_API.AUTH.REFRESH)
 
         setAccessToken(res.data?.access_token as string);
+        setLoggedInCookie();
 
         return res
     },
@@ -74,6 +77,7 @@ export const AuthService = {
         });
 
         removeAccessToken();
+        removeLoggedInCookie();
 
         return res
     },
