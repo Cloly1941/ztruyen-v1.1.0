@@ -11,10 +11,10 @@ const PROTECTED_PREFIXES = ['/tai-khoan']
 export function middleware(request: NextRequest) {
     const { pathname, searchParams } = request.nextUrl
 
-    const refreshToken = request.cookies.get(VARIABLE.REFRESH_TOKEN)?.value
+    const isLoggedInCookie = request.cookies.get(VARIABLE.IS_LOGGED_IN)?.value
     const hasToken = searchParams.has('token')
 
-    const isLoggedIn = Boolean(refreshToken)
+    const isLoggedIn = isLoggedInCookie === 'true'
 
     if (
         hasToken &&

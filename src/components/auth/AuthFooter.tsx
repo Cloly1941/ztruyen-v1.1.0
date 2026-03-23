@@ -4,8 +4,6 @@
 import Link from "next/link";
 import Image from "next/image";
 
-import Button from "@/components/common/Button";
-
 // ** Configs
 import {CONFIG_API} from "@/configs/api";
 
@@ -35,21 +33,21 @@ const AuthFooter = () => {
     return (
         <div className='flex flex-col items-center text-zinc-400 text-sm mt-6'>
             <span>Các phương thức đăng nhập khác</span>
-            <div className='flex flex-col sm:flex-row gap-5 sm:gap-7 my-5 sm:my-3 justify-between'>
-                <div className='flex gap-2 items-center cursor-pointer' onClick={() => loginSocialUrl('google')}>
-                    <Image src='/google-icon.png' alt='Đăng nhập với Google' width={24} height={24}/>
-                    Đăng nhập Google
-                </div>
-                <div className='flex gap-2 items-center cursor-pointer' onClick={() => loginSocialUrl('facebook')}>
-                    <Image src='/facebook-icon.png' alt='Đăng nhập với Google' width={24} height={24}/>
-                    Đăng nhập Facebook
-                </div>
-            </div>
-            {/*<div className='flex gap-2 items-center cursor-pointer my-6 sm:my-8'*/}
-            {/*     onClick={() => loginSocialUrl('google')}>*/}
-            {/*    <Image src='/google-icon.png' alt='Đăng nhập với Google' width={24} height={24}/>*/}
-            {/*    Đăng nhập bằng Google*/}
+            {/*<div className='flex flex-col sm:flex-row gap-5 sm:gap-7 my-5 sm:my-3 justify-between'>*/}
+            {/*    <div className='flex gap-2 items-center cursor-pointer' onClick={() => loginSocialUrl('google')}>*/}
+            {/*        <Image src='/google-icon.png' alt='Đăng nhập với Google' width={24} height={24}/>*/}
+            {/*        Đăng nhập Google*/}
+            {/*    </div>*/}
+            {/*    <div className='flex gap-2 items-center cursor-pointer' onClick={() => loginSocialUrl('facebook')}>*/}
+            {/*        <Image src='/facebook-icon.png' alt='Đăng nhập với Google' width={24} height={24}/>*/}
+            {/*        Đăng nhập Facebook*/}
+            {/*    </div>*/}
             {/*</div>*/}
+            <div className='flex gap-2 items-center cursor-pointer my-6 sm:my-8'
+                 onClick={() => loginSocialUrl('google')}>
+                <Image src='/google-icon.png' alt='Đăng nhập với Google' width={24} height={24}/>
+                Đăng nhập bằng Google
+            </div>
             <span className='text-center w-full md:w-[400px]'>Bằng cách đăng nhập hay hoàn tất đăng ký, bạn đã đồng ý với
                 <Link className='text-primary' href='thoa-thuan-nguoi-dung'
                       target='_blank'> Thoả thuận người dùng </Link>

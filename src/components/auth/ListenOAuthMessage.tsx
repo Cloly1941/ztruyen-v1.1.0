@@ -5,6 +5,7 @@ import { useEffect } from 'react'
 
 // ** Lib
 import { setAccessToken } from '@/lib/localStorage'
+import {setLoggedInCookie} from "@/lib/cookie-client";
 
 export function ListenOAuthMessage() {
     useEffect(() => {
@@ -15,6 +16,7 @@ export function ListenOAuthMessage() {
                 const { token } = event.data
 
                 setAccessToken(token)
+                setLoggedInCookie();
 
                 window.location.href = '/'
             }
