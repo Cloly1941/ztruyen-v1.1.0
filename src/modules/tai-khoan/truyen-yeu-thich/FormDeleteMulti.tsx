@@ -58,6 +58,7 @@ const FormDeleteMulti = (
         onSuccess: async (data) => {
             toast.success(data.message)
             setSelected([])
+            setDeleteMulti(false)
             const slugs = listFavorite
                 .filter(item => selected.includes(item._id))
                 .map(item => item.comic_slug)

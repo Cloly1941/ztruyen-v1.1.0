@@ -91,40 +91,44 @@ const CommentItem = ({
                     frameUrl={user.avatar_frame?.image?.url}
                 />
 
-                <div className='ml-[76px]'>
-                    <div className='-mt-6 dark:text-gray-200'>
+                <div className='ml-[70px] sm:ml-[76px]'>
+                    <div className='-mt-6 dark:text-gray-200 break-words'>
                         {comment.content}
                     </div>
 
-                    <div className='flex gap-5 text-sm mt-1 text-[#9499A0] dark:text-gray-400'>
-                        <div>{dayjs(comment.createdAt).format("DD-MM-YYYY HH:mm")}</div>
-                        <LikeComment
-                            likeCount={comment.likeCount}
-                            mutate={mutate}
-                            commentId={comment._id}
-                            isLiked={comment.isLiked}
-                            profile={profile}
-                        />
-                        <span
-                            onClick={() => handleToggleReply(
-                                PARENT_REPLY_ID(comment._id),
-                                comment.userId._id,
-                                comment.userId.name
-                            )}
-                            className='cursor-pointer hover:text-primary'
-                        >
-                        {activeCommentId === PARENT_REPLY_ID(comment._id) ? 'Huỷ' : 'Phản hồi'}
-                    </span>
-                        <CommentAction
-                            isOwner={profile?._id === comment.userId._id}
-                            commentId={comment._id}
-                            mutate={mutate}
-                        />
+                    <div
+                        className='flex gap-2 sm:gap-5 flex-col sm:flex-row text-sm mt-1 text-[#9499A0] dark:text-gray-400'>
+                        <div className='shrink-0'>{dayjs(comment.createdAt).format("DD-MM-YYYY HH:mm")}</div>
+                        <div className='flex gap-5 w-full items-center'>
+                            <LikeComment
+                                likeCount={comment.likeCount}
+                                mutate={mutate}
+                                commentId={comment._id}
+                                isLiked={comment.isLiked}
+                                profile={profile}
+                            />
+                            <span
+                                onClick={() => handleToggleReply(
+                                    PARENT_REPLY_ID(comment._id),
+                                    comment.userId._id,
+                                    comment.userId.name
+                                )}
+                                className='cursor-pointer hover:text-primary'
+                            >
+                            {activeCommentId === PARENT_REPLY_ID(comment._id) ? 'Huỷ' : 'Phản hồi'}
+                        </span>
+                            <CommentAction
+                                isOwner={profile?._id === comment.userId._id}
+                                commentId={comment._id}
+                                mutate={mutate}
+                                profile={profile}
+                            />
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div className='ml-[76px]'>
+            <div className='ml-[70px] sm:ml-[76px]'>
                 {comment.replyCount > 0 && (
                     <button
                         onClick={handleToggleShowReplies}

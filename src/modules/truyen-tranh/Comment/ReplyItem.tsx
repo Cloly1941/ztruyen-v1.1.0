@@ -29,28 +29,35 @@ const ReplyItem = ({reply, isReplyOpen, onToggleReply, mutateReply, profile, mut
                 frameUrl={reply.userId.avatar_frame?.image?.url}
             />
             <div className='ml-[46px]'>
-                <div className='-mt-3 dark:text-gray-200 text-[15px]'>
+                <div className='-mt-3 dark:text-gray-200 text-[15px] break-words'>
                     {reply.replyTo && (
                         <span className='text-primary mr-1.5'>@{reply.replyTo.name}</span>
                     )}
                     {reply.content}
                 </div>
-                <div className='flex gap-5 text-sm mt-1 text-[#9499A0] dark:text-gray-400'>
-                    <div>{dayjs(reply.createdAt).format("DD-MM-YYYY HH:mm")}</div>
-                    <LikeComment
-                        likeCount={reply.likeCount}
-                        commentId={reply._id}
-                        mutate={mutateReply}
-                        isLiked={reply.isLiked}
-                        profile={profile}
-                    />
-                    <span
-                        onClick={onToggleReply}
-                        className='cursor-pointer hover:text-primary'
-                    >
+                <div className='flex gap-2 sm:gap-5 flex-col sm:flex-row text-sm mt-1 text-[#9499A0] dark:text-gray-400'>
+                    <div className='shrink-0'>{dayjs(reply.createdAt).format("DD-MM-YYYY HH:mm")}</div>
+                    <div className='flex gap-5 w-full items-center'>
+                        <LikeComment
+                            likeCount={reply.likeCount}
+                            commentId={reply._id}
+                            mutate={mutateReply}
+                            isLiked={reply.isLiked}
+                            profile={profile}
+                        />
+                        <span
+                            onClick={onToggleReply}
+                            className='cursor-pointer hover:text-primary'
+                        >
                         {isReplyOpen ? 'Huỷ' : 'Phản hồi'}
                     </span>
-                    <CommentAction isOwner={isOwner} commentId={reply._id} mutate={mutateDeleteReply}/>
+                        <CommentAction
+                            isOwner={isOwner}
+                            commentId={reply._id}
+                            mutate={mutateDeleteReply}
+                            profile={profile}
+                        />
+                    </div>
                 </div>
             </div>
         </li>

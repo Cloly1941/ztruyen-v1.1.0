@@ -17,12 +17,6 @@ import {Tooltip, TooltipContent, TooltipTrigger} from '@/components/ui/tooltip';
 // ** Skeleton
 import ListChapterSkeleton from "@/skeletons/truyen-tranh/ListChapterSkeleton";
 
-// ** utils
-import getIdFromUrl from "@/utils/getIdFromUrl";
-
-// ** Config
-import {CONFIG_SLUG} from "@/configs/slug";
-
 // ** Type
 import {TOtruyenChapter} from "@/types/api.otruyen";
 
@@ -75,7 +69,7 @@ const RangeBtnPagination = ({chapters, slug}: Props) => {
         <div className="flex flex-col gap-6">
             {/* Pagination buttons */}
             <div
-                className="flex sm:grid sm:grid-cols-4 md:grid-cols-6 gap-2.5 sm:gap-3 mt-5 overflow-x-auto scroll-hidden">
+                className="flex sm:grid sm:grid-cols-4 md:grid-cols-6 gap-2.5 sm:gap-3 mt-5 overflow-x-auto no-scrollbar">
                 {Array.from({length: totalRanges}).map((_, idx) => {
                     const rangeStart = idx * rangeSize;
                     const rangeEnd = Math.min((idx + 1) * rangeSize - 1, maxChapter);
@@ -86,7 +80,7 @@ const RangeBtnPagination = ({chapters, slug}: Props) => {
                             onClick={() => setCurrentRange(idx)}
                             className={`py-2 rounded-full text-xs transition min-w-max md:min-w-0  ${
                                 idx === currentRange
-                                    ? "bg-blue-100 text-blue-600 hover:bg-blue-100 dark:bg-blue-200"
+                                    ? "bg-blue-100 text-blue-600 dark:text-black/60 hover:bg-blue-100 dark:bg-blue-200"
                                     : "bg-gray-100 dark:bg-white/10 text-gray-600 dark:text-white hover:bg-gray-100 hover:text-black dark:hover:text-white/70"
                             }`}
                         >

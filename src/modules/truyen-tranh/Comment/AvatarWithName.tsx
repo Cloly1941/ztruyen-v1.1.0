@@ -16,7 +16,7 @@ type TAvatarWithName = {
 const AvatarWithName = ({ size, name, avatarUrl, frameName, frameUrl, className }: TAvatarWithName) => {
     return (
         <div className='flex items-start'>
-            <div className={cn('mr-2', size === 60 && 'mx-2')}>
+            <div className={cn('mr-2', size === 60 && 'mr-2 sm:mx-2')}>
                 <AvatarWithFrame
                     size={size}
                     avatarName={name}

@@ -6,6 +6,7 @@ import {ChevronLeft, ChevronRight} from "lucide-react";
 import {cn} from "@/lib/utils";
 import {getPaginationPages} from "@/utils/pagination";
 import {useEffect, useRef} from "react";
+import {ListReplyCommentSkeleton} from "@/skeletons/truyen-tranh/CommentSectionSkeleton";
 
 type TReplyList = {
     show: boolean;
@@ -35,17 +36,23 @@ const ReplyList = ({
                        mutateDeleteReply
                    }: TReplyList) => {
 
+    const isInitialLoading = isValidating && replies.length === 0;
+    const isPageLoading = isValidating && replies.length > 0;
+
     const listRef = useRef<HTMLUListElement>(null);
 
     useEffect(() => {
         if (listRef.current) {
-            listRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            listRef.current.scrollIntoView({behavior: 'smooth', block: 'start'});
         }
     }, [page]);
 
+    if (isInitialLoading) return <ListReplyCommentSkeleton/>
+
     return (
         <div className={cn('mt-4', !show && 'hidden')}>
-            <ul ref={listRef} className={cn('flex flex-col gap-y-5', isValidating && 'opacity-50 pointer-events-none')}>
+            <ul ref={listRef}
+                className={cn('flex flex-col gap-y-5 transition-opacity duration-200', isPageLoading && 'opacity-50 pointer-events-none')}>
                 {replies.map((reply) => (
                     <ReplyItem
                         key={reply._id}

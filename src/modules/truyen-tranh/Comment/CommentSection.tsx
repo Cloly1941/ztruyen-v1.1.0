@@ -13,7 +13,7 @@ import useInfiniteLoad from "@/hooks/common/useInfiniteLoad";
 import useSentinel from "@/hooks/common/useSentinel";
 import useGetMethod from "@/hooks/common/useGetMethod";
 import {UserService} from "@/services/api/user";
-import CommentSectionSkeleton, {ListCommentSkeleton} from "@/skeletons/truyen-tranh/CommentSectionSkeleton";
+import {ListCommentSkeleton, CommentSectionSkeleton} from "@/skeletons/truyen-tranh/CommentSectionSkeleton";
 
 type TCommentSection = {
     slug: string;
@@ -72,14 +72,14 @@ const CommentSection = ({name, slug}: TCommentSection) => {
     return (
         <div ref={containerRef}>
             {/* Title Head */}
-            <div className="mt-10 flex gap-20">
+            <div className="mt-10 flex justify-between sm:justify-start sm:gap-20">
                 <div className="relative inline-block">
                     <h2 className="text-lg font-medium">Bình luận</h2>
                     <span className="absolute top-2 left-full ml-2 -translate-y-1/2 text-sm text-img whitespace-nowrap">
                         {totalCount}
                     </span>
                 </div>
-                <div className="flex gap-5 text-sm items-center text-third">
+                <div className="flex gap-5 text-sm items-center text-third pr-2">
                     {SORT_OPTIONS.map((item, index) => (
                         <div key={item.value} className="flex items-center gap-5">
                             <div

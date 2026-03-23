@@ -143,7 +143,7 @@ const SendComment = ({
         <div className='mt-6 flex'>
             {!user ? (
                 <>
-                    <div className='relative size-12 mx-4 shrink-0'>
+                    <div className='relative size-12 ml-2 mr-4 sm:mx-4 shrink-0'>
                         <Image
                             src={AvatarFallBack}
                             alt='ảnh đại diện dự phòng'
@@ -154,17 +154,19 @@ const SendComment = ({
                     </div>
                     <div
                         className='flex justify-center items-center bg-[#f1f2f3] dark:bg-zinc-800 text-sm w-full rounded-md text-third'>
-                        Bạn cần
+                        <span className='hidden sm:inline-block'>Bạn cần</span>
                         <Link href='/dang-nhap'>
-                            <Button size='sm' className='text-xs mx-2 h-6 px-2.5'>Đăng nhập</Button>
+                            <Button size='sm' className='text-xs mx-2 h-6 px-2.5'>
+                                Đăng nhập
+                            </Button>
                         </Link>
-                        để bình luận đó nhe (・ω・)
+                        <span className='hidden sm:inline-block'>để bình luận đó nhe (・ω・)</span>
                     </div>
                 </>
             ) : (
                 <div className='w-full' ref={wrapperRef}>
                     <div className='flex'>
-                        <div className='mx-2'>
+                        <div className='mr-2 sm:mx-2'>
                             <AvatarWithFrame
                                 size={60}
                                 avatarName={user.name}

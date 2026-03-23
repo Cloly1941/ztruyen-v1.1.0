@@ -28,7 +28,7 @@ const DetailDesc = ({desc}: TDetailDescProps) => {
           </div>
           <div
               dangerouslySetInnerHTML={{__html: desc}}
-              className="text-sm text-black/75 dark:text-white mt-4 block md:hidden"
+              className="text-sm text-black/75 dark:text-white mt-4 block md:hidden break-words"
           />
       </>
     )
