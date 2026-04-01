@@ -5,6 +5,7 @@ import dayjs from "dayjs";
 import LikeComment from "@/modules/truyen-tranh/Comment/LikeComment";
 import AvatarWithName from "@/modules/truyen-tranh/Comment/AvatarWithName";
 import CommentAction from "@/modules/truyen-tranh/Comment/CommentAction";
+import CommentContent from "@/modules/truyen-tranh/Comment/CommentContent";
 
 type TReplyItem = {
     reply: IComment;
@@ -16,7 +17,15 @@ type TReplyItem = {
     mutate: () => Promise<unknown>;
 }
 
-const ReplyItem = ({reply, isReplyOpen, onToggleReply, mutateReply, profile, mutateDeleteReply, mutate}: TReplyItem) => {
+const ReplyItem = ({
+                       reply,
+                       isReplyOpen,
+                       onToggleReply,
+                       mutateReply,
+                       profile,
+                       mutateDeleteReply,
+                       mutate
+                   }: TReplyItem) => {
 
     const isOwner = profile?._id === reply.userId._id
 
@@ -34,9 +43,10 @@ const ReplyItem = ({reply, isReplyOpen, onToggleReply, mutateReply, profile, mut
                     {reply.replyTo && (
                         <span className='text-primary mr-1.5'>@{reply.replyTo.name}</span>
                     )}
-                    {reply.content}
+                    <CommentContent content={reply.content} className='inline'/>
                 </div>
-                <div className='flex gap-2 sm:gap-5 flex-col sm:flex-row text-sm mt-1 text-[#9499A0] dark:text-gray-400'>
+                <div
+                    className='flex gap-2 sm:gap-5 flex-col sm:flex-row text-sm mt-1 text-[#9499A0] dark:text-gray-400'>
                     <div className='shrink-0'>{dayjs(reply.createdAt).format("DD-MM-YYYY HH:mm")}</div>
                     <div className='flex gap-5 w-full items-center'>
                         <LikeComment

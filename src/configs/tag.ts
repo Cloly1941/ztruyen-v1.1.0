@@ -28,6 +28,12 @@ export const CONFIG_TAG = {
         DELETE: 'delete-comment',
         REPORT: 'report-comment',
     },
+    EMOJI: {
+        LIST: 'emoji-list'
+    },
+    EMOJI_CATEGORIES: {
+        LIST: 'emoji-categories-list'
+    },
     IMAGE: {
         UPLOAD: 'upload-image',
     }

@@ -12,6 +12,7 @@ import {CommentService} from "@/services/api/comment";
 import LikeComment from "@/modules/truyen-tranh/Comment/LikeComment";
 import AvatarWithName from "@/modules/truyen-tranh/Comment/AvatarWithName";
 import CommentAction from "@/modules/truyen-tranh/Comment/CommentAction";
+import CommentContent from "@/modules/truyen-tranh/Comment/CommentContent";
 
 type TCommentItem = {
     user: IUserComment;
@@ -92,9 +93,7 @@ const CommentItem = ({
                 />
 
                 <div className='ml-[70px] sm:ml-[76px]'>
-                    <div className='-mt-6 dark:text-gray-200 break-words'>
-                        {comment.content}
-                    </div>
+                    <CommentContent className='-mt-6 dark:text-gray-200 break-words' content={comment.content}/>
 
                     <div
                         className='flex gap-2 sm:gap-5 flex-col sm:flex-row text-sm mt-1 text-[#9499A0] dark:text-gray-400'>

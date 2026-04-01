@@ -12,5 +12,5 @@ export const BANNED_WORDS: string[] = [
 
 export const URL_REGEX = /(^|\s)(https?:\/\/[^\s]+|www\.[^\s]+|[\w\-]+\.(com|net|org|io|vn|co|me|tv|xyz|info|app|dev|page|site|link|click|live|online|store|shop)(\.[a-z]{2,})?(\/[^\s]*)?)/gi
 
-// Đổi từ <emo></emo> sang :name:
-export const VALID_EMO_REGEX = /:[\w\-]+:/g
+// :name:
+export const VALID_EMO_REGEX = /:[\w\- ]+:/g

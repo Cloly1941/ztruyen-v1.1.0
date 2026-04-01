@@ -79,9 +79,10 @@ const SendComment = ({
                      }: TSendComment) => {
     const [isFocus, setIsFocus] = useState(false);
     const [comment, setComment] = useState<string>("");
+    const [openEmoji, setOpenEmoji] = useState(false);
     const wrapperRef = useRef<HTMLDivElement>(null);
-    const popoverRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLTextAreaElement>(null);
+    const POPOVER_ATTR = 'data-popover-emoji'
 
     const {trigger, isMutating} = useMutateMethod<void, TSendCommentPayload | TSendReplyPayload>({
         api: (arg) => parent
@@ -112,9 +113,10 @@ const SendComment = ({
         const handleClickOutside = (e: MouseEvent) => {
             const target = e.target as HTMLElement;
             const isClickInsideWrapper = wrapperRef.current?.contains(target);
-            const isClickInsidePopover = popoverRef.current?.contains(target);
+            const isClickInsidePopover = !!target.closest(`[${POPOVER_ATTR}]`);
             if (!isClickInsideWrapper && !isClickInsidePopover) {
                 setIsFocus(false);
+                setOpenEmoji(false);
             }
         };
 
@@ -137,6 +139,23 @@ const SendComment = ({
                 ? {parent, replyTo, content: result.value} satisfies TSendReplyPayload
                 : {comicName, comicSlug, content: result.value} satisfies TSendCommentPayload
         )
+    }
+
+    const handleEmojiSelect = (value: string) => {
+        const textarea = inputRef.current
+        if (!textarea) return setComment(prev => prev + value)
+
+        const start = textarea.selectionStart ?? comment.length
+        const end = textarea.selectionEnd ?? comment.length
+
+        const newComment = comment.slice(0, start) + value + comment.slice(end)
+        setComment(newComment)
+
+        requestAnimationFrame(() => {
+            textarea.focus()
+            const pos = start + value.length
+            textarea.setSelectionRange(pos, pos)
+        })
     }
 
     return (
@@ -197,7 +216,13 @@ const SendComment = ({
                     </div>
                     {isFocus && (
                         <div className='flex justify-between items-center mt-2.5 ml-20'>
-                            <PopoverEmoji popoverRef={popoverRef}/>
+                            <PopoverEmoji
+                                open={openEmoji}
+                                onOpenChange={setOpenEmoji}
+                                inputRef={inputRef}
+                                onEmojiSelect={handleEmojiSelect}
+                                POPOVER_ATTR={POPOVER_ATTR}
+                            />
                             <div className='flex gap-2'>
                                 <Button
                                     sizeCustom='xs'

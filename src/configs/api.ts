@@ -5,12 +5,14 @@ const userUrl = baseUrl + '/user';
 const frameUrl = baseUrl + '/frame';
 const favoriteUrl = baseUrl + '/favorite';
 const commentUrl = baseUrl + '/comment';
+const emojiUrl = baseUrl + '/emoji';
+const emojiCategoriesUrl = baseUrl + '/emoji-category';
 
 export const CONFIG_API = {
     AUTH: {
-        LOGIN:`${authUrl}/login`,
-        REGISTER:`${authUrl}/register`,
-        LOGOUT:`${authUrl}/logout`,
+        LOGIN: `${authUrl}/login`,
+        REGISTER: `${authUrl}/register`,
+        LOGOUT: `${authUrl}/logout`,
         REFRESH: `${authUrl}/refresh`,
         FORGOT: `${authUrl}/forgot-password`,
         RESET: `${authUrl}/reset-password`,
@@ -37,7 +39,14 @@ export const CONFIG_API = {
         LIKE: `${commentUrl}/like`,
         REPORT: `${commentUrl}/report`
     },
+    EMOJI: {
+        INDEX: emojiUrl
+    },
+    EMOJI_CATEGORIES: {
+        INDEX: emojiCategoriesUrl
+    },
     IMAGE: {
+        INDEX: `${baseUrl}/image`,
         UPLOAD: `${baseUrl}/upload`,
     },
 } as const
