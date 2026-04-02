@@ -19,7 +19,7 @@ type TAvatarWithName = {
 const AvatarWithName = (
     {
         size, name, avatarUrl, frameName, frameUrl,
-        className, chapterName, chapterPage, type
+        className, chapterName, chapterPage, type = 'detail'
     }
     : TAvatarWithName) => {
     return (
