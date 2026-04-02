@@ -61,7 +61,7 @@ const ListComicByStatus = async ({slug, pageQuery, sortQuery}: TListComicByStatu
     return (
         <section className="section-list-comic">
             <div
-                className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-y-4 gap-2 md:gap-2.5 lg:gap-3 mb-4">
+                className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-y-4 gap-2 md:gap-2.5 lg:gap-3 mb-4">
                 {listComic.map((item, index) => {
                     return (
                         <figure
@@ -87,8 +87,29 @@ const ListComicByStatus = async ({slug, pageQuery, sortQuery}: TListComicByStatu
                                         imgSize="lg"
                                         alt={item.name}
                                         priority={index <= 0}
+                                        className='size-full'
                                     />
                                 </Link>
+                                <Link href={`/${CONFIG_SLUG.DETAIL}/${item.slug}.html`}
+                                    className="absolute top-0 left-0 w-full h-full rounded-[8px] cursor-pointer"
+                                    style={{
+                                        background:
+                                            'linear-gradient(0deg,rgba(0,0,0,.8) -1.22%,transparent 35.07%)',
+                                    }}
+                                />
+                                <ul className="absolute bottom-2.5 inline-flex gap-1 sm:gap-2 md:gap-2.5 lg:gap-3 items-center overflow-hidden px-2 sm:px-[12px]">
+                                    {item.category
+                                        ?.slice(0, 2)
+                                        .map((tag, j) => (
+                                            <Tag
+                                                key={j}
+                                                href={`/${CONFIG_SLUG.GENRE}/${tag.slug}.html`}
+                                                title={tag.name}
+                                            >
+                                                {tag.name}
+                                            </Tag>
+                                        ))}
+                                </ul>
                             </div>
                             <figcaption
                                 className="mt-1.5 text-center"

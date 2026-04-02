@@ -17,7 +17,7 @@ const ListComicSkeleton = ({bgColor = false}: { bgColor?: boolean }) => {
                         className="
                                 grid grid-flow-col
                                 gap-1.5 sm:gap-2 md:gap-[10px] lg:gap-3
-                                [grid-auto-columns:calc((100%-2*6px)/3)]
+                                [grid-auto-columns:calc((100%-2*6px)/2)]
                                 sm:[grid-auto-columns:calc((100%-2*8px)/3)]
                                 md:[grid-auto-columns:calc((100%-3*10px)/4)]
                                 lg:[grid-auto-columns:calc((100%-4*12px)/5)] overflow-hidden"

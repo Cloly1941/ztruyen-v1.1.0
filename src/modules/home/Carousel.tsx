@@ -97,9 +97,9 @@ const Carousel = ({
                         }}
                         breakpoints={{
                             0: {
-                                slidesPerView: 3,
-                                slidesPerGroup: 3,
-                                spaceBetween: 6,
+                                slidesPerView: 2,
+                                slidesPerGroup: 2,
+                                spaceBetween: 8,
                             },
                             640: {
                                 slidesPerView: 3,
@@ -158,7 +158,7 @@ const Carousel = ({
                                                 )
                                             }
                                         />
-                                        <ul className="absolute bottom-2.5 hidden sm:inline-flex gap-1 sm:gap-2 md:gap-2.5 lg:gap-3 items-center overflow-hidden px-2 sm:px-[12px]">
+                                        <ul className="absolute bottom-2.5 inline-flex gap-1 sm:gap-2 md:gap-2.5 lg:gap-3 items-center overflow-hidden px-2 sm:px-[12px]">
                                             {item.category
                                                 ?.slice(0, 2)
                                                 .map((tag, j) => (
@@ -197,7 +197,7 @@ const Carousel = ({
                     {/* Prev button */}
                     <Button
                         shape='circle'
-                        className={`btn-carousel -left-6 sm:-left-[34px] ${atBeginning ? 'hidden' : ''}`}
+                        className={`btn-carousel -left-4 sm:-left-[34px] ${atBeginning ? 'hidden' : ''}`}
                         onClick={() => swiperRef.current?.slidePrev()}
                     >
                         <ChevronLeft className='size-6 sm:size-8 text-black'/>
@@ -206,7 +206,7 @@ const Carousel = ({
                     {/* Next button */}
                     <Button
                         shape='circle'
-                        className={`btn-carousel -right-6 sm:-right-[34px] ${atEnd ? 'hidden' : ''}`}
+                        className={`btn-carousel -right-4 sm:-right-[34px] ${atEnd ? 'hidden' : ''}`}
                         onClick={() => swiperRef.current?.slideNext()}
                     >
                         <ChevronRight className='size-6 sm:size-8 text-black'/>
