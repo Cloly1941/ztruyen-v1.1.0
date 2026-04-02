@@ -13,7 +13,7 @@ type TAvatarWithName = {
     className?: string
     chapterPage?: number | null
     chapterName?: string | null
-    type: "detail" | "reading";
+    type?: "detail" | "reading";
 }
 
 const AvatarWithName = (
