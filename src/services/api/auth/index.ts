@@ -2,7 +2,7 @@
 import {fetcher} from "@/lib/fetcher";
 import {removeAccessToken, setAccessToken} from "@/lib/localStorage";
 import {authFetcherWithRefresh} from "@/lib/auth-fetch";
-import {removeLoggedInCookie, setLoggedInCookie} from "@/lib/cookie-client";
+import {setLoggedInCookie} from "@/lib/cookie-client";
 
 // ** Types
 import {ILogin, IRegister} from "@/types/api";
@@ -77,7 +77,6 @@ export const AuthService = {
         });
 
         removeAccessToken();
-        removeLoggedInCookie();
 
         return res
     },
