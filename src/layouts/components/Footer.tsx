@@ -1,12 +1,13 @@
 // ** Next
-import Link from "next/link"
+import Link from 'next/link';
 
 // ** Components
-import Tag from "@/components/common/Tag"
-import Logo from "@/components/common/Logo"
+import Tag from '@/components/common/Tag';
+import Logo from '@/components/common/Logo';
+import InstallPWAButton from '@/components/common/InstallPWAButton';
 
 // ** Configs
-import {tagsFooter} from "@/configs/footer"
+import { tagsFooter } from '@/configs/footer';
 
 const Footer = () => {
     return (
@@ -17,11 +18,15 @@ const Footer = () => {
                         {/* Top */}
                         <div className="grid grid-cols-1 gap-y-6 md:grid-cols-2">
                             <div>
-                                <Logo size="lg"/>
+                                <Logo size="lg" />
                             </div>
                             <ul className="flex flex-wrap gap-2">
                                 {tagsFooter.map((tag) => (
-                                    <Tag key={tag.title} href={tag.href} theme="dark">
+                                    <Tag
+                                        key={tag.title}
+                                        href={tag.href}
+                                        theme="dark"
+                                    >
                                         {tag.title}
                                     </Tag>
                                 ))}
@@ -34,23 +39,30 @@ const Footer = () => {
                                 Miễn trừ trách nhiệm
                             </h3>
                             <p className="text-sm leading-relaxed">
-                                ZTruyen chỉ cung cấp giao diện và tổng hợp dữ liệu từ
-                                <strong className="mx-1 text-white/70">OTruyen</strong>.
-                                Chúng tôi không lưu trữ hoặc sở hữu nội dung truyện.
-                                Thông tin hiển thị chỉ mang tính tham khảo và
-                                <strong className="mx-1 text-white/70">không chịu trách nhiệm</strong>
-                                về độ chính xác, liên kết ngoài hoặc nội dung do bên thứ ba cung cấp.
+                                ZTruyen chỉ cung cấp giao diện và tổng hợp dữ
+                                liệu từ
+                                <strong className="mx-1 text-white/70">
+                                    OTruyen
+                                </strong>
+                                . Chúng tôi không lưu trữ hoặc sở hữu nội dung
+                                truyện. Thông tin hiển thị chỉ mang tính tham
+                                khảo và
+                                <strong className="mx-1 text-white/70">
+                                    không chịu trách nhiệm
+                                </strong>
+                                về độ chính xác, liên kết ngoài hoặc nội dung do
+                                bên thứ ba cung cấp.
                             </p>
                         </div>
 
-                        <div className="border-t border-white/10"/>
+                        <div className="border-t border-white/10" />
 
                         {/* Bottom */}
                         <div className="flex flex-wrap items-center justify-between gap-y-3 text-sm">
-                            <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+                            <div className="flex flex-wrap items-center gap-x-4 gap-y-3">
                                 <Link
                                     href="/thoa-thuan-nguoi-dung"
-                                    target='_blank'
+                                    target="_blank"
                                     className="hover:text-white/80 transition-colors"
                                 >
                                     Thỏa thuận người dùng
@@ -58,11 +70,12 @@ const Footer = () => {
                                 <span className="text-white/20">|</span>
                                 <Link
                                     href="/chinh-sach-bao-mat"
-                                    target='_blank'
+                                    target="_blank"
                                     className="hover:text-white/80 transition-colors"
                                 >
                                     Chính sách bảo mật
                                 </Link>
+                                <InstallPWAButton />
                             </div>
 
                             <p className="text-sm font-medium">
@@ -73,7 +86,7 @@ const Footer = () => {
                 </div>
             </div>
         </footer>
-    )
-}
+    );
+};
 
-export default Footer
+export default Footer;

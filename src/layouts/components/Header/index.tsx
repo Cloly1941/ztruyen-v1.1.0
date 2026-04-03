@@ -1,9 +1,6 @@
 // ** React
 import {ReactNode} from 'react';
 
-// ** Next
-import Link from "next/link";
-
 // ** Components
 import {ModeToggle} from '@/components/common/ModeToggle';
 import Button from '@/components/common/Button';
@@ -28,8 +25,8 @@ import {
 // ** Lucide Icon
 import {Menu} from 'lucide-react';
 
-// ** lib
-import {getCookie} from "@/lib/cookie";
+// ** Module
+import ClientAuth from "@/layouts/components/Header/ClientAuth";
 
 const Header = async ({
                           asChild = false,
@@ -39,10 +36,9 @@ const Header = async ({
     children?: ReactNode;
 }) => {
 
-    const isLogin = await getCookie()
-
     return (
-        <header className="shadow-layout z-40 fixed left-0 top-0 right-0 bg-background h-header flex justify-center items-center">
+        <header
+            className="shadow-layout z-40 fixed left-0 top-0 right-0 bg-background h-header flex justify-center items-center">
             <nav className="container flex justify-between items-center py-2.5 font-medium text-header">
 
                 <div className="flex items-center gap-10">
@@ -56,11 +52,7 @@ const Header = async ({
                     <div className="hidden xl:block">
                         <ModeToggle/>
                     </div>
-                    {isLogin ? (
-                        <AccountMenu/>
-                    ) : (
-                        <Link href='/dang-nhap' className='text-header hidden xl:block'>Đăng nhập</Link>
-                    )}
+                    <ClientAuth/>
 
                     <div className="xl:hidden">
                         <Sheet>

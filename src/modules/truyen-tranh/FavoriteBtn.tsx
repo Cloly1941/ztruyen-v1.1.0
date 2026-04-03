@@ -2,7 +2,6 @@
 
 // ** Next
 import {useRouter} from "next/navigation";
-import {RequestCookie} from "next/dist/compiled/@edge-runtime/cookies";
 
 // ** Icons
 import {Heart, HeartCrack} from "lucide-react"
@@ -29,13 +28,13 @@ import FavoriteBtnSkeleton from "@/skeletons/truyen-tranh/FavoriteBtnSkeleton";
 
 // ** Lib
 import {invalidateFavorite} from "@/lib/invalidate-cache/invalidateFavorite";
+import {getAccessToken} from "@/lib/localStorage";
 
 
 type TFavoriteBtn = {
     slug: string
     comicName: string
     comicCover: string
-    isLogin?: RequestCookie
 }
 
 export type TFavoriteBtnPayload = {
@@ -44,9 +43,11 @@ export type TFavoriteBtnPayload = {
     comic_cover: string
 }
 
-const FavoriteBtn = ({slug, comicName, comicCover, isLogin}: TFavoriteBtn) => {
+const FavoriteBtn = ({slug, comicName, comicCover}: TFavoriteBtn) => {
 
     const router = useRouter()
+
+    const isLogin = getAccessToken()
 
     const {data: favorite, isLoading} = useGetMethod<IFavoriteToggle>({
         api: () => FavoriteService.check(slug),

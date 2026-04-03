@@ -1,19 +1,36 @@
-import type {NextConfig} from "next";
+// ** Next
+import type { NextConfig } from "next";
+
+// ** Next PWA
+import withPWA from "next-pwa";
 
 const nextConfig: NextConfig = {
-    /* config options here */
     images: {
         unoptimized: true,
     },
     eslint: {
         ignoreDuringBuilds: true,
-    }
+    },
 };
 
-export default nextConfig;
-
-// Enable calling `getCloudflareContext()` in `next dev`.
-// See https://opennext.js.org/cloudflare/bindings#local-access-to-bindings.
-import {initOpenNextCloudflareForDev} from "@opennextjs/cloudflare";
-
-initOpenNextCloudflareForDev();
+export default withPWA({
+    dest: 'public',
+    disable: process.env.NODE_ENV === 'development',
+    register: true,
+    skipWaiting: true,
+    runtimeCaching: [
+        {
+            urlPattern: /^https:\/\/your-api\.com\/api\/.*/i,
+            handler: 'NetworkFirst',
+            options: {
+                cacheName: 'api-cache',
+                expiration: { maxEntries: 50, maxAgeSeconds: 300 },
+            },
+        },
+        {
+            urlPattern: /\.(?:png|jpg|svg|css|js)$/i,
+            handler: 'CacheFirst',
+            options: { cacheName: 'static-assets' },
+        },
+    ],
+})(nextConfig);

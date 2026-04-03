@@ -36,9 +36,6 @@ import {TOtruyenChapter} from "@/types/api.otruyen";
 // ** Skeleton
 import DetailRecommendedComicSkeleton from "@/skeletons/truyen-tranh/DetailRecommendedComicSkeleton";
 
-// ** Lib
-import {getCookie} from "@/lib/cookie";
-
 type TDetailComicProps = {
     params: Promise<{ slug: string }>
 }
@@ -81,8 +78,6 @@ export async function generateMetadata({params}: TDetailComicProps): Promise<Met
 }
 
 const DetailComic = async ({params}: TDetailComicProps) => {
-
-    const isLogin = await getCookie()
 
     const {slug} = await params
 
@@ -150,7 +145,6 @@ const DetailComic = async ({params}: TDetailComicProps) => {
                                 slug={slugComic}
                                 comicName={detailComic.name}
                                 comicCover={detailComic.thumb_url}
-                                isLogin={isLogin}
                             />
                         </div>
                     )}
