@@ -66,8 +66,8 @@ export const metadata: Metadata = {
         'tien hiep',
     ],
     authors: [
-        { name: 'Cloly' },
-        { name: 'Cloly', url: 'https://www.facebook.com/ree.6I6/' },
+        {name: 'Cloly'},
+        {name: 'Cloly', url: 'https://www.facebook.com/ree.6I6/'},
     ],
     creator: 'Cloly',
     publisher: 'Cloly',
@@ -101,12 +101,12 @@ export const metadata: Metadata = {
     manifest: "/manifest.json",
     icons: {
         icon: [
-            { url: CONFIG_IMG.FAVICON },
-            { url: CONFIG_IMG.FAVICON_16, sizes: "16x16", type: "image/png" },
-            { url: CONFIG_IMG.FAVICON_32, sizes: "32x32", type: "image/png" }
+            {url: CONFIG_IMG.FAVICON},
+            {url: CONFIG_IMG.FAVICON_16, sizes: "16x16", type: "image/png"},
+            {url: CONFIG_IMG.FAVICON_32, sizes: "32x32", type: "image/png"}
         ],
         apple: [
-            { url: CONFIG_IMG.ICON_APPLE, sizes: "180x180" }
+            {url: CONFIG_IMG.ICON_APPLE, sizes: "180x180"}
         ]
     },
 };
@@ -115,8 +115,8 @@ export const viewport: Viewport = {
     width: 'device-width',
     initialScale: 1,
     themeColor: [
-        { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-        { media: "(prefers-color-scheme: dark)", color: "#212121" }
+        {media: "(prefers-color-scheme: light)", color: "#ffffff"},
+        {media: "(prefers-color-scheme: dark)", color: "#212121"}
     ],
 };
 
@@ -138,9 +138,8 @@ export default function RootLayout({children,}: { children: ReactNode }) {
                 </TooltipProvider>
             </ProgressWrapper>
             <Toast/>
-            <NotificationListener />
+            <NotificationListener/>
         </ThemeProvider>
-        </body>
         <Script
             src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`}
             strategy="afterInteractive"
@@ -154,6 +153,7 @@ export default function RootLayout({children,}: { children: ReactNode }) {
     gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}');
   `}
         </Script>
+        </body>
         </html>
     );
 }
