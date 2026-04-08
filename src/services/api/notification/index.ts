@@ -30,5 +30,19 @@ export const NotificationService = {
                 method: 'DELETE',
             }
         )
+    },
+    delete: (id: string) => {
+        return authFetcherWithRefresh<IApiRes<void>>(
+            `${CONFIG_API.NOTIFICATION.INDEX}/${id}`,{
+                method: 'DELETE',
+            }
+        )
+    },
+    read: (id: string) => {
+        return authFetcherWithRefresh<IApiRes<void>>(
+            `${CONFIG_API.NOTIFICATION.INDEX}/${id}`,{
+                method: 'PATCH',
+            }
+        )
     }
 }

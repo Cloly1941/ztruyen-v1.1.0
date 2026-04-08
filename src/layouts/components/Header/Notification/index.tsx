@@ -26,6 +26,7 @@ import ButtonSkeleton from "@/skeletons/layouts/ButtonSkeleton";
 import useInfiniteLoad from "@/hooks/common/useInfiniteLoad";
 import useGetMethod from "@/hooks/common/useGetMethod";
 import useSentinel from "@/hooks/common/useSentinel";
+import useMutateMethod from "@/hooks/common/useMutateMethod";
 
 // ** Layout components
 import NotificationItem from "@/layouts/components/Header/Notification/NotificationItem";
@@ -70,6 +71,29 @@ const Notification = () => {
             NotificationService.list({page, limit: LIMIT})
                 .then(res => res.data as IModelPaginateNotification<INotification>),
     });
+
+    // Mutate read all and delete all
+    const {
+        trigger: readAllTrigger,
+        isMutating: isReadAllMutating
+    } = useMutateMethod({
+        api: () => NotificationService.readAll(),
+        key: CONFIG_TAG.NOTIFICATION.READ_ALL,
+        onSuccess: async () => {
+            await mutateList()
+        }
+    })
+    const {
+        trigger: deleteAllTrigger,
+        isMutating: isDeleteAllMutating
+    } = useMutateMethod({
+        api: () => NotificationService.deleteAll(),
+        key: CONFIG_TAG.NOTIFICATION.DELETE_ALL,
+        onSuccess: async () => {
+            await mutateList()
+            await mutateCount()
+        }
+    })
 
     // Revalidate count and list
     useEffect(() => {
@@ -120,7 +144,12 @@ const Notification = () => {
                             </DropdownMenuLabel>
 
                             {hasData && (
-                                <DropdownAction mutateNotification={mutateList} mutateTotal={mutateCount}/>
+                                <DropdownAction
+                                    onDeleteTrigger={deleteAllTrigger}
+                                    onReadTrigger={readAllTrigger}
+                                    isLoading={isReadAllMutating || isDeleteAllMutating}
+                                    type='MULTI'
+                                />
                             )}
                         </div>
                         {(data.length <= 0 && !isLoading) && (
@@ -133,14 +162,20 @@ const Notification = () => {
                                 <NotificationItemSkeleton/>
                             ) : (
                                 data.map((item) => (
-                                    <DropdownMenuItem key={item._id}>
+                                    <DropdownMenuItem
+                                        key={item._id}
+                                        asChild
+                                    >
                                         <NotificationItem
+                                            id={item._id}
                                             content={item.meta.contentPreview}
                                             type={item.type}
                                             comicName={item.meta.comicName}
                                             isRead={item.isRead}
                                             senderName={item.meta.senderName}
                                             senderAvatar={item.meta.senderAvatar || ''}
+                                            mutateList={mutateList}
+                                            mutateCount={mutateCount}
                                         />
                                     </DropdownMenuItem>
                                 ))
