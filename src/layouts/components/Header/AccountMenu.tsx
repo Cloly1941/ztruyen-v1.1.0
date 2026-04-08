@@ -21,7 +21,7 @@ import {
 import {Heart, User} from "lucide-react";
 
 // ** Skeleton
-import AvatarSkeleton from "@/skeletons/layouts/AvatarSkeletons";
+import AvatarSkeleton from "@/skeletons/layouts/AvatarSkeleton";
 
 // ** Hooks
 import useGetMethod from "@/hooks/common/useGetMethod"

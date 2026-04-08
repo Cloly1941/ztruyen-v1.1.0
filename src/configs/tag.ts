@@ -37,6 +37,8 @@ export const CONFIG_TAG = {
     NOTIFICATION: {
         LIST: 'notification-list',
         COUNT: 'notification-count',
+        READ_ALL: 'notification-read-all',
+        DELETE_ALL: 'notification-delete-all',
     },
     IMAGE: {
         UPLOAD: 'upload-image',

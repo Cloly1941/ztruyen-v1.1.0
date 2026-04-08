@@ -18,19 +18,18 @@ type TNotificationItem = {
     senderName: string;
     senderAvatar: string;
     content: string;
-    createdAt: string;
     isRead: boolean;
     comicName: string;
     type: NotificationType;
 }
 
 const NotificationItem = (
-    {senderName, senderAvatar, content, comicName, isRead, createdAt, type}: TNotificationItem) => {
+    {senderName, senderAvatar, content, comicName, isRead, type}: TNotificationItem) => {
 
     const badge = getBadgeNotification[type];
 
     return (
-        <div className='flex gap-3 items-start py-2'>
+        <div className='flex gap-3 items-center py-2'>
             <div className='relative flex-shrink-0'>
                 <Avatar className='size-14'>
                     <AvatarImage src={senderAvatar} alt={senderName}/>
@@ -46,26 +45,20 @@ const NotificationItem = (
                     {badge.icon}
                 </div>
             </div>
-            <div className='flex items-center gap-2'>
-                <div className={cn(isRead ? 'opacity-60' : '')}>
-                    <p className='line-clamp-3'>
-                        <span className='text-sm font-medium'>{senderName}</span>
-                        {' '}
-                        <span className='text-xs text-muted-foreground'>
+            <div className={cn(isRead ? 'opacity-60' : '')}>
+                <p className='line-clamp-3'>
+                    <span className='text-sm font-medium'>{senderName}</span>
+                    {' '}
+                    <span className='text-xs text-muted-foreground'>
                         {type === 'REPLY_COMMENT' ? 'đã phản hồi về ' : 'đã thích '}
-                            bình luận của bạn tại truyện {' '}
-                            <span className='text-primary'>{comicName}</span>
+                        bình luận của bạn tại truyện {' '}
+                        <span className='text-primary'>{comicName}</span>
 
                         : {content}
                     </span>
-                    </p>
-                    <div
-                        className={cn('text-xs mt-1', isRead ? '' : 'text-destructive dark:text-amber-400')}>
-                        {formatRelativeTime(createdAt)}
-                    </div>
-                </div>
-                {!isRead && <div className='rounded-full size-2 bg-primary flex-shrink-0 -mt-3'/>}
+                </p>
             </div>
+            {!isRead && <div className='rounded-full size-2 bg-primary flex-shrink-0'/>}
         </div>
     )
 }

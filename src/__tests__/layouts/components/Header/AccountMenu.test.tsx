@@ -25,7 +25,7 @@ jest.mock('@/layouts/components/Header/Logout', () => ({
     __esModule: true,
     default: () => <div data-testid="logout">Logout</div>,
 }))
-jest.mock('@/skeletons/layouts/AvatarSkeletons', () => ({
+jest.mock('@/skeletons/layouts/AvatarSkeleton', () => ({
     __esModule: true,
     default: () => <div data-testid="avatar-skeleton" />,
 }))

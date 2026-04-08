@@ -17,4 +17,18 @@ export const NotificationService = {
             `${CONFIG_API.NOTIFICATION.INDEX}?${query}`
         )
     },
+    readAll: () => {
+        return authFetcherWithRefresh<IApiRes<void>>(
+            `${CONFIG_API.NOTIFICATION.READ_ALL}`,{
+                method: 'PATCH',
+            }
+        )
+    },
+    deleteAll: () => {
+        return authFetcherWithRefresh<IApiRes<void>>(
+            `${CONFIG_API.NOTIFICATION.DELETE_ALL}`,{
+                method: 'DELETE',
+            }
+        )
+    }
 }

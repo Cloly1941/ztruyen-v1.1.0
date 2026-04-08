@@ -60,7 +60,6 @@ const FavoriteBtn = ({slug, comicName, comicCover}: TFavoriteBtn) => {
     const {trigger, isMutating} = useMutateMethod<IFavoriteToggle, TFavoriteBtnPayload>({
         api: (arg) => FavoriteService.toggle(arg),
         key: CONFIG_TAG.FAVORITE.TOGGLE,
-        showToast: false,
         onSuccess: async () => {
             await invalidateFavorite(slug)
         }

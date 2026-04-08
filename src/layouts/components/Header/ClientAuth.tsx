@@ -8,12 +8,13 @@ import AccountMenu from "@/layouts/components/Header/AccountMenu";
 
 // ** Hooks
 import {useAuth} from "@/hooks/common/useAuth";
+import AvatarSkeleton from "@/skeletons/layouts/AvatarSkeleton";
 
 const ClientAuth = () => {
 
     const { isLogin, loading } = useAuth();
 
-    if (loading) return null;
+    if (loading) return <AvatarSkeleton/>;
 
     return (
         <>

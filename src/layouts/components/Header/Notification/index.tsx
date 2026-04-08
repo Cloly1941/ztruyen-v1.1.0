@@ -44,6 +44,7 @@ import {INotification} from "@/types/api";
 
 // ** Lib
 import {REFRESH_EVENT} from "@/lib/invalidate-cache/events";
+import DropdownAction from "@/layouts/components/Header/Notification/DropdownAction";
 
 const LIMIT = 10;
 
@@ -86,6 +87,9 @@ const Notification = () => {
 
     const {sentinelRef} = useSentinel({onIntersect: loadMore});
 
+    const hasData = data && data.length > 0;
+    const isFirstLoad = isLoading && !hasData;
+
     if (loading) return <ButtonSkeleton/>;
 
     return (
@@ -108,18 +112,24 @@ const Notification = () => {
                             )}
                         </div>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent className="w-90 p-0 max-h-[36vh] md:max-h-[90vh] overflow-y-auto"
+                    <DropdownMenuContent className="w-90 pb-2 px-2 max-h-[36vh] md:max-h-[90vh] overflow-y-auto"
                                          align="center">
-                        <DropdownMenuLabel className='font-bold my-2 px-2'>
-                            Thông báo
-                        </DropdownMenuLabel>
-                        {data.length <= 0 && (
-                            <div className="pt-5 pb-8 text-center text-sm text-muted-foreground">
+                        <div className='flex justify-between items-center'>
+                            <DropdownMenuLabel className='font-bold mt-2 mb-0.5'>
+                                Thông báo
+                            </DropdownMenuLabel>
+
+                            {hasData && (
+                                <DropdownAction mutateNotification={mutateList} mutateTotal={mutateCount}/>
+                            )}
+                        </div>
+                        {(data.length <= 0 && !isLoading) && (
+                            <div className="pt-20 pb-24 text-center text-sm text-muted-foreground">
                                 Không có thông báo nào
                             </div>
                         )}
                         <DropdownMenuGroup>
-                            {isLoading ? (
+                            {isFirstLoad ? (
                                 <NotificationItemSkeleton/>
                             ) : (
                                 data.map((item) => (
@@ -129,14 +139,13 @@ const Notification = () => {
                                             type={item.type}
                                             comicName={item.meta.comicName}
                                             isRead={item.isRead}
-                                            createdAt={item.createdAt}
                                             senderName={item.meta.senderName}
                                             senderAvatar={item.meta.senderAvatar || ''}
                                         />
                                     </DropdownMenuItem>
                                 ))
                             )}
-                            {isValidating && <NotificationItemSkeleton/>}
+                            {(isValidating && hasData) && <NotificationItemSkeleton/>}
                             <div ref={sentinelRef}/>
                         </DropdownMenuGroup>
                     </DropdownMenuContent>
