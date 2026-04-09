@@ -93,7 +93,7 @@ const ReplyList = ({
             </ul>
 
             {totalPages > 1 && (
-                <div className='flex items-center gap-1 mt-4 text-sm text-[#9499A0]'>
+                <div className='flex items-center gap-1 mt-4 text-xs sm:text-sm text-[#9499A0]'>
                     <span className='mr-3'>
                         {isValidating ? 'Đang tải...' : `Tổng ${totalPages} trang`}
                     </span>

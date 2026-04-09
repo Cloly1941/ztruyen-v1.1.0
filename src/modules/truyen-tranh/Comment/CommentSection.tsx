@@ -105,12 +105,12 @@ const CommentSection = (
             {/* Title Head */}
             <div className={cn("flex justify-between sm:justify-start sm:gap-20", type === 'detail' && 'mt-10')}>
                 <div className="relative inline-block">
-                    <h2 className="text-lg font-medium">Bình luận</h2>
-                    <span className="absolute top-2 left-full ml-2 -translate-y-1/2 text-sm text-img whitespace-nowrap">
+                    <h2 className="text-base sm:text-lg font-medium">Bình luận</h2>
+                    <span className="absolute top-2 left-full ml-2 -translate-y-1/2 text-[13px] sm:text-sm text-img whitespace-nowrap">
                         {totalCount}
                     </span>
                 </div>
-                <div className="flex gap-5 text-sm items-center text-third pr-2">
+                <div className="flex gap-5 text-[13px] sm:text-sm items-center text-third pr-2">
                     {SORT_OPTIONS.map((item, index) => (
                         <div key={item.value} className="flex items-center gap-5">
                             <div
@@ -161,7 +161,7 @@ const CommentSection = (
 
                     {/* Sentinel */}
                     {isValidating && <ListCommentSkeleton/>}
-                    <div ref={sentinelRef} className="mt-16 mb-[100px] text-sm text-third text-center">
+                    <div ref={sentinelRef} className="mt-10 sm:mt-16 mb-[80px] sm:mb-[100px] text-[13px] sm:text-sm text-third text-center">
                         {!isValidating && !hasMore && comments.length > 0 && (
                             <span>Không còn bình luận nữa</span>
                         )}

@@ -88,7 +88,7 @@ const FormReportComment = ({ commentId }: TFormReportCommentProps) => {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <TriangleAlert className='size-4 text-red-500 cursor-pointer'/>
+                <TriangleAlert className='size-3.5 sm:size-4 text-red-500 cursor-pointer'/>
             </DialogTrigger>
 
             <DialogContent>

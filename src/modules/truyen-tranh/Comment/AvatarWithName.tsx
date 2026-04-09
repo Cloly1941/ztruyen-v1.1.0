@@ -14,12 +14,14 @@ type TAvatarWithName = {
     chapterPage?: number | null
     chapterName?: string | null
     type?: "detail" | "reading";
+    mobileSize?: number
 }
 
 const AvatarWithName = (
     {
         size, name, avatarUrl, frameName, frameUrl,
-        className, chapterName, chapterPage, type = 'detail'
+        className, chapterName, chapterPage, type = 'detail',
+        mobileSize
     }
     : TAvatarWithName) => {
     return (
@@ -27,6 +29,7 @@ const AvatarWithName = (
             <div className={cn('mr-2', size === 60 && 'mr-2 sm:mx-2')}>
                 <AvatarWithFrame
                     size={size}
+                    mobileSize={mobileSize}
                     avatarName={name}
                     avatarUrl={avatarUrl}
                     frameName={frameName}
@@ -34,18 +37,18 @@ const AvatarWithName = (
                 />
             </div>
             <div className={cn(
-                'text-[#61666D] text-[15px] truncate dark:text-gray-300',
-                size === 60 ? 'mt-3' : 'mt-1',
+                'text-[#61666D] text-sm sm:text-[15px] truncate dark:text-gray-300',
+                size === 60 ? 'mt-1 sm:mt-3' : 'mt-1',
                 className
             )}>
                 {name}
                 {chapterName && (
                     <>
                         <span
-                            className='inline-block mx-1.5 text-[13px]'>
+                            className='inline-block mx-1 sm:mx-1.5 text-xs sm:text-[13px]'>
                             tại {type === 'detail' ? 'chương' : 'ảnh'}
                         </span>
-                        <span className='text-link cursor-pointer text-sm'>
+                        <span className='text-link cursor-pointer text-xs sm:text-sm'>
                             {type === 'detail' && `Chương ${chapterName}`} {chapterPage}P
                         </span>
                     </>

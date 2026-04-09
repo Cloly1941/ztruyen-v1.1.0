@@ -81,7 +81,7 @@ const LikeComment = ({
         >
             <ThumbsUp
                 className={cn(
-                    "size-3.5 transition-all",
+                    "size-3 sm:size-3.5 transition-all",
                     isLiked && "fill-primary"
                 )}
             />

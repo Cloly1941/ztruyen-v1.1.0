@@ -1,3 +1,6 @@
+// ** React
+import {CSSProperties} from "react";
+
 // ** Next
 import Image from "next/image";
 
@@ -16,6 +19,7 @@ type TAvatarWithFrameProps = {
     frameUrl?: string;
     frameName?: string;
     size?: number;
+    mobileSize?: number;
     className?: string;
 };
 
@@ -34,37 +38,34 @@ const AvatarWithFrame = ({
                              frameName,
                              frameUrl,
                              size = 48,
-                             className
+                             mobileSize,
+                             className,
                          }: TAvatarWithFrameProps) => {
-
-    if (!frameUrl) {
-        const avatarSize = size * 0.8;
-
-        return (
-            <div
-                style={{width: size, height: size}}
-                className="flex items-center justify-center shrink-0"
-            >
-                <Avatar style={{width: avatarSize, height: avatarSize}}>
-                    {avatarUrl && <AvatarImage src={avatarUrl} alt={avatarName}/>}
-                    <AvatarFallback asChild>
-                        <div className="relative size-full">{fallbackAvatar}</div>
-                    </AvatarFallback>
-                </Avatar>
-            </div>
-        );
-    }
+    const hasFrame = !!frameUrl;
 
     return (
         <div
-            style={{width: size, height: size}}
-            className={cn("relative shrink-0", className)}
+            style={
+                {
+                    "--avatar-size": `${mobileSize ?? size}px`,
+                    "--avatar-size-sm": `${size}px`,
+                } as CSSProperties
+            }
+            className={cn(
+                "relative shrink-0",
+                "[width:var(--avatar-size)] [height:var(--avatar-size)]",
+                "sm:[width:var(--avatar-size-sm)] sm:[height:var(--avatar-size-sm)]",
+                className
+            )}
         >
-            {/* Avatar center */}
+            {/* Avatar */}
             <div className="absolute inset-0 flex items-center justify-center z-0">
                 <Avatar
-                    style={{width: size * 0.68, height: size * 0.68}}
-                    className="rounded-full"
+                    className={cn(
+                        hasFrame
+                            ? "[width:calc(var(--avatar-size)*0.68)] [height:calc(var(--avatar-size)*0.68)] sm:[width:calc(var(--avatar-size-sm)*0.68)] sm:[height:calc(var(--avatar-size-sm)*0.68)]"
+                            : "[width:calc(var(--avatar-size)*0.8)] [height:calc(var(--avatar-size)*0.8)] sm:[width:calc(var(--avatar-size-sm)*0.8)] sm:[height:calc(var(--avatar-size-sm)*0.8)]"
+                    )}
                 >
                     {avatarUrl && <AvatarImage src={avatarUrl} alt={avatarName}/>}
                     <AvatarFallback asChild>
@@ -74,13 +75,15 @@ const AvatarWithFrame = ({
             </div>
 
             {/* Frame */}
-            <Image
-                src={frameUrl}
-                alt={frameName || "frame"}
-                fill
-                sizes={`${size}px`}
-                className="object-contain z-10 pointer-events-none"
-            />
+            {hasFrame && (
+                <Image
+                    src={frameUrl}
+                    alt={frameName || "frame"}
+                    fill
+                    sizes={`(max-width: 768px) ${mobileSize ?? size}px, ${size}px`}
+                    className="object-contain z-10 pointer-events-none"
+                />
+            )}
         </div>
     );
 };

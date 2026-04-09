@@ -50,7 +50,7 @@ const FormDeleteComment = ({id, mutate, mutateReply} :TFormDeleteComment) => {
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
-                <Trash2 className='size-4 text-red-500 cursor-pointer'/>
+                <Trash2 className='size-3.5 sm:size-4 text-red-500 cursor-pointer'/>
             </AlertDialogTrigger>
             <AlertDialogContent>
                 <AlertDialogHeader>

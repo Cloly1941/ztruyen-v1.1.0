@@ -22,7 +22,7 @@ const DetailListChapter = ({listChapter, slug, name}: TDetailListChapterProps) =
 
     return (
         <section className='p-5 lg:w-[70%] xl:w-[76%] h-min bg-section-detail'>
-            <h2 className='text-lg font-medium'>Danh sách chương</h2>
+            <h2 className='text-base sm:text-lg font-medium'>Danh sách chương</h2>
             <RangeBtnPagination chapters={listChapter[0].server_data as TOtruyenChapter[]} slug={slug}/>
             <CommentSection name={name} slug={slug}/>
         </section>

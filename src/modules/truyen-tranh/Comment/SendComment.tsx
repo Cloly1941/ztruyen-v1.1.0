@@ -8,7 +8,7 @@ import Image from "next/image";
 import {useEffect, useRef, useState} from "react";
 
 // ** SWR
-import { mutate as globalMutate } from 'swr'
+import {mutate as globalMutate} from 'swr'
 
 // ** Hooks
 import useMutateMethod from "@/hooks/common/useMutateMethod";
@@ -113,7 +113,7 @@ const SendComment = ({
                 await globalMutate(
                     (key) => Array.isArray(key) && key[0] === detailKey,
                     undefined,
-                    { revalidate: true }
+                    {revalidate: true}
                 )
             }
             setComment('')
@@ -213,6 +213,7 @@ const SendComment = ({
                         <div className='mr-2 sm:mx-2'>
                             <AvatarWithFrame
                                 size={60}
+                                mobileSize={45}
                                 avatarName={user.name}
                                 avatarUrl={user.avatar?.url}
                                 frameName={user.avatar_frame?.name}
@@ -240,7 +241,7 @@ const SendComment = ({
                         />
                     </div>
                     {isFocus && (
-                        <div className='flex justify-between items-center mt-2.5 ml-20'>
+                        <div className='flex justify-between items-center mt-2.5 ml-14 sm:ml-20'>
                             <PopoverEmoji
                                 open={openEmoji}
                                 onOpenChange={setOpenEmoji}
@@ -250,10 +251,10 @@ const SendComment = ({
                             />
                             <div className='flex gap-2'>
                                 <Button
-                                    sizeCustom='xs'
+                                    className='h-[32px]'
                                     isLoading={isMutating}
                                     onClick={handleSendComment}>
-                                    <Send/>
+                                    <Send className='size-3.5'/>
                                 </Button>
                             </div>
                         </div>

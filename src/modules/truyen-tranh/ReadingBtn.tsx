@@ -54,7 +54,7 @@ const ReadingBtn = ({chapter, slug}: TReadingBtnProps) => {
     return (
         <Link href={`/${CONFIG_SLUG.READING}/${isComicHistory.path}`} className=' w-full'>
             <Button sizeCustom='xs' width='full'>
-                Đọc tiếp chương {isComicHistory.chapter_name} thôi nào ~~ (=^･ｪ･^=)
+                Đọc tiếp chương {isComicHistory.chapter_name} {' '} <span className='hidden sm:inline-block'>thôi nào ~~ (=^･ｪ･^=)</span>
             </Button>
         </Link>
     )

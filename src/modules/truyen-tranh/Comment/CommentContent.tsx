@@ -17,7 +17,7 @@ const CommentContent = ({content, className}: TCommentContent) => {
                 part.type === 'text'
                     ? <span key={index}>{part.value}</span>
                     : (
-                        <span key={index} className={cn('relative size-6 inline-block align-middle', part.url.includes('gif') && 'size-20')}>
+                        <span key={index} className={cn('relative size-5 sm:size-6 inline-block align-middle', part.url.includes('gif') && 'size-12 sm:size-20')}>
                             <Image
                                 key={index}
                                 src={part.url}

@@ -120,6 +120,7 @@ const CommentItem = ({
             <div className='group/header'>
                 <AvatarWithName
                     size={60}
+                    mobileSize={45}
                     name={user.name}
                     avatarUrl={user.avatar?.url}
                     frameName={user.avatar_frame?.name}
@@ -129,11 +130,11 @@ const CommentItem = ({
                     type={type}
                 />
 
-                <div className='ml-[70px] sm:ml-[76px]'>
-                    <CommentContent className='-mt-6 dark:text-gray-200 break-words' content={comment.content}/>
+                <div className='ml-[54px] sm:ml-[76px]'>
+                    <CommentContent className='-mt-[18px] sm:-mt-6 dark:text-gray-200 break-words text-sm sm:text-base' content={comment.content}/>
 
                     <div
-                        className='flex gap-2 sm:gap-5 flex-col sm:flex-row text-sm mt-1 text-[#9499A0] dark:text-gray-400'>
+                        className='flex gap-2 sm:gap-5 flex-col sm:flex-row text-[13px] sm:text-sm mt-1 text-[#9499A0] dark:text-gray-400'>
                         <div className='shrink-0'>{dayjs(comment.createdAt).format("DD-MM-YYYY HH:mm")}</div>
                         <div className='flex gap-5 w-full items-center'>
                             <LikeComment
@@ -165,11 +166,11 @@ const CommentItem = ({
                 </div>
             </div>
 
-            <div className='ml-[70px] sm:ml-[76px]'>
+            <div className='ml-[52px] sm:ml-[76px]'>
                 {comment.replyCount > 0 && (
                     <button
                         onClick={handleToggleShowReplies}
-                        className='flex items-center gap-1 text-sm text-primary mt-2 hover:underline'
+                        className='flex items-center gap-1 text-[13px] sm:text-sm text-primary mt-2 hover:underline'
                     >
                         {showReplies
                             ? <><ChevronUp className='size-4'/> Thu gọn</>
