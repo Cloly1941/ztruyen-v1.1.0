@@ -1,5 +1,8 @@
 'use client'
 
+// ** React
+import {useEffect} from "react"
+
 // ** Types
 import {IComment, IUserProfile} from "@/types/api";
 
@@ -23,6 +26,8 @@ type TReplyItem = {
     detailKey?: string;
     page?: number | null
     chapterName?: string | null
+    highlightReplyId?: string;
+    onHighlightReady?: (id: string) => void;
 }
 
 const ReplyItem = ({
@@ -32,10 +37,16 @@ const ReplyItem = ({
                        mutateReply,
                        profile,
                        mutateDeleteReply,
-                       mutate, detailKey
+                       mutate, detailKey,
+                       highlightReplyId, onHighlightReady
                    }: TReplyItem) => {
 
     const isOwner = profile?._id === reply.userId._id
+
+    useEffect(() => {
+        if (reply._id !== highlightReplyId) return;
+        onHighlightReady?.(reply._id);
+    }, [reply._id, highlightReplyId, onHighlightReady]);
 
     return (
         <li className='group/header'>
@@ -46,8 +57,8 @@ const ReplyItem = ({
                 frameName={reply.userId.avatar_frame?.name}
                 frameUrl={reply.userId.avatar_frame?.image?.url}
             />
-            <div className='ml-[46px]'>
-                <div className='-mt-3 dark:text-gray-200 text-[15px] break-words'>
+            <div className='ml-[46px]' >
+                <div className='-mt-3 dark:text-gray-200 text-[15px] break-words' id={reply._id}>
                     {reply.replyTo && (
                         <span className='text-primary mr-1.5'>@{reply.replyTo.name}</span>
                     )}

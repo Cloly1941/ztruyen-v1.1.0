@@ -42,7 +42,8 @@ export const CONFIG_API = {
         REPLIES: `${commentUrl}/replies`,
         REPLY: `${commentUrl}/reply`,
         LIKE: `${commentUrl}/like`,
-        REPORT: `${commentUrl}/report`
+        REPORT: `${commentUrl}/report`,
+        PAGE_OF_REPLY: `${commentUrl}/page-of-reply`
     },
     EMOJI: {
         INDEX: emojiUrl

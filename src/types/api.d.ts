@@ -121,6 +121,10 @@ export interface IComment {
     isLiked: boolean;
 }
 
+export interface IPageOfReply {
+    page: number;
+}
+
 // Emoji
 export interface IEmojiCategory {
     _id: string
@@ -170,7 +174,7 @@ export interface INotification {
     senderId: string;
     type: NotificationType;
     commentId: string;
-    replyId: string;
+    replyId?: string;
     isRead: boolean;
     createdAt: string;
     updatedAt: string;

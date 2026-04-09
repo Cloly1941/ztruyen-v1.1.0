@@ -5,7 +5,7 @@ import {authFetcherWithRefresh} from "@/lib/auth-fetch";
 import {CONFIG_API} from "@/configs/api";
 
 // ** Type
-import {IComment} from "@/types/api";
+import {IComment, IPageOfReply} from "@/types/api";
 
 // ** Util and type
 import {buildQueryString, TQueryParams} from "@/utils/buildQueryString";
@@ -19,6 +19,16 @@ export const CommentService = {
         const query = buildQueryString(params)
         return authFetcherWithRefresh<IApiRes<IModelPaginateComment<IComment>>>(
             `${CONFIG_API.COMMENT.INDEX}?${query}`
+        )
+    },
+    detail: (id: string): Promise<IApiRes<IComment>> => {
+        return authFetcherWithRefresh<IApiRes<IComment>>(
+            `${CONFIG_API.COMMENT.INDEX}/${id}`
+        )
+    },
+    pageOfReply: (id: string): Promise<IApiRes<IPageOfReply>> => {
+        return authFetcherWithRefresh<IApiRes<IPageOfReply>>(
+            `${CONFIG_API.COMMENT.PAGE_OF_REPLY}/${id}`
         )
     },
     create: (payload: TSendCommentPayload): Promise<IApiRes<void>> => {

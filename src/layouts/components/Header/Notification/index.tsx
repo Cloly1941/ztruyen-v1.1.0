@@ -176,6 +176,10 @@ const Notification = () => {
                                             senderAvatar={item.meta.senderAvatar || ''}
                                             mutateList={mutateList}
                                             mutateCount={mutateCount}
+                                            comicSlug={item.meta.comicSlug}
+                                            parentId={item.commentId}
+                                            replyId={item.replyId}
+                                            chapterId={item.meta.chapterId}
                                         />
                                     </DropdownMenuItem>
                                 ))

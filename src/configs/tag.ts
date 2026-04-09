@@ -27,6 +27,7 @@ export const CONFIG_TAG = {
         CREATE: 'create-comment',
         DELETE: 'delete-comment',
         REPORT: 'report-comment',
+        DETAIL: 'comment-detail',
     },
     EMOJI: {
         LIST: 'emoji-list'

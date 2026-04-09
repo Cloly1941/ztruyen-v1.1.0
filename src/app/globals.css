@@ -229,6 +229,11 @@
     }
 
     /* End Account*/
+    /* Dialog comment */
+    .dialog-comment-content {
+        @apply xl:!w-[60vw] xl:!max-w-[52vw]
+    }
+
     /* Shadcn ui component*/
     /* form */
     .form {

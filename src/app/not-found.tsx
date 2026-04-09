@@ -22,7 +22,6 @@ export default function NotFound() {
                     src={CONFIG_IMG.NOT_FOUND}
                     fill
                     alt="404 - Ztruyện | ztruyen.io.vn"
-                    placeholder="blur"
                     className="hover:scale-105 transition-transform filter-img"
                 />
             </div>

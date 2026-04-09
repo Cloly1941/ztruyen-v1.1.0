@@ -182,7 +182,7 @@ const OverlaySettings = ({
                             <span className="text-xs">Bình luận</span>
                         </div>
                     </DialogTrigger>
-                    <DialogContent className='xl:!w-[60vw] xl:!max-w-[52vw]'>
+                    <DialogContent className='dialog-comment-content'>
                         <DialogHeader>
                             <DialogTitle className='text-sm text-setting mb-2'>
                                 Chương{' '}

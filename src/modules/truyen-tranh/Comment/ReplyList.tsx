@@ -37,6 +37,8 @@ type TReplyList = {
     detailKey?: string;
     chapterPage?: number | null
     chapterName?: string | null
+    highlightReplyId?: string;
+    onHighlightReady?: (id: string) => void;
 }
 
 const ReplyList = ({
@@ -52,7 +54,8 @@ const ReplyList = ({
                        profile,
                        mutateDeleteReply,
                        mutate,
-                       detailKey
+                       detailKey,
+                       highlightReplyId, onHighlightReady
                    }: TReplyList) => {
 
     const isInitialLoading = isValidating && replies.length === 0;
@@ -83,6 +86,8 @@ const ReplyList = ({
                         mutateDeleteReply={mutateDeleteReply}
                         mutate={mutate}
                         detailKey={detailKey}
+                        highlightReplyId={highlightReplyId}
+                        onHighlightReady={onHighlightReady}
                     />
                 ))}
             </ul>

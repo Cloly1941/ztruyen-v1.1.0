@@ -13,7 +13,6 @@ const EmptyFavorite = () => {
                     src={CONFIG_IMG.EMPTY}
                     alt="Danh sách yêu thích trống"
                     fill
-                    placeholder="blur"
                     className="filter-img"
                 />
             </div>

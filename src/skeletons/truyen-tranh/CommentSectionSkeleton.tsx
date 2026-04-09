@@ -2,6 +2,46 @@
 import {Skeleton} from "@/components/ui/skeleton";
 import {Separator} from "@/components/ui/separator";
 
+export const CommentItemSkeleton = () => {
+    return (
+        <li>
+            {/* Avatar + Username */}
+            <div className='flex items-start'>
+                <div className='mx-2'>
+                    <Skeleton className='size-[60px] rounded-full'/>
+                </div>
+                <Skeleton className='h-4 w-28 mt-4'/>
+            </div>
+
+            {/* Content block */}
+            <div className='ml-[76px]'>
+                {/* Comment content */}
+                <div className='-mt-5 space-y-2'>
+                    <Skeleton className='h-4 w-full'/>
+                    <Skeleton className='h-4 w-3/4'/>
+                </div>
+
+                {/* Meta: date + like + reply */}
+                <div className='flex gap-5 mt-2'>
+                    <Skeleton className='h-3 w-24'/>
+                    <Skeleton className='h-3 w-10'/>
+                    <Skeleton className='h-3 w-14'/>
+                </div>
+
+                {/* Reply toggle button */}
+                <Skeleton className='h-4 w-24 mt-3'/>
+
+                {/* Replies */}
+                <div className='mt-4'>
+                    <ListReplyCommentSkeleton/>
+                </div>
+
+                <Separator className='bg-[#E3E5E7] dark:bg-zinc-700 mt-6'/>
+            </div>
+        </li>
+    )
+}
+
 export const ListCommentSkeleton = () => {
     return (
         <ul className='flex flex-col gap-y-5'>

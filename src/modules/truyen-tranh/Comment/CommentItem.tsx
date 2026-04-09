@@ -41,6 +41,10 @@ type TCommentItem = {
     profile?: IUserProfile
     detailKey?: string
     type: "detail" | "reading";
+    isNotification?: boolean;
+    replyPage?: number;
+    highlightReplyId?: string;
+    onHighlightReady?: (id: string) => void;
 }
 
 const REPLY_LIMIT = 10;
@@ -49,12 +53,13 @@ const PARENT_REPLY_ID = (commentId: string) => `parent-${commentId}`;
 const CommentItem = ({
                          user, comment, comicSlug, comicName, profile,
                          mutate, activeCommentId, onSetActiveCommentId,
-                         detailKey, type
+                         detailKey, type, isNotification = false, replyPage = 1,
+                         highlightReplyId, onHighlightReady
                      }: TCommentItem) => {
-    const [showReplies, setShowReplies] = useState(false);
-    const [page, setPage] = useState(1);
+    const [showReplies, setShowReplies] = useState(isNotification);
+    const [page, setPage] = useState(replyPage);
     const hasFetchedRef = useRef(false);
-    const [fetchEnabled, setFetchEnabled] = useState(false);
+    const [fetchEnabled, setFetchEnabled] = useState(isNotification);
 
     // replyTo tương ứng với activeReplyId
     const [activeReplyTo, setActiveReplyTo] = useState<string | null>(null);
@@ -187,6 +192,8 @@ const CommentItem = ({
                     mutateDeleteReply={mutateReply}
                     mutate={mutate}
                     detailKey={detailKey}
+                    highlightReplyId={highlightReplyId}
+                    onHighlightReady={onHighlightReady}
                 />
 
                 {activeCommentId && activeCommentId.startsWith(`parent-${comment._id}`) ||
