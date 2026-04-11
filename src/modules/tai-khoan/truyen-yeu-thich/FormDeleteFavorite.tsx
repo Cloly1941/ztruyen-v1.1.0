@@ -92,7 +92,7 @@ const FormDeleteFavorite = ({listFavorite, deleteMulti, setSelected, selected}: 
                                 >
                                     <ComicImage
                                         src={`${CONFIG_API_OTRUYEN.IMAGE_COMIC}/${item.comic_cover}`}
-                                        imgSize="lg"
+                                        size='full'
                                         alt={item.comic_name}
                                         priority={i <= 0}
                                     />
@@ -102,7 +102,7 @@ const FormDeleteFavorite = ({listFavorite, deleteMulti, setSelected, selected}: 
                                 <Link href={`/${CONFIG_SLUG.DETAIL}/${item.comic_slug}`}>
                                     <ComicImage
                                         src={`${CONFIG_API_OTRUYEN.IMAGE_COMIC}/${item.comic_cover}`}
-                                        imgSize="lg"
+                                        size='full'
                                         alt={item.comic_name}
                                         priority={i <= 0}
                                     />

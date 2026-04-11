@@ -81,13 +81,12 @@ const ListComicByStatus = async ({slug, pageQuery, sortQuery}: TListComicByStatu
                                         </Tag>
                                     )}
                                 </div>
-                                <Link href={`/${CONFIG_SLUG.DETAIL}/${item.slug}`}>
+                                <Link href={`/${CONFIG_SLUG.DETAIL}/${item.slug}.html`}>
                                     <ComicImage
                                         src={`${CONFIG_API_OTRUYEN.IMAGE_COMIC}/${item.thumb_url}`}
-                                        imgSize="lg"
+                                        size='full'
                                         alt={item.name}
                                         priority={index <= 0}
-                                        className='size-full'
                                     />
                                 </Link>
                                 <Link href={`/${CONFIG_SLUG.DETAIL}/${item.slug}.html`}

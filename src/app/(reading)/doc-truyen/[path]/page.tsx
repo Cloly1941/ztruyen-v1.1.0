@@ -62,17 +62,7 @@ const ReadingComic = async ({params}: TReadingComic) => {
 
     return (
         <>
-            <Header asChild>
-                <h1 className="text-sm line-clamp-1 hidden md:block">
-                    <Link
-                        href={`/${CONFIG_SLUG.DETAIL}/${listDetailComic.slug}.html`}
-                        className="hover:text-primary"
-                    >
-                        {listDetailComic.name} {' - '}
-                    </Link>
-                    Chương {listDetailImageChapter.chapter_name}
-                </h1>
-            </Header>
+            <Header asChild/>
             <ListImageChapter
                 listImageChapter={listDetailImageChapter.chapter_image}
                 nextChapter={nextChapter}

@@ -15,7 +15,7 @@ import {cn} from '@/lib/utils';
 // ** Config
 import {CONFIG_IMAGE} from "@/configs/image";
 
-const comicImageVariants = cva('aspect-[3/4] object-cover', {
+const comicImageVariants = cva('relative aspect-[3/4] overflow-hidden', {
     variants: {
         rounded: {
             default: '',
@@ -23,8 +23,14 @@ const comicImageVariants = cva('aspect-[3/4] object-cover', {
             md: 'rounded-[8px]'
         },
         size: {
-            default: '',
-            full: 'size-full',
+            default: 'w-[135px]',
+            xs: 'w-[62px]',
+            sm: 'w-[100px]',
+            lg: 'w-[180px]',
+            xl: 'w-[192.7px]',
+            '2xl': 'w-[219px]',
+            '3xl': 'w-[522px]',
+            full: 'w-full',
         },
     },
     defaultVariants: {
@@ -33,50 +39,29 @@ const comicImageVariants = cva('aspect-[3/4] object-cover', {
     },
 });
 
-type ComicImageSize = 'xs' | 'sm' | 'default' | 'lg' | 'xl' | '2xl' | '3xl';
-
-interface ComicImageDimension {
-    width: number;
-    height: number;
-}
-
-const comicImageSizes: Record<ComicImageSize, ComicImageDimension> = {
-    xs: {width: 62, height: 83},
-    sm: {width: 100, height: 240},
-    default: {width: 135, height: 180},
-    lg: {width: 180, height: 240},
-    xl: {width: 192.7, height: 258},
-    '2xl': {width: 219, height: 288},
-    '3xl': {width: 522, height: 300},
-};
-
 export interface ComicImageProps
-    extends ImageProps,
+    extends Omit<ImageProps, 'width' | 'height' | 'fill'>,
         VariantProps<typeof comicImageVariants> {
-    imgSize?: ComicImageSize;
+    wrapperClassName?: string;
 }
 
 const ComicImage = forwardRef<HTMLImageElement, ComicImageProps>(
-    ({size, rounded, className, imgSize = 'default', src, alt, ...props}, ref) => {
-
-        const key = imgSize in comicImageSizes ? imgSize : 'default';
-        const safeSize = comicImageSizes[key as ComicImageSize];
-        const {width, height} = safeSize;
-
+    ({size, rounded, className, wrapperClassName, src, alt, ...props}, ref) => {
         return (
-            <Image
-                ref={ref}
-                src={src!}
-                alt={alt}
-                width={width}
-                height={height}
-                placeholder={CONFIG_IMAGE.BLUR_DATA_URL as 'data:image/'}
-                onError={(e) => {
-                    e.currentTarget.src = CONFIG_IMAGE.BLUR_DATA_URL
-                }}
-                className={cn(comicImageVariants({size, rounded, className}))}
-                {...props}
-            />
+            <div className={cn(comicImageVariants({size, rounded}), wrapperClassName)}>
+                <Image
+                    ref={ref}
+                    src={src!}
+                    alt={alt}
+                    fill
+                    placeholder={CONFIG_IMAGE.BLUR_DATA_URL as 'data:image/'}
+                    onError={(e) => {
+                        e.currentTarget.src = CONFIG_IMAGE.BLUR_DATA_URL
+                    }}
+                    className={cn('object-cover', className)}
+                    {...props}
+                />
+            </div>
         );
     }
 );

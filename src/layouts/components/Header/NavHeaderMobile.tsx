@@ -2,13 +2,13 @@
 
 // ** Next
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import {usePathname} from 'next/navigation';
 
 // ** Components
 import Button from "@/components/common/Button";
 
 // ** Shadcn ui
-import { SheetClose, SheetTitle } from '@/components/ui/sheet';
+import {SheetClose, SheetTitle} from '@/components/ui/sheet';
 
 // ** utils
 import removeExtension from '@/utils/removeExtension';
@@ -18,13 +18,17 @@ import {navHeader} from "@/configs/header";
 
 // ** Hooks
 import {useAuth} from "@/hooks/common/useAuth";
+import Search from "@/layouts/components/Header/Search";
+import useTailwindBreakpoints from "@/hooks/common/useTailwindBreakpoints";
 
 const NavHeaderMobile = () => {
     const path = usePathname();
 
+    const {isSm} = useTailwindBreakpoints()
+
     const pathGenre = path.startsWith('/the-loai');
 
-    const { isLogin, loading } = useAuth();
+    const {isLogin, loading} = useAuth();
 
     if (loading) return null;
 
@@ -50,7 +54,7 @@ const NavHeaderMobile = () => {
                                     ${isActive ? 'text-primary' : ''}
                                     `}
                                 >
-                                    {Icon && <Icon className="size-4" />}
+                                    {Icon && <Icon className="size-4"/>}
                                     <span>{nav.title}</span>
                                 </Link>
                             </SheetClose>
@@ -58,6 +62,13 @@ const NavHeaderMobile = () => {
                     </SheetTitle>
                 );
             })}
+            {!isSm && (
+                <SheetTitle>
+                    <li>
+                        <Search isSheet/>
+                    </li>
+                </SheetTitle>
+            )}
             {!isLogin && (
                 <Link href='/dang-nhap' className='mt-4'>
                     <Button width='full' sizeCustom='xs'>Đăng nhập ngay ~</Button>

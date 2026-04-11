@@ -129,18 +129,10 @@ const GridCarouselClient = ({data}: TGridCarouselClientProps) => {
                                                     src={`${CONFIG_API_OTRUYEN.IMAGE_COMIC}/${item.thumb_url}`}
                                                     alt={item.name}
                                                     title={item.name}
-                                                    priority={
-                                                        slideIndex <= 1 &&
-                                                        index <= 2
-                                                    }
-                                                    loading={
-                                                        slideIndex <= 1
-                                                            ? 'eager'
-                                                            : 'lazy'
-                                                    }
+                                                    priority={slideIndex <= 1 && index <= 2}
+                                                    loading={slideIndex <= 1 ? 'eager' : 'lazy'}
                                                     rounded='sm'
                                                     size='full'
-                                                    imgSize='lg'
                                                 />
                                             </Link>
                                         </div>

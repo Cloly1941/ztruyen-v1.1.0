@@ -1,4 +1,4 @@
-import {CheckCircle2, Clock, Facebook, Layers, PlayCircle, Sparkles} from "lucide-react";
+import {CheckCircle2, Clock, Facebook, Layers, PlayCircle, Search, Sparkles} from "lucide-react";
 
 export const navHeader: TLinkWithIcon[] = [
     {

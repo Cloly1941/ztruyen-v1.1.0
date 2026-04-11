@@ -222,7 +222,7 @@ const ListComicHistory = () => {
                                     <ComicImage
                                         src={`${CONFIG_API_OTRUYEN.IMAGE_COMIC}/${item.thumb}`}
                                         alt={item.title}
-                                        imgSize="lg"
+                                        size='full'
                                         priority={i <= 0}
                                     />
                                 </div>

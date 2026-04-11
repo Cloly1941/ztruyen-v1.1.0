@@ -144,7 +144,6 @@ const Carousel = ({
                                             priority={i <= 0}
                                             rounded="md"
                                             size="full"
-                                            imgSize="2xl"
                                         />
                                         <div
                                             className="absolute top-0 left-0 w-full h-full rounded-[8px] cursor-pointer"

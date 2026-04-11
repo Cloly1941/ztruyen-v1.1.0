@@ -94,7 +94,7 @@ declare global {
                     totalItems: number;
                     totalItemsPerPage: number;
                     currentPage: number;
-                    pageRange: number;
+                    pageRanges: number;
                 }
             };
             titlePage: string;

@@ -100,8 +100,9 @@ const DetailComic = async ({params}: TDetailComicProps) => {
                     src={`${CONFIG_API_OTRUYEN.IMAGE_COMIC}/${detailComic.thumb_url}`}
                     alt={detailComic.name}
                     priority={true}
-                    imgSize="xl"
+                    size='xl'
                     rounded='sm'
+                    wrapperClassName="shrink-0"
                 />
 
                 {/* Right Content */}

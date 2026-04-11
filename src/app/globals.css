@@ -357,10 +357,6 @@
 
     /* End Header*/
     /* common */
-    .section-list-comic {
-        @apply container pt-2 pb-20
-    }
-
     .filter-img {
         @apply grayscale brightness-90 dark:invert object-contain
     }
@@ -472,10 +468,20 @@
     }
 
     [data-slot="sheet-overlay"] {
-        @apply bg-black/80
+        @apply backdrop-blur-sm bg-black/20
     }
 
     /* End Sheet */
+    /* Command */
+    [data-slot="dialog-overlay"] {
+        @apply backdrop-blur-sm bg-black/20;
+    }
+
+    [data-slot="command-empty"] {
+        @apply text-[#777]
+    }
+
+    /* End command */
     /*  Loading  */
     .text-loading {
         @apply flex items-center gap-3 text-2xl text-zinc-700 dark:text-zinc-300;

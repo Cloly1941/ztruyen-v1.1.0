@@ -121,7 +121,7 @@ const CommentItem = ({
                 <AvatarWithName
                     size={60}
                     mobileSize={45}
-                    name={user.name}
+                    name={user?.name}
                     avatarUrl={user.avatar?.url}
                     frameName={user.avatar_frame?.name}
                     frameUrl={user.avatar_frame?.image?.url}

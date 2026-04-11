@@ -122,7 +122,6 @@ const InteractiveThumbnail = ({ listRecommendedComic }: { listRecommendedComic: 
                                 alt={item.name}
                                 title={item.name}
                                 size="full"
-                                imgSize="xs"
                             />
                         </div>
                     ))}
@@ -137,7 +136,6 @@ const InteractiveThumbnail = ({ listRecommendedComic }: { listRecommendedComic: 
                         alt={selectedComic.name}
                         title={selectedComic.name}
                         size="full"
-                        imgSize="3xl"
                     />
                     <Button
                         shape="pill"

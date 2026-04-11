@@ -205,17 +205,15 @@ const OverlaySettings = ({
                 </Dialog>
 
                 {/* Detail comic btn*/}
-                {!isMd && (
-                    <Link
-                        href={`/${CONFIG_SLUG.DETAIL}/${slugComic}.html`}
-                        className="flex flex-col items-center gap-1 p-2 cursor-pointer text-setting"
-                    >
-                        <BookOpenText className="size-5"/>
-                        <span className="text-white text-xs">
+                <Link
+                    href={`/${CONFIG_SLUG.DETAIL}/${slugComic}.html`}
+                    className="flex flex-col items-center gap-1 p-2 cursor-pointer text-setting"
+                >
+                    <BookOpenText className="size-5"/>
+                    <span className="text-white text-xs">
                             Chi tiết truyện
                         </span>
-                    </Link>
-                )}
+                </Link>
 
                 {/* Menu */}
                 <DropdownMenu
@@ -343,18 +341,18 @@ const OverlaySettings = ({
                 {/* Zoom in/out */}
                 <div className="absolute bottom-0 -left-[140px] hidden lg:block">
                     <div className="bg-setting rounded-[40px] flex w-[120px] items-center justify-between">
+                       <span
+                           className="p-3 cursor-pointer"
+                           onClick={handlePlusChange}
+                       >
+                            <Plus className="size-4"/>
+                        </span>
+                        <span className="text-[13px] text-setting">{`${imgWidth}%`}</span>
                         <span
                             className="p-3 cursor-pointer"
                             onClick={handleMinusChange}
                         >
                             <Minus className="size-4"/>
-                        </span>
-                        <span className="text-[13px] text-setting">{`${imgWidth}%`}</span>
-                        <span
-                            className="p-3 cursor-pointer"
-                            onClick={handlePlusChange}
-                        >
-                            <Plus className="size-4"/>
                         </span>
                     </div>
                 </div>

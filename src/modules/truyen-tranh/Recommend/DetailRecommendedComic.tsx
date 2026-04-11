@@ -44,17 +44,14 @@ const DetailRecommendedComic = async () => {
                 {listRecommendedComic.map((item: IOtruyenListComic, index: number) => {
                     return (
                         <figure className="flex mt-4 gap-3" key={index}>
-                            <div className="lg:w-[35%]">
+                            <div className="w-[80px] sm:w-[100px] lg:w-[35%] shrink-0">
                                 {/* Thumbnail */}
-                                <Link
-                                    href={`/${CONFIG_SLUG.DETAIL}/${item.slug}.html`}
-                                    key={index}
-                                >
+                                <Link href={`/${CONFIG_SLUG.DETAIL}/${item.slug}.html`} key={index}>
                                     <ComicImage
                                         src={`${CONFIG_API_OTRUYEN.IMAGE_COMIC}/${item.thumb_url}`}
                                         alt={item.name}
                                         priority={index <= 0}
-                                        imgSize="sm"
+                                        size='full'
                                     />
                                 </Link>
                             </div>

@@ -7,7 +7,6 @@ import Button from '@/components/common/Button';
 import Logo from '@/components/common/Logo';
 
 // ** Layout Components
-import Search from '@/layouts/components/Header/Search';
 import NavHeader from '@/layouts/components/Header/NavHeader';
 import NavHeaderMobile from '@/layouts/components/Header/NavHeaderMobile';
 import ReadingHistoryBtn from "@/layouts/components/Header/ReadingHistoryBtn";
@@ -27,12 +26,10 @@ import {Menu} from 'lucide-react';
 // ** Layout components
 import ClientAuth from "@/layouts/components/Header/ClientAuth";
 import Notification from "@/layouts/components/Header/Notification";
+import SearchWrapper from "@/layouts/components/Header/Search/SearchWrapper";
 
 
-const Header = async ({
-                          asChild = false,
-                          children,
-                      }: {
+const Header = async ({asChild = false}: {
     asChild?: boolean;
     children?: ReactNode;
 }) => {
@@ -46,9 +43,8 @@ const Header = async ({
                     <Logo/>
                     {!asChild && <NavHeader/>}
                 </div>
-                {children}
                 <div className="flex items-center gap-2">
-                    {!asChild && <Search/>}
+                    <SearchWrapper/>
                     <ReadingHistoryBtn/>
                     <div className="hidden xl:block">
                         <ModeToggle/>
