@@ -41,9 +41,6 @@ import {VisuallyHidden} from "@radix-ui/react-visually-hidden";
 // ** React
 import {useState} from "react";
 
-// ** Type
-import {IComment} from "@/types/api";
-
 type TNotificationItem = {
     id: string;
     senderName: string;
@@ -90,15 +87,8 @@ const NotificationItem = ({
 
     const handleOpen = async () => {
         setCommentError(false)
-        try {
-            await CommentService.detail(parentId)
-            if (!isRead) await readTrigger()
-            setOpen(true)
-        } catch {
-            setCommentError(true)
-            setOpen(true)
-            if (!isRead) await readTrigger()
-        }
+        if (!isRead) await readTrigger()
+        setOpen(true)
     }
 
     return (
@@ -150,21 +140,14 @@ const NotificationItem = ({
                 <VisuallyHidden>
                     <DialogTitle>{comicName}</DialogTitle>
                 </VisuallyHidden>
-                {commentError ? (
-                    <div className="flex flex-col items-center justify-center h-[50vh] gap-3 text-center px-4">
-                        <p className="text-muted-foreground text-sm">
-                            Bình luận này đã bị xóa hoặc không còn tồn tại (ฅ^ω^ฅ)
-                        </p>
-                    </div>
-                ) : (
                     <DialogNotificationContent
                         comicName={comicName}
                         comicSlug={comicSlug}
                         parentId={parentId}
                         replyId={replyId}
                         type={chapterId ? 'reading' : 'detail'}
+                        onClose={() => setOpen(false)}
                     />
-                )}
             </DialogContent>
         </Dialog>
     )

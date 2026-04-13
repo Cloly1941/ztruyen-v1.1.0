@@ -45,6 +45,7 @@ type TCommentItem = {
     replyPage?: number;
     highlightReplyId?: string;
     onHighlightReady?: (id: string) => void;
+    onDelete?: () => void;
 }
 
 const REPLY_LIMIT = 10;
@@ -54,7 +55,7 @@ const CommentItem = ({
                          user, comment, comicSlug, comicName, profile,
                          mutate, activeCommentId, onSetActiveCommentId,
                          detailKey, type, isNotification = false, replyPage = 1,
-                         highlightReplyId, onHighlightReady
+                         highlightReplyId, onHighlightReady, onDelete
                      }: TCommentItem) => {
     const [showReplies, setShowReplies] = useState(isNotification);
     const [page, setPage] = useState(replyPage);
@@ -160,6 +161,7 @@ const CommentItem = ({
                                 commentId={comment._id}
                                 mutate={mutate}
                                 profile={profile}
+                                onDelete={onDelete}
                             />
                         </div>
                     </div>

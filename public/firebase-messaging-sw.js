@@ -15,9 +15,20 @@ firebase.initializeApp({
 const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage((payload) => {
-    const title = payload.notification?.title ?? 'Thông báo mới';
-    const body = payload.notification?.body ?? '';
     const data = payload.data ?? {};
+    const senderName = data.senderName ?? 'nguời dùng';
+    const comicName = data.comicName ?? 'một truyện nào đó';
+
+    let title = 'Thông báo mới';
+    if (data.type === 'REPLY_COMMENT') {
+        title = `Người dùng ${senderName} đã phản hồi bình luận của bạn tại truyện ${comicName}`;
+    } else if (data.type === 'LIKE_COMMENT') {
+        title = `Người dùng ${senderName} đã thích bình luận của bạn tại truyện ${comicName}`;
+    } else {
+        title = data.title ?? 'Thông báo mới';
+    }
+
+    const body = data.body ?? '';
 
     self.registration.showNotification(title, {
         body,
@@ -43,7 +54,6 @@ self.addEventListener('notificationclick', (event) => {
     const data = event.notification.data ?? {};
     const url = buildUrl(data);
 
-    // Gửi signal revalidate cho tất cả tab
     const channel = new BroadcastChannel('notification-click');
     channel.postMessage({type: 'REVALIDATE', url});
     channel.close();
@@ -55,11 +65,11 @@ self.addEventListener('notificationclick', (event) => {
                 for (const client of clientList) {
                     if ('focus' in client) {
                         return client.focus().then(() => {
-                            if ('navigate' in client) return client.navigate(url)
-                        })
+                            if ('navigate' in client) return client.navigate(url);
+                        });
                     }
                 }
-                return clients.openWindow(url)
+                return clients.openWindow(url);
             })
     );
 });

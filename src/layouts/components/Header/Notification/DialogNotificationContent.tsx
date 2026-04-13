@@ -29,19 +29,17 @@ import {UserService} from "@/services/api/user";
 import CommentItem from "@/modules/truyen-tranh/Comment/CommentItem";
 import {CommentItemSkeleton} from "@/skeletons/truyen-tranh/CommentSectionSkeleton";
 
-// ** Skeleton
-
-
 type TDialogNotificationContent = {
     replyId?: string;
     parentId: string;
     comicName: string;
     comicSlug: string;
     type: "detail" | "reading";
+    onClose?: () => void;
 }
 
 const DialogNotificationContent = ({
-                                       comicName, comicSlug, parentId, replyId, type
+                                       comicName, comicSlug, parentId, replyId, type, onClose
                                    }: TDialogNotificationContent) => {
 
     const [activeCommentId, setActiveCommentId] = useState<string | null>(null);
@@ -54,7 +52,7 @@ const DialogNotificationContent = ({
         revalidateIfStale: false,
     })
 
-    const {data: comment, mutate, isLoading: isCommentLoading} = useGetMethod<IComment>({
+    const {data: comment, mutate, isLoading: isCommentLoading, error} = useGetMethod<IComment>({
         api: () => CommentService.detail(parentId),
         key: `${CONFIG_TAG.COMMENT.DETAIL}-${parentId}`,
         revalidateIfStale: false,
@@ -106,8 +104,15 @@ const DialogNotificationContent = ({
         </>
     );
 
-    if (!comment) return null;
-    if (replyId && !pageOfReply) return null;
+    if (!isLoading && (error || !comment)) return (
+        <div className="flex flex-col items-center justify-center h-[50vh] gap-3 text-center px-4">
+            <p className="text-muted-foreground text-sm">
+                Bình luận này đã bị xóa hoặc không còn tồn tại (ฅ^ω^ฅ)
+            </p>
+        </div>
+    )
+
+    if (!comment) return null
 
     return (
         <>
@@ -137,6 +142,7 @@ const DialogNotificationContent = ({
                     replyPage={pageOfReply?.page ?? 1}
                     highlightReplyId={replyId}
                     onHighlightReady={replyId ? handleHighlightReady : undefined}
+                    onDelete={onClose}
                 />
             </div>
         </>

@@ -27,9 +27,10 @@ type TFormDeleteComment = {
     id: string;
     mutate: () => Promise<unknown>;
     mutateReply?: () => Promise<unknown>;
+    onDelete?: () => void;
 }
 
-const FormDeleteComment = ({id, mutate, mutateReply} :TFormDeleteComment) => {
+const FormDeleteComment = ({id, mutate, mutateReply, onDelete} :TFormDeleteComment) => {
 
     const {trigger, isMutating} = useMutateMethod<void, string>({
         api: (id) => CommentService.delete(id),
@@ -39,6 +40,7 @@ const FormDeleteComment = ({id, mutate, mutateReply} :TFormDeleteComment) => {
             if (mutateReply) {
                 await mutateReply()
             }
+            if (onDelete) onDelete()
             toast.success(data.message)
         }
     })

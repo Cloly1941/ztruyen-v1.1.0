@@ -13,9 +13,10 @@ type TCommentAction = {
     mutate: () => Promise<unknown>;
     mutateReply?: () => Promise<unknown>;
     profile?: IUserProfile
+    onDelete?: () => void;
 }
 
-const CommentAction = ({isOwner, commentId, mutate, mutateReply, profile}: TCommentAction) => {
+const CommentAction = ({isOwner, commentId, mutate, mutateReply, profile, onDelete}: TCommentAction) => {
 
     if (!profile?._id) return null;
 
@@ -23,7 +24,7 @@ const CommentAction = ({isOwner, commentId, mutate, mutateReply, profile}: TComm
         <div className='ml-auto visible lg:invisible lg:group-hover/header:visible'>
             <div className='md:mr-5'>
                 {isOwner ? (
-                    <FormDeleteComment id={commentId} mutate={mutate} mutateReply={mutateReply}/>
+                    <FormDeleteComment id={commentId} mutate={mutate} mutateReply={mutateReply} onDelete={onDelete}/>
                 ) : (
                     <FormReportComment commentId={commentId}/>
                 )}
