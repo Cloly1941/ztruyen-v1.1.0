@@ -1,3 +1,5 @@
+import {TStatus} from "@/types/api.otruyen";
+
 type TGender = 'male' | 'female' | 'lgbt';
 
 type TRole = 'admin' | 'author' | 'user';
@@ -9,6 +11,8 @@ type TType = 'text' | 'image'
 export type NotificationType = 'REPLY_COMMENT' | 'LIKE_COMMENT';
 
 export type AnnouncementType = 'info' | 'warning' | 'maintenance' | 'event';
+
+export type TCountry = 'trung' | 'han' | 'nhat';
 
 // Common
 interface IImage {
@@ -195,4 +199,20 @@ export interface IAnnouncement {
     isActive: boolean;
     createdAt: string;
     updatedAt: string;
+}
+
+// Comic
+export interface IComic {
+    _id: string;
+    name: string;
+    slug: string;
+    thumb_url: string;
+    authors: string[];
+    status: string;
+    genres: string[];
+    latest_chapter: string;
+    chapter_api_data: string;
+    updatedAt: string;
+    country: TCountry;
+    rank: number;
 }

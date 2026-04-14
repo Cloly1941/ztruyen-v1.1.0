@@ -46,6 +46,9 @@ export const CONFIG_TAG = {
     ANNOUNCEMENT: {
         ACTIVE: 'active-announcement',
     },
+    COMIC: {
+        LIST: 'comment-list',
+    },
     IMAGE: {
         UPLOAD: 'upload-image',
     }

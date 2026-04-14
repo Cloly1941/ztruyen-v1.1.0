@@ -9,6 +9,7 @@ const emojiUrl = baseUrl + '/emoji';
 const emojiCategoriesUrl = baseUrl + '/emoji-category';
 const notificationUrl = baseUrl + '/notification';
 const announcementUrl = baseUrl + '/announcement';
+const comicUrl = baseUrl + '/comic';
 
 export const CONFIG_API = {
     AUTH: {
@@ -61,6 +62,9 @@ export const CONFIG_API = {
     ANNOUNCEMENT: {
         INDEX: announcementUrl,
         ACTIVE: `${announcementUrl}/active`,
+    },
+    COMIC: {
+        INDEX: comicUrl,
     },
     IMAGE: {
         INDEX: `${baseUrl}/image`,

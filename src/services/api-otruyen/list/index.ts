@@ -16,12 +16,26 @@ import {IOtruyenListComic} from "@/types/api.otruyen";
 // ** Enums
 import {ESlug, ESortField, ESortType} from "@/types/enum";
 
-export const getListByStatus = unstable_cache(
-    async (slug: ESlug, pageQuery: number = 1, sortField: ESortField = ESortField.UPDATED_AT, sortType: ESortType = ESortType.DESC) => {
-        return fetcher<IApiOtruyenResWPagination<IOtruyenListComic[]>>(`${CONFIG_API_OTRUYEN.LIST}/${slug}?page=${pageQuery}&sort_field=${sortField}&sort_type=${sortType}`);
-    },
-    [CONFIG_TAG_OTRUYEN.STATUS],
-    {
-        revalidate: 30,
-    }
-)
+export const getListByStatus = (
+    slug: ESlug,
+    pageQuery: number = 1,
+    sortField: ESortField = ESortField.UPDATED_AT,
+    sortType: ESortType = ESortType.DESC
+) =>
+    unstable_cache(
+        async () => {
+            return fetcher<IApiOtruyenResWPagination<IOtruyenListComic[]>>(
+                `${CONFIG_API_OTRUYEN.LIST}/${slug}?page=${pageQuery}&sort_field=${sortField}&sort_type=${sortType}`
+            );
+        },
+        [
+            CONFIG_TAG_OTRUYEN.STATUS,
+            slug,
+            String(pageQuery),
+            sortField,
+            sortType,
+        ],
+        {
+            revalidate: CACHE_TIME.MINUTE,
+        }
+    )();
