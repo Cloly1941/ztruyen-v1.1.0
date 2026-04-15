@@ -28,7 +28,7 @@ export const navHeader: TLinkWithIcon[] = [
     },
     {
         title: 'Top tuần',
-        href: '/top-tuan/trung',
+        href: '/top-tuan/trung.html',
         icon: Flame
     }
 ];

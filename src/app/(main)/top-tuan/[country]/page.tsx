@@ -20,6 +20,7 @@ import {cn} from "@/lib/utils";
 
 // ** Config
 import {CONFIG_SLUG} from "@/configs/slug";
+import removeExtension from "@/utils/removeExtension";
 
 type TRankingPage = {
     params: Promise<{ country: string }>
@@ -41,12 +42,14 @@ const RankingPage = async ({params}: TRankingPage) => {
 
     const {country} = await params
 
+    const countryComic = removeExtension(country, '.html')
+
     const queryParams: TQueryParams = {
         page: 1,
         limit: 50,
         sort: 'rank',
         filters: {
-            country: [country]
+            country: [countryComic]
         },
     }
 
@@ -56,8 +59,8 @@ const RankingPage = async ({params}: TRankingPage) => {
 
     if (!listTopComic) return <ErrorText/>
 
-    const countryLabel = getCountryLabel(country)
-    const desc = COUNTRY_DESC[country] ?? `Top truyện ${countryLabel} được đọc nhiều nhất tuần qua.`
+    const countryLabel = getCountryLabel(countryComic)
+    const desc = COUNTRY_DESC[countryComic] ?? `Top truyện ${countryLabel} được đọc nhiều nhất tuần qua.`
 
     return (
         <section className='pb-20'>
@@ -75,12 +78,12 @@ const RankingPage = async ({params}: TRankingPage) => {
 
                 <ul className="flex flex-wrap text-sm">
                     {COUNTRY_TABS.map((tab) => {
-                        const isActive = country === tab.value
+                        const isActive = countryComic === tab.value
 
                         return (
                             <li key={tab.value}>
                                 <Link
-                                    href={`/${CONFIG_SLUG.TOP_WEEK}/${tab.value}`}
+                                    href={`/${CONFIG_SLUG.TOP_WEEK}/${tab.value}.html`}
                                     className={cn(
                                         "cursor-pointer px-[10px] py-1 transition active:text-primary block",
                                         isActive && "text-primary"

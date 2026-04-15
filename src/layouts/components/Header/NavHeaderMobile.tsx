@@ -25,26 +25,29 @@ const NavHeaderMobile = () => {
     const path = usePathname();
 
     const {isSm} = useTailwindBreakpoints()
+    const {isLogin, loading} = useAuth();
 
     const pathGenre = path.startsWith('/the-loai');
-
-    const {isLogin, loading} = useAuth();
+    const pathTopTuan = path.startsWith('/top-tuan');
 
     if (loading) return null;
 
     return (
         <>
             {navHeader.map((nav) => {
-                const isActive =
-                    pathGenre && nav.title === 'Thể loại'
-                        ? true
-                        : removeExtension(path, '.html') ===
-                        removeExtension(nav.href, '.html');
+                const isGenre = pathGenre && nav.title === 'Thể loại';
+                const isTop = pathTopTuan && nav.title === 'Top tuần';
+
+                const isSamePath =
+                    removeExtension(path, '.html') ===
+                    removeExtension(nav.href, '.html');
+
+                const isActive = isGenre || isTop || isSamePath;
 
                 const Icon = nav.icon;
 
                 return (
-                    <SheetTitle asChild={true} key={nav.href}>
+                    <SheetTitle asChild key={nav.href}>
                         <li className="rounded-md">
                             <SheetClose asChild>
                                 <Link
@@ -61,6 +64,7 @@ const NavHeaderMobile = () => {
                     </SheetTitle>
                 );
             })}
+
             {!isSm && (
                 <SheetTitle>
                     <li>
@@ -68,9 +72,12 @@ const NavHeaderMobile = () => {
                     </li>
                 </SheetTitle>
             )}
+
             {!isLogin && (
                 <Link href='/dang-nhap' className='mt-4'>
-                    <Button width='full' sizeCustom='xs'>Đăng nhập ngay ~</Button>
+                    <Button width='full' sizeCustom='xs'>
+                        Đăng nhập ngay ~
+                    </Button>
                 </Link>
             )}
         </>

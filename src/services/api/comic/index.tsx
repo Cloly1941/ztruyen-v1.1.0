@@ -7,6 +7,7 @@ import {unstable_cache} from "next/cache";
 import {fetcher} from "@/lib/fetcher";
 
 // ** Config
+import {CONFIG_API} from "@/configs/api";
 import {CONFIG_TAG} from "@/configs/tag";
 import {CACHE_TIME} from "@/configs/cache-time";
 
@@ -15,7 +16,6 @@ import {buildQueryString, TQueryParams} from "@/utils/buildQueryString";
 
 // ** Type
 import {IComic} from "@/types/api";
-import {VARIABLE} from "@/configs/variable";
 
 export async function getTopComic(params: TQueryParams) {
     const query = buildQueryString(params);
@@ -23,7 +23,7 @@ export async function getTopComic(params: TQueryParams) {
     return unstable_cache(
         async () => {
             return fetcher<IApiRes<IModelPaginate<IComic>>>(
-                `${VARIABLE.BASE_URL_FE}/api/comics?${query}`
+                `${CONFIG_API.COMIC.INDEX}?${query}`
             );
         },
         [

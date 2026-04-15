@@ -14,15 +14,20 @@ const NavHeader = () => {
     const path = usePathname();
 
     const pathGenre = path.startsWith('/the-loai');
+    const pathTopTuan = path.startsWith('/top-tuan');
 
     return (
         <ul className="hidden xl:flex items-center gap-[25px]">
             {navHeader.map((nav) => {
 
-                const isGenre = pathGenre && nav.title === 'Thể loại'
-                const isSamePath = removeExtension(path, '.html') === removeExtension(nav.href, '.html');
+                const isGenre = pathGenre && nav.title === 'Thể loại';
+                const isTop = pathTopTuan && nav.title === 'Top tuần';
 
-                const isActive = isGenre ? true : isSamePath;
+                const isSamePath =
+                    removeExtension(path, '.html') ===
+                    removeExtension(nav.href, '.html');
+
+                const isActive = isGenre || isTop || isSamePath;
 
                 return (
                     <li key={nav.href}>
@@ -39,4 +44,4 @@ const NavHeader = () => {
     );
 };
 
-export default NavHeader;
+export default NavHeader
