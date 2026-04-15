@@ -23,7 +23,7 @@ export async function getTopComic(params: TQueryParams) {
     return unstable_cache(
         async () => {
             return fetcher<IApiRes<IModelPaginate<IComic>>>(
-                `${CONFIG_API.COMIC}?${query}`
+                `${CONFIG_API.COMIC.INDEX}?${query}`
             );
         },
         [

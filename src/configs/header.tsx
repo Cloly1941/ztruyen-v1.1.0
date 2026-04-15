@@ -1,4 +1,4 @@
-import {CheckCircle2, Clock, Facebook, Layers, PlayCircle, Search, Sparkles} from "lucide-react";
+import {CheckCircle2, Clock, Flame, Layers, PlayCircle, Sparkles} from "lucide-react";
 
 export const navHeader: TLinkWithIcon[] = [
     {
@@ -27,8 +27,8 @@ export const navHeader: TLinkWithIcon[] = [
         icon: Sparkles,
     },
     {
-        title: 'Fanpage',
-        href: 'https://www.facebook.com/profile.php?id=61582484157563',
-        icon: Facebook,
-    },
+        title: 'Top tuần',
+        href: '/top-tuan/trung',
+        icon: Flame
+    }
 ];

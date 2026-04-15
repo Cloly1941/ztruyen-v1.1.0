@@ -20,7 +20,6 @@ const NavHeader = () => {
             {navHeader.map((nav) => {
 
                 const isGenre = pathGenre && nav.title === 'Thể loại'
-                const isFanpage = nav.title === 'Fanpage'
                 const isSamePath = removeExtension(path, '.html') === removeExtension(nav.href, '.html');
 
                 const isActive = isGenre ? true : isSamePath;
@@ -29,7 +28,6 @@ const NavHeader = () => {
                     <li key={nav.href}>
                         <Link
                             href={nav.href}
-                            target={isFanpage ? '_blank' : undefined}
                             className={`hover:text-primary ${isActive ? 'text-primary' : ''}`}
                         >
                             {nav.title}

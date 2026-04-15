@@ -3,5 +3,6 @@ export const CONFIG_SLUG = {
     GENRE: 'the-loai',
     DETAIL: 'truyen-tranh',
     READING: 'doc-truyen',
-    LIST: 'danh-sach'
+    LIST: 'danh-sach',
+    TOP_WEEK: 'top-tuan',
 } as const

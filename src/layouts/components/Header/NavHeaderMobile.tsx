@@ -49,7 +49,6 @@ const NavHeaderMobile = () => {
                             <SheetClose asChild>
                                 <Link
                                     href={nav.href}
-                                    target={nav.title === 'Fanpage' ? '_blank' : undefined}
                                     className={`hover:text-primary py-2 pl-3 flex items-center gap-2
                                     ${isActive ? 'text-primary' : ''}
                                     `}

@@ -1,4 +1,6 @@
-const baseUrlImg = `${process.env.NEXT_PUBLIC_IMG_URL}/public`
+const baseUrl = process.env.NEXT_PUBLIC_IMG_URL
+const baseUrlImg = `${baseUrl}/public`;
+const topNumberUrl = `${baseUrl}/top-number`;
 const faviconUrl = `${baseUrlImg}/favicon`;
 const iconUrl = `${baseUrlImg}/icons`;
 
@@ -14,4 +16,5 @@ export const CONFIG_IMG = {
     LOGO: `${baseUrlImg}/logo.png`,
     NOT_FOUND: `${baseUrlImg}/notfound.webp`,
     PAGE: `${baseUrlImg}/page.png`,
+    TOP_NUMBER: topNumberUrl
 } as const;

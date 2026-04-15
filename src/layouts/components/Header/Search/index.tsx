@@ -19,8 +19,8 @@ import {
     InputGroupInput,
 } from "@/components/ui/input-group"
 
-// ** Layout component
-import SearchComicItem from "@/layouts/components/Header/Search/SearchComicItem";
+// ** Component
+import ComicItemHorizontal from "@/components/common/ComicItemHorizontal";
 
 // ** Lucide Icon
 import {SearchIcon} from 'lucide-react';
@@ -119,7 +119,15 @@ const Search = ({isSheet = false}: TSearch) => {
                                         key={`${item.slug}-${index}`}
                                         className='border mb-2'
                                     >
-                                        <SearchComicItem data={item}/>
+                                        <ComicItemHorizontal
+                                            slug={item.slug}
+                                            name={item.name}
+                                            chapterApiData={item?.chaptersLatest?.[0]?.chapter_api_data}
+                                            chapterName={item?.chaptersLatest?.[0]?.chapter_name}
+                                            status={item.status}
+                                            author={item.author}
+                                            thumbUrl={item.thumb_url}
+                                        />
                                     </CommandItem>
                                 ))}
                             </CommandGroup>
