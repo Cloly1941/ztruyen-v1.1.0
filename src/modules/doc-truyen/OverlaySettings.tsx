@@ -37,6 +37,7 @@ import getIdFromUrl from "@/utils/getIdFromUrl";
 import CommentSection from "@/modules/truyen-tranh/Comment/CommentSection";
 import Settings from "@/modules/doc-truyen/Settings";
 import {TBannerMode} from "@/hooks/common/useBannerMode";
+import {usePathname, useSearchParams} from "next/navigation";
 
 type TOverlaySettings = {
     imgWidth?: number
@@ -70,9 +71,14 @@ const OverlaySettings = ({
 
     // State
     const [isFullScreen, setIsFullScreen] = useState(false);
+    const [open, setOpen] = useState(false);
 
     // ** Ref
     const listRef = useRef<HTMLUListElement | null>(null);
+
+    const pathname = usePathname();
+    const searchParams = useSearchParams();
+
 
     const currentChapter = chapters.find((ch) =>
         getIdFromUrl(
@@ -80,6 +86,11 @@ const OverlaySettings = ({
             '/'
         ) === currentChapterId
     )
+
+    // close when change path
+    useEffect(() => {
+        setOpen(false);
+    }, [pathname, searchParams]);
 
     // Dropdown menu
     const scrollToActive = () => {
@@ -182,7 +193,7 @@ const OverlaySettings = ({
             <div
                 className="bg-setting rounded-[40px] text-white/90 flex items-center justify-center px-5 max-w-max pt-1 gap-1.5">
                 {/* Comment */}
-                <Dialog>
+                <Dialog open={open} onOpenChange={setOpen}>
                     <DialogTrigger asChild>
                         <div className="flex flex-col items-center gap-1 p-2 cursor-pointer">
                             <MessageSquare className="size-5 text-setting"/>

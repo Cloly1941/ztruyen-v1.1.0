@@ -29,7 +29,7 @@ export function ListenOAuthMessage() {
                     revalidate: true,
                 })
 
-                window.location.href = '/'
+                window.history.back();
 
                 setTimeout(() => {
                     askEnableNotification()

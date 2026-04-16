@@ -74,7 +74,7 @@ const FormLogin = () => {
             })
             window.dispatchEvent(new Event(AUTH_CHANGE_EVENT))
 
-            router.push("/")
+            router.back()
 
             setTimeout(() => {
                 askEnableNotification()

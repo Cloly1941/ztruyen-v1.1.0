@@ -1,7 +1,10 @@
 'use client';
 
+// ** Next
+import {usePathname} from "next/navigation";
+
 // ** React
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 
 // ** Shadcn ui
 import {
@@ -50,6 +53,12 @@ const Search = ({isSheet = false}: TSearch) => {
     const [keyword, setKeyword] = useState('');
     const debouncedKeyword = useDebounce(keyword, 500);
 
+    const pathname = usePathname();
+
+    useEffect(() => {
+        setOpen(false);
+    }, [pathname]);
+
     const {data, isLoading, totalItems, loadMore, isValidating} = useInfiniteLoadOtruyen<IOtruyenSearchComic>({
         key: `search-${debouncedKeyword}`,
         api: (page) => getListBySearch(debouncedKeyword, page),
@@ -59,7 +68,7 @@ const Search = ({isSheet = false}: TSearch) => {
     const {sentinelRef} = useSentinel({onIntersect: loadMore});
 
     return (
-        <div className="flex flex-col gap-4" onClick={(e) => isSheet && e.stopPropagation()}>
+        <div className="flex flex-col gap-4">
             {isSheet ? (
                 <div onClick={() => setOpen(true)} className='hover:text-primary py-2 pl-3 flex items-center gap-2'>
                     <SearchIcon className='size-4'/>
