@@ -138,26 +138,18 @@ const DetailComic = async ({params}: TDetailComicProps) => {
                     <DetailDesc desc={detailComic.content}/>
 
                     {/* Buttons */}
-                    {detailComic.chapters[0] ? (
-                        <div className='flex gap-3 mt-4 w-full'>
-                            <ReadingBtn slug={slugComic}
-                                        chapter={detailComic.chapters[0].server_data?.[0] as TOtruyenChapter}/>
-                            <FavoriteBtn
-                                slug={slugComic}
-                                comicName={detailComic.name}
-                                comicCover={detailComic.thumb_url}
-                            />
-                        </div>
-                    ) : (
-                        <div className='absolute top-5 right-5'>
-                            <FavoriteBtn
-                                slug={slugComic}
-                                comicName={detailComic.name}
-                                comicCover={detailComic.thumb_url}
-                                isBorder={false}
-                            />
-                        </div>
-                    )}
+                    <div className='mt-4 w-full'>
+                        <ReadingBtn slug={slugComic}
+                                    chapter={detailComic.chapters[0].server_data?.[0] as TOtruyenChapter}/>
+                    </div>
+                    <div className='absolute top-2 right-2 sm:top-5 sm:right-5'>
+                        <FavoriteBtn
+                            slug={slugComic}
+                            comicName={detailComic.name}
+                            comicCover={detailComic.thumb_url}
+                            isBorder={false}
+                        />
+                    </div>
                 </div>
             </section>
 

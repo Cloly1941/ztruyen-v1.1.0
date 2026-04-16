@@ -79,6 +79,8 @@ export interface IHistory {
     chapter_name: string
     image_name: number
     path: string
+    maxReadChapterName?: string
+    maxReadPath?: string
 }
 
 // Favorite

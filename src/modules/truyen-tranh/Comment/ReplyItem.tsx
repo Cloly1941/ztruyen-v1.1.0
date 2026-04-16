@@ -28,6 +28,7 @@ type TReplyItem = {
     chapterName?: string | null
     highlightReplyId?: string;
     onHighlightReady?: (id: string) => void;
+    comicSlug: string
 }
 
 const ReplyItem = ({
@@ -38,7 +39,8 @@ const ReplyItem = ({
                        profile,
                        mutateDeleteReply,
                        mutate, detailKey,
-                       highlightReplyId, onHighlightReady
+                       highlightReplyId, onHighlightReady,
+                       comicSlug
                    }: TReplyItem) => {
 
     const isOwner = profile?._id === reply.userId._id
@@ -57,6 +59,8 @@ const ReplyItem = ({
                 avatarUrl={reply.userId.avatar?.url}
                 frameName={reply.userId.avatar_frame?.name}
                 frameUrl={reply.userId.avatar_frame?.image?.url}
+                chapterId={reply.chapterId}
+                slug={comicSlug}
             />
             <div className='ml-[43px] sm:ml-[46px]'>
                 <div className='-mt-3 dark:text-gray-200 text-[13px] sm:text-[15px] break-words flex' id={reply._id}>

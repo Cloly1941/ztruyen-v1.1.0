@@ -24,7 +24,7 @@ import {CONFIG_SLUG} from "@/configs/slug";
 // ** Hook
 import useMounted from "@/hooks/common/useMounted";
 
-// ** SKeleton
+// ** Skeleton
 import ReadingBtnSkeleton from "@/skeletons/truyen-tranh/ReadingBtnSkeleton";
 
 type TReadingBtnProps = {
@@ -36,14 +36,14 @@ const ReadingBtn = ({chapter, slug}: TReadingBtnProps) => {
 
     const mounted = useMounted();
 
-    const isComicHistory = historyService.getBySlug(slug);
-    const hrefFirstChapter = buildReadingUrl(slug, chapter.chapter_name, chapter.chapter_api_data)
+    const history = historyService.getBySlug(slug);
+    const hrefFirstChapter = buildReadingUrl(slug, chapter.chapter_name, chapter.chapter_api_data);
 
     if (!mounted) return <ReadingBtnSkeleton/>;
 
-    if (!isComicHistory)
+    if (!history)
         return (
-            <Link href={hrefFirstChapter} className=' w-full'>
+            <Link href={hrefFirstChapter} className='w-full'>
                 <Button sizeCustom='xs' width='full'>
                     <BookOpen/>
                     Đọc từ đầu
@@ -52,11 +52,24 @@ const ReadingBtn = ({chapter, slug}: TReadingBtnProps) => {
         );
 
     return (
-        <Link href={`/${CONFIG_SLUG.READING}/${isComicHistory.path}`} className=' w-full'>
-            <Button sizeCustom='xs' width='full'>
-                Đọc tiếp chương {isComicHistory.chapter_name} {' '} <span className='hidden sm:inline-block'>thôi nào ~~ (=^･ｪ･^=)</span>
-            </Button>
-        </Link>
+        <div className='flex flex-col gap-2 w-full'>
+            {/* Current chapter */}
+            <Link href={`/${CONFIG_SLUG.READING}/${history.path}`} className='w-full'>
+                <Button sizeCustom='xs' width='full'>
+                    Đọc tiếp chương {history.chapter_name}
+                    <span className='hidden sm:inline-block'>thôi nào ~~ (=^･ｪ･^=)</span>
+                </Button>
+            </Link>
+
+            {/* Lastet chapter */}
+            {history.maxReadPath && (
+                <Link href={`/${CONFIG_SLUG.READING}/${history.maxReadPath}`} className='w-full'>
+                    <Button sizeCustom='xs' width='full' variant='outline'>
+                        Đã đọc đến chương {history.maxReadChapterName}
+                    </Button>
+                </Link>
+            )}
+        </div>
     )
 }
 

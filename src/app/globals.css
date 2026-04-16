@@ -372,6 +372,10 @@
     }
 
     /* End Header*/
+    /* Width center fit*/
+    .w-center-fit {
+        @apply w-fit mx-auto
+    }
     /* common */
     .section-list-comic {
         @apply container pt-2 pb-20

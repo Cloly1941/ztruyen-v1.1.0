@@ -44,12 +44,13 @@ type TListImageChapter = {
     currentChapterId: string
     path: string
     listDetailComic: IOtruyenDetailComic
+    imageComment?: number
 }
 
 const ListImageChapter = ({
                               listImageChapter, nextChapter, prevChapter,
                               chapters, currentChapterId, path, listDetailComic,
-                              currentChapter, slugComic, chapter_path
+                              currentChapter, slugComic, chapter_path, imageComment
                           }: TListImageChapter) => {
 
     const totalImage = listImageChapter.length;
@@ -256,6 +257,7 @@ const ListImageChapter = ({
                 image_name={currentImageIndex}
                 setCurrentImageIndex={setCurrentImageIndex}
                 imgRefs={imgRefs}
+                imageComment={imageComment}
             />
         </>
     )

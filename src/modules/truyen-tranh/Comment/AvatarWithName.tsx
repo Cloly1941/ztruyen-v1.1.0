@@ -1,8 +1,14 @@
+// ** Next
+import Link from "next/link";
+
 // ** Component
 import AvatarWithFrame from "@/components/common/AvatarWithFrame";
 
 // ** Lib
 import {cn} from "@/lib/utils";
+
+// ** Util
+import {buildReadingUrl} from "@/utils/buildReadingUrl ";
 
 type TAvatarWithName = {
     size: number
@@ -15,15 +21,18 @@ type TAvatarWithName = {
     chapterName?: string | null
     type?: "detail" | "reading";
     mobileSize?: number
+    slug: string
+    chapterId: string
 }
 
 const AvatarWithName = (
     {
         size, name, avatarUrl, frameName, frameUrl,
         className, chapterName, chapterPage, type = 'detail',
-        mobileSize
+        mobileSize, slug, chapterId
     }
     : TAvatarWithName) => {
+
     return (
         <div className='flex items-start'>
             <div className={cn('mr-2', size === 60 && 'mr-2 sm:mx-2')}>
@@ -42,8 +51,8 @@ const AvatarWithName = (
                 className
             )}>
                 {name}
-                {chapterName && (
-                    <>
+                {chapterName && chapterId && (
+                    <Link href={`${buildReadingUrl(slug, chapterName, chapterId)}?anh=${chapterPage}`}>
                         <span
                             className='inline-block mx-1 sm:mx-1.5 text-xs sm:text-[13px]'>
                             tại {type === 'detail' ? 'chương' : 'ảnh'}
@@ -51,7 +60,7 @@ const AvatarWithName = (
                         <span className='text-link cursor-pointer text-xs sm:text-sm'>
                             {type === 'detail' && `Chương ${chapterName}`} {chapterPage}P
                         </span>
-                    </>
+                    </Link>
                 )}
             </div>
 

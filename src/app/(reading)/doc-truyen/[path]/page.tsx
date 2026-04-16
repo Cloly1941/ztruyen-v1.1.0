@@ -21,9 +21,10 @@ import {TOtruyenChapter} from "@/types/api.otruyen";
 
 type TReadingComic = {
     params: Promise<{ path: string }>
+    searchParams: Promise<{ anh?: string }>;
 }
 
-const ReadingComic = async ({params}: TReadingComic) => {
+const ReadingComic = async ({params, searchParams}: TReadingComic) => {
 
     const {path} = await params
 
@@ -32,6 +33,10 @@ const ReadingComic = async ({params}: TReadingComic) => {
     const slugComic = getChapterName(paths)
 
     const chapterId = getIdFromUrl(paths, '-')
+
+    const anh = await searchParams
+
+    const image = anh?.anh ? Number(anh.anh) : undefined;
 
     const [resDetail, resChapter] = await Promise.all([
         getDetailComic(slugComic),
@@ -67,6 +72,7 @@ const ReadingComic = async ({params}: TReadingComic) => {
                 currentChapterId={chapterId}
                 path={path}
                 listDetailComic={listDetailComic}
+                imageComment={image}
             />
             {/*<DevToolsDetection/>*/}
         </>

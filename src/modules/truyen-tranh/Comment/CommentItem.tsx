@@ -129,6 +129,8 @@ const CommentItem = ({
                     chapterName={comment.chapterName}
                     chapterPage={comment.page}
                     type={type}
+                    slug={comicSlug}
+                    chapterId={comment.chapterId}
                 />
 
                 <div className='ml-[54px] sm:ml-[76px]'>
@@ -197,6 +199,7 @@ const CommentItem = ({
                     detailKey={detailKey}
                     highlightReplyId={highlightReplyId}
                     onHighlightReady={onHighlightReady}
+                    comicSlug={comicSlug}
                 />
 
                 {activeCommentId && activeCommentId.startsWith(`parent-${comment._id}`) ||
