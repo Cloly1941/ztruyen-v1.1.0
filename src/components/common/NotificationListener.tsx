@@ -78,113 +78,127 @@ const NotificationListener = () => {
     useEffect(() => {
         if (!isLogin) return;
 
-        const messaging = getFirebaseMessaging();
-        if (!messaging) return;
+        if (typeof window === 'undefined') return;
+        if (!('Notification' in window)) return;
 
-        const unsubscribe = onMessage(messaging, (payload) => {
+        let unsubscribe: (() => void) | undefined;
 
-            const data = (payload.data ?? {}) as Partial<INotificationFCM> & {
-                title?: string;
-                body?: string;
-            };
+        try {
+            const messaging = getFirebaseMessaging();
+            if (!messaging) return;
 
-            const title = data.title ?? '';
-            const body = data.body ?? '';
-            const avatarUrl = data.senderAvatar ?? '';
-            const type: NotificationFCMType = data.type ?? 'system';
-            const senderName = data.senderName ?? '';
-            const comicName = data.comicName ?? '';
-            const comicSlug = data.comicSlug ?? '';
-            const commentId = data.commentId ?? '';
-            const replyId = data.replyId ?? '';
-            const chapterId = data.chapterId ?? '';
-            const notificationId = data.notificationId ?? '';
+            unsubscribe = onMessage(messaging, (payload) => {
 
-            const badge = getBadgeNotification[type];
+                const data = (payload.data ?? {}) as Partial<INotificationFCM> & {
+                    title?: string;
+                    body?: string;
+                };
 
-            if (type === 'REPLY_COMMENT' || type === 'LIKE_COMMENT') {
-                dispatchRefresh();
-            }
+                const title = data.title ?? '';
+                const body = data.body ?? '';
+                const avatarUrl = data.senderAvatar ?? '';
+                const type: NotificationFCMType = data.type ?? 'system';
+                const senderName = data.senderName ?? '';
+                const comicName = data.comicName ?? '';
+                const comicSlug = data.comicSlug ?? '';
+                const commentId = data.commentId ?? '';
+                const replyId = data.replyId ?? '';
+                const chapterId = data.chapterId ?? '';
+                const notificationId = data.notificationId ?? '';
 
-            toast.custom(
-                (t) => (
-                    <div
-                        onClick={async () => {
-                            toast.dismiss(t.id);
-                            if (notificationId) {
-                                await readTrigger(notificationId);
-                            }
-                            setDialogData({
-                                open: true,
-                                comicName,
-                                comicSlug,
-                                commentId,
-                                replyId,
-                                chapterId,
-                                notificationId,
-                            });
-                        }}
-                        className={cn(
-                            'notification-wrapper',
-                            t.visible ? 'animate-enter' : 'animate-leave',
-                        )}
-                    >
-                        {/* Header */}
-                        <p className="notification-header">Thông báo mới</p>
+                const badge = getBadgeNotification[type];
 
-                        {/* Body */}
-                        <div className="notification-body">
-                            {/* Avatar + badge */}
-                            <div className="relative flex-shrink-0">
-                                <Avatar className="size-10 sm:size-12">
-                                    <AvatarImage src={avatarUrl} alt={senderName}/>
-                                    <AvatarFallback asChild>
-                                        <div className="relative size-full">{fallbackAvatar}</div>
-                                    </AvatarFallback>
-                                </Avatar>
-                                <div
-                                    className="absolute -bottom-1 -right-1 size-5 sm:size-[22px] rounded-full border-2 border-white dark:border-zinc-900 flex items-center justify-center"
-                                    style={{background: badge.bg}}
-                                >
-                                    {badge.icon}
+                if (type === 'REPLY_COMMENT' || type === 'LIKE_COMMENT') {
+                    dispatchRefresh();
+                }
+
+                toast.custom(
+                    (t) => (
+                        <div
+                            onClick={async () => {
+                                toast.dismiss(t.id);
+                                if (notificationId) {
+                                    await readTrigger(notificationId);
+                                }
+                                setDialogData({
+                                    open: true,
+                                    comicName,
+                                    comicSlug,
+                                    commentId,
+                                    replyId,
+                                    chapterId,
+                                    notificationId,
+                                });
+                            }}
+                            className={cn(
+                                'notification-wrapper',
+                                t.visible ? 'animate-enter' : 'animate-leave',
+                            )}
+                        >
+                            {/* Header */}
+                            <p className="notification-header">Thông báo mới</p>
+
+                            {/* Body */}
+                            <div className="notification-body">
+                                {/* Avatar + badge */}
+                                <div className="relative flex-shrink-0">
+                                    <Avatar className="size-10 sm:size-12">
+                                        <AvatarImage src={avatarUrl} alt={senderName}/>
+                                        <AvatarFallback asChild>
+                                            <div className="relative size-full">{fallbackAvatar}</div>
+                                        </AvatarFallback>
+                                    </Avatar>
+                                    <div
+                                        className="absolute -bottom-1 -right-1 size-5 sm:size-[22px] rounded-full border-2 border-white dark:border-zinc-900 flex items-center justify-center"
+                                        style={{background: badge.bg}}
+                                    >
+                                        {badge.icon}
+                                    </div>
                                 </div>
-                            </div>
 
-                            {/* Text */}
-                            <div className="flex-1 min-w-0 space-y-1.5">
-                                <p className="text-[13px] leading-snug">
+                                {/* Text */}
+                                <div className="flex-1 min-w-0 space-y-1.5">
+                                    <p className="text-[13px] leading-snug">
                                     <span className="font-semibold text-zinc-900 dark:text-zinc-100 mr-1">
                                         {senderName}
                                     </span>
-                                    <span className="text-zinc-500 dark:text-zinc-400">
+                                        <span className="text-zinc-500 dark:text-zinc-400">
                                         {title}
                                     </span>
-                                </p>
-                                {body && (
-                                    <p className="notification-desc line-clamp-4 pl-2.5 border-l-2 border-zinc-300 dark:border-zinc-600">
-                                        {body}
                                     </p>
-                                )}
+                                    {body && (
+                                        <p className="notification-desc line-clamp-4 pl-2.5 border-l-2 border-zinc-300 dark:border-zinc-600">
+                                            {body}
+                                        </p>
+                                    )}
+                                </div>
                             </div>
+
+                            {/* Close */}
+                            <button
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    toast.dismiss(t.id);
+                                }}
+                                className="notification-close"
+                            >
+                                <X/>
+                            </button>
                         </div>
+                    ),
+                    {duration: 5000, position: 'top-right'},
+                );
+            });
+        } catch (err) {
+            console.warn('[FCM] onMessage setup failed:', err);
+        }
 
-                        {/* Close */}
-                        <button
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                toast.dismiss(t.id);
-                            }}
-                            className="notification-close"
-                        >
-                            <X/>
-                        </button>
-                    </div>
-                ),
-                {duration: 5000, position: 'top-right'},
-            );
-        });
-
-        return () => unsubscribe();
+        return () => {
+            try {
+                unsubscribe?.();
+            } catch {
+            }
+        };
     }, [isLogin]);
 
     return (

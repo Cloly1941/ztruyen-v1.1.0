@@ -3,9 +3,6 @@
 // ** React
 import {useEffect} from 'react'
 
-// ** Next js
-import {useRouter} from 'next/navigation'
-
 // ** SWR
 import {mutate} from 'swr'
 

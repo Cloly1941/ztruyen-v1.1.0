@@ -30,6 +30,7 @@ function buildSwUrl(): string {
 export async function requestNotificationPermission(): Promise<boolean> {
     try {
         if (typeof window === 'undefined') return false;
+        if (!('Notification' in window)) return false;
 
         if (Notification.permission === 'granted') return true;
 
@@ -37,7 +38,7 @@ export async function requestNotificationPermission(): Promise<boolean> {
 
         return permission === 'granted';
     } catch (err) {
-        console.error('[FCM] request permission failed:', err);
+        console.warn('[FCM] request permission failed:', err);
         return false;
     }
 }
@@ -68,6 +69,7 @@ export async function initFCM(): Promise<void> {
     try {
         if (typeof window === 'undefined') return;
         if (!('serviceWorker' in navigator)) return;
+        if (!('Notification' in window)) return;
 
         // check permission
         if (Notification.permission !== 'granted') {
@@ -105,7 +107,7 @@ export async function initFCM(): Promise<void> {
         ]);
 
     } catch (err) {
-        console.error('[FCM] initFCM failed:', err);
+        console.warn('[FCM] initFCM failed:', err);
     }
 }
 
