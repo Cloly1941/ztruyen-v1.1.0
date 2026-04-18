@@ -14,6 +14,23 @@ firebase.initializeApp({
 
 const messaging = firebase.messaging();
 
+messaging.onBackgroundMessage((payload) => {
+    return self.clients
+        .matchAll({ type: 'window', includeUncontrolled: true })
+        .then((clientsArr) => {
+            if (clientsArr.length > 0) return;
+
+            const data = payload.data || {};
+            return self.registration.showNotification(data.title || 'Thông báo mới', {
+                body: data.body || 'Có thông báo mới',
+                icon: data.icon || 'https://img.ztruyen.io.vn/public/favicon/favicon.ico',
+                badge: data.badge || 'https://img.ztruyen.io.vn/public/favicon/favicon.ico',
+                data: data,
+                requireInteraction: true,
+            });
+        });
+});
+
 self.addEventListener('notificationclick', (event) => {
     event.notification.close();
 
