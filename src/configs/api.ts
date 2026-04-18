@@ -33,6 +33,7 @@ export const CONFIG_API = {
         REMOVE: '/remove',
         SUBSCRIBE_TOPIC: '/subscribe-topic',
         UNSUBSCRIBE_TOPIC: '/unsubscribe-topic',
+        CHANGE_PASSWORD: `${userUrl}/change-password`
     },
     FRAME: {
         INDEX: frameUrl

@@ -10,6 +10,7 @@ import {IUserProfile} from "@/types/api";
 
 // ** Module type
 import {TUpdateProfilePayload} from "@/modules/tai-khoan/thong-tin-ca-nhan/FormUpdateProfile";
+import {TChangePasswordPayload} from "@/modules/tai-khoan/doi-mat-khau/FormChangePassword";
 
 export type TUploadProfileImagePayload = {
     avatar?: string;
@@ -41,6 +42,12 @@ export const UserService = {
         removeAccessToken();
 
         return res
+    },
+    changePassword: (payload: TChangePasswordPayload): Promise<IApiRes<void>> => {
+        return authFetcherWithRefresh<IApiRes<void>>(CONFIG_API.USER.CHANGE_PASSWORD, {
+            method: 'PATCH',
+            body: JSON.stringify(payload),
+        })
     },
     saveFcmToken: (token: string) =>
         authFetcherWithRefresh(`${CONFIG_API.USER.FCM}`, {

@@ -116,7 +116,7 @@ const UserSetting = () => {
                             </FieldLabel>
                             <FieldDescription className="text-xs text-muted-foreground mt-1 leading-relaxed">
                                 {getNotifDescription()} {' '}
-                                <Link href='/'
+                                <Link href='/huong-dan'
                                       className='text-amber-600'
                                       target='_blank'
                                 >

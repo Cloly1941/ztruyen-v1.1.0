@@ -1,6 +1,8 @@
 // ** Next
 import { Metadata } from "next"
 
+export const dynamic = 'force-static'
+
 export const metadata: Metadata = {
     title: "Thỏa thuận người dùng - ZTruyen",
     description:
@@ -39,7 +41,7 @@ export const metadata: Metadata = {
 
 const TermsOfService = () => {
     return (
-        <main className="min-h-screen bg-background">
+        <div className="min-h-screen bg-background">
             <div className="container py-8 sm:py-12 lg:py-16">
                 {/* Title */}
                 <h1 className="mb-4 text-xl font-semibold tracking-tight sm:text-3xl lg:text-4xl">
@@ -186,7 +188,7 @@ const TermsOfService = () => {
                     </section>
                 </div>
             </div>
-        </main>
+        </div>
     )
 }
 
