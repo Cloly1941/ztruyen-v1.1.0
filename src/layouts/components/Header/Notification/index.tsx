@@ -46,10 +46,14 @@ import {INotification} from "@/types/api";
 // ** Lib
 import {REFRESH_EVENT} from "@/lib/invalidate-cache/events";
 import DropdownAction from "@/layouts/components/Header/Notification/DropdownAction";
+import {usePathname} from "next/navigation";
 
 const LIMIT = 10;
 
 const Notification = () => {
+
+    const pathname = usePathname()
+
     const {isLogin, loading} = useAuth();
     const [open, setOpen] = useState(false);
     const [hasOpened, setHasOpened] = useState(false);
@@ -94,6 +98,16 @@ const Notification = () => {
             await mutateCount()
         }
     })
+
+    // when change pathname revalidate
+    useEffect(() => {
+        if (!isLogin) return
+        void mutateCount()
+        if (hasOpened) {
+            void mutateList()
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [pathname])
 
     // Revalidate count and list
     useEffect(() => {
