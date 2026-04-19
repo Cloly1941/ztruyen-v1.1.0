@@ -12,6 +12,7 @@ import {TooltipProvider} from "@/components/ui/tooltip";
 // ** Component
 import NotificationRevalidate from "@/components/common/NotificationRevalidate";
 import AnnouncementBanner from "@/components/common/AnnouncementBanner";
+import DeviceRedirect from "@/components/common/DeviceRedirect";
 
 // ** Theme provider
 import {ThemeProvider} from "@/theme/ThemeProvider";
@@ -139,6 +140,7 @@ export default function RootLayout({children,}: { children: ReactNode }) {
             enableSystem
             disableTransitionOnChange
         >
+            <DeviceRedirect/>
             <ProgressWrapper>
                 <TooltipProvider>
                     {children}
